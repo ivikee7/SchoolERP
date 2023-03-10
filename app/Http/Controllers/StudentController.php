@@ -31,68 +31,70 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        if (auth()->user()->can('student_access')) {
-            if ($request->ajax()) {
-                $users = DB::table('users as u')
-                    ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
-                    ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-                    ->leftJoin('student_admissions as sa', 'u.id', 'sa.user_id')
-                    ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
-                    ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
-                    ->leftJoin('transport_routes as tr', 'u.transport_id', 'tr.id')
-                    ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
-                    ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
-                    ->leftJoin('users as ucn', 'u.created_by', 'ucn.id')
-                    ->leftJoin('users as uun', 'u.updated_by', 'uun.id')
-                    ->whereIn('r.name', ['STUDENT'])
-                    ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'tr.route_name as transport_id', 'u.aadhaar_number', 'u.mother_tongue', DB::raw("date(u.date_of_birth) as date_of_birth"), 'u.place_of_birth', 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.termination_date', 'u.status', 'sa.admission_status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
-                    ->get();
-                $datatables = DataTables($users)
-                    ->editColumn('id', '{{$id}}')
-                    ->addColumn('full_name', function ($user) {
-                        return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
-                    })
-                    //                    ->addColumn('student_class', '{{$class_name}} {{$section_name}}')
-                    ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
-                    ->addColumn('address', '{{$address_line1}} {{$city}} {{$state}} {{$country}} {{$pin_code}}')
-                    ->editColumn('gender', function ($user) {
-                        if ($user->gender == 'M') return 'Male';
-                        if ($user->gender == 'F') return 'Female';
-                        if ($user->gender == 'O') return 'Other';
-                    })
-                    ->editColumn('created_by', '{{$created_by_name}} {{$created_at}}')
-                    ->editColumn('updated_by', '{{$updated_by_name}} {{$updated_at}}')
-                    ->editColumn('status', function ($user) {
-                        if ($user->status == 0) return 'Inactive';
-                        if ($user->status == 1) return 'Active';
-                    })
-                    ->addColumn('action', function ($users) {
-                        $status = '';
-                        if (Auth()->user()->can('student_show')) {
-                            $status .= '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
-                        }
-                        return $status;
-                    })
-                    ->rawColumns(['status', 'action'])
-                    ->setRowClass(function ($user) {
-                        if ($user->admission_status == 0) {
-                            return 'bg-warning';
-                        }
-                    });
-                $genders = ["Male", "Female", "Other"];
-                $allClass = StudentClass::distinct('name')->pluck('name');
-                $allSection = StudentSection::distinct('name')->pluck('name');
-                $status = ["Active", "Inactive"];
-                $datatables->with([
-                    'allGenders' => $genders,
-                    'allClasses' => $allClass,
-                    'allSections' => $allSection,
-                    'allStatus' => $status,
-                ]);
-                return $datatables->make(true);
-            }
+        if (!auth()->user()->can('student_access')) {
+            return abort(403, "You don't have permission!");
+        }
+
+        if (!$request->ajax()) {
             return view('student.index');
-        } else return abort(403, "You don't have permission!");
+        }
+
+        $users = User::query('as u')
+            ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
+            ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
+            ->leftJoin('student_admissions as sa', 'u.id', 'sa.user_id')
+            ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
+            ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
+            ->leftJoin('transport_routes as tr', 'u.transport_id', 'tr.id')
+            ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
+            ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
+            ->leftJoin('users as ucn', 'u.created_by', 'ucn.id')
+            ->leftJoin('users as uun', 'u.updated_by', 'uun.id')
+            ->whereIn('r.name', ['STUDENT'])
+            ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'tr.route_name as transport_id', 'u.aadhaar_number', 'u.mother_tongue', DB::raw("date(u.date_of_birth) as date_of_birth"), 'u.place_of_birth', 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.termination_date', 'u.status', 'sa.admission_status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
+            ->get();
+        $datatables = DataTables($users)
+            ->editColumn('id', '{{$id}}')
+            ->addColumn('full_name', function ($user) {
+                return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
+            })
+            ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
+            ->addColumn('address', '{{$address_line1}} {{$city}} {{$state}} {{$country}} {{$pin_code}}')
+            ->editColumn('gender', function ($user) {
+                if ($user->gender == 'M') return 'Male';
+                if ($user->gender == 'F') return 'Female';
+                if ($user->gender == 'O') return 'Other';
+            })
+            ->editColumn('created_by', '{{$created_by_name}} {{$created_at}}')
+            ->editColumn('updated_by', '{{$updated_by_name}} {{$updated_at}}')
+            ->editColumn('status', function ($user) {
+                if ($user->status == 0) return 'Inactive';
+                if ($user->status == 1) return 'Active';
+            })
+            ->addColumn('action', function ($users) {
+                $status = '';
+                if (auth()->user()->can('student_show')) {
+                    $status .= '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
+                }
+                return $status;
+            })
+            ->rawColumns(['status', 'action'])
+            ->setRowClass(function ($user) {
+                if ($user->admission_status == 0) {
+                    return 'bg-warning';
+                }
+            });
+        $genders = ["Male", "Female", "Other"];
+        $allClass = StudentClass::distinct('name')->pluck('name');
+        $allSection = StudentSection::distinct('name')->pluck('name');
+        $status = ["Active", "Inactive"];
+        $datatables->with([
+            'allGenders' => $genders,
+            'allClasses' => $allClass,
+            'allSections' => $allSection,
+            'allStatus' => $status,
+        ]);
+        return $datatables->make(true);
     }
 
     /**
@@ -102,25 +104,27 @@ class StudentController extends Controller
      */
     public function create(Request $request)
     {
-        if (Auth()->user()->can('student_create')) {
-            if (!StudentAdmission::where('registration_id', $request->registration)->first()) {
-                if (StudentRegistration::findOrFail($request->registration)) {
-                    $registration = StudentRegistration::findOrFail($request->registration);
-                    $local_guardians = DB::table('users as u')
-                        ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
-                        ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-                        ->whereNotIn('r.name', ['STUDENT', 'Super Admin'])
-                        ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name')
-                        ->get();
-                    $routes = TransportRoute::all();
-                    $quotas = StudentQuota::all();
-                    $acadamic_sessions = AcademicSession::all();
-                    $classes = StudentClass::all();
-                    $sections = StudentSection::all();
-                    return view('student.create')->with(['local_guardians' => $local_guardians, 'routes' => $routes, 'quotas' => $quotas, 'acadamic_sessions' => $acadamic_sessions, 'classes' => $classes, 'sections' => $sections, 'registration' => $registration]);
-                }
-            } else return abort(404);
-        } else return abort(403, "You don't have permission!");
+        if (!auth()->user()->can('student_create')) {
+            return abort(403, "You don't have permission!");
+        }
+
+        if (!StudentAdmission::where('registration_id', $request->registration)->first()) {
+            if (StudentRegistration::findOrFail($request->registration)) {
+                $registration = StudentRegistration::findOrFail($request->registration);
+                $local_guardians = DB::table('users as u')
+                    ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
+                    ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
+                    ->whereNotIn('r.name', ['STUDENT', 'Super Admin'])
+                    ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name')
+                    ->get();
+                $routes = TransportRoute::all();
+                $quotas = StudentQuota::all();
+                $acadamic_sessions = AcademicSession::all();
+                $classes = StudentClass::all();
+                $sections = StudentSection::all();
+                return view('student.create')->with(['local_guardians' => $local_guardians, 'routes' => $routes, 'quotas' => $quotas, 'acadamic_sessions' => $acadamic_sessions, 'classes' => $classes, 'sections' => $sections, 'registration' => $registration]);
+            }
+        } else return abort(404);
     }
 
     /**
@@ -131,102 +135,107 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth()->user()->can('student_create')) {
-            $request->validate([
-                'title' => 'required',
-                'first_name' => 'required',
-                'middle_name' => 'nullable',
-                'last_name' => 'required',
-                'contact_number' => 'required|integer',
-                'contact_number2' => 'nullable|integer',
-                'address_line1' => 'required',
-                'city' => 'required',
-                'state' => 'required',
-                'pin_code' => 'required|integer',
-                'country' => 'required',
-                'transport_id' => 'required|integer',
-                'aadhaar_number' => 'nullable|integer',
-                'blood_group' => 'required',
-                'mother_tongue' => 'required',
-                'date_of_birth' => 'required|date',
-                'place_of_birth' => 'required',
-                'gender' => 'required',
-                'father_name' => 'required',
-                'mother_name' => 'required',
-                'remarks' => 'nullable',
-                'termination_date' => 'nullable',
-                'status' => 'required|boolean',
-                'email' => 'nullable|email',
-                'registration_number' => 'required|integer',
-                'acadamic_session' => 'required|integer',
-                'quota' => 'required|integer',
-                'class' => 'required|integer',
-                'section' => 'required|integer',
-                'local_guardian' => 'nullable|integer',
-                'relationship' => 'nullable',
+        if (!auth()->user()->can('student_create')) {
+            return abort(403, "You don't have permission!");
+        }
+
+        $request->validate([
+            'title' => 'required',
+            'first_name' => 'required',
+            'middle_name' => 'nullable',
+            'last_name' => 'required',
+            'contact_number' => 'required|integer',
+            'contact_number2' => 'nullable|integer',
+            'address_line1' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'pin_code' => 'required|integer',
+            'country' => 'required',
+            'transport_id' => 'required|integer',
+            'aadhaar_number' => 'nullable|integer',
+            'blood_group' => 'required',
+            'mother_tongue' => 'required',
+            'date_of_birth' => 'required|date',
+            'place_of_birth' => 'required',
+            'gender' => 'required',
+            'father_name' => 'required',
+            'mother_name' => 'required',
+            'remarks' => 'nullable',
+            'termination_date' => 'nullable',
+            'status' => 'required|boolean',
+            'email' => 'nullable|email',
+            'registration_number' => 'required|integer',
+            'acadamic_session' => 'required|integer',
+            'quota' => 'required|integer',
+            'class' => 'required|integer',
+            'section' => 'required|integer',
+            'local_guardian' => 'nullable|integer',
+            'relationship' => 'nullable',
+        ]);
+
+        if (User::where('first_name', $request->first_name)
+            ->where('contact_number', $request->contact_number)
+            ->exists()
+        ) {
+            return abort(403, 'Student already exists!');
+        } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
+            return abort(403, 'Email id already exists');
+        } else {
+            // Create student profile
+            $student = User::create([
+                'title' => strtoupper($request->title),
+                'first_name' => strtoupper($request->first_name),
+                'middle_name' => strtoupper($request->middle_name),
+                'last_name' => strtoupper($request->last_name),
+                'contact_number' => strtoupper($request->contact_number),
+                'contact_number2' => strtoupper($request->contact_number2),
+                'address_line1' => strtoupper($request->address_line1),
+                'city' => strtoupper($request->city),
+                'state' => strtoupper($request->state),
+                'pin_code' => strtoupper($request->pin_code),
+                'country' => strtoupper($request->country),
+                'transport_id' => strtoupper($request->transport_id),
+                'aadhaar_number' => strtoupper($request->aadhaar_number),
+                'blood_group' => strtoupper($request->blood_group),
+                'mother_tongue' => strtoupper($request->mother_tongue),
+                'date_of_birth' => $request->date_of_birth,
+                'place_of_birth' => strtoupper($request->place_of_birth),
+                'gender' => strtoupper($request->gender),
+                'father_name' => strtoupper($request->father_name),
+                'mother_name' => strtoupper($request->mother_name),
+                'remarks' => strtoupper($request->remarks),
+                'termination_date' => $request->termination_date,
+                'status' => strtoupper($request->status),
+                'email' => strtolower($request->email),
+                'password' => '12345678',
+                'created_by' => Auth()->user()->id,
+                'updated_by' => Auth()->user()->id,
+            ])->syncRoles('STUDENT');
+
+            // Create student admission
+            $admission = StudentAdmission::create([
+                'user_id' => $student->id,
+                'registration_id' => $request->registration_number,
+                'academic_session_id' => $request->acadamic_session,
+                'student_quota_id' => $request->quota,
+                'admission_class_id' => $request->class,
+                'admission_section_id' => $request->section,
+                'current_class_id' => $request->class,
+                'current_section_id' => $request->section,
+                'local_guardian_profile_id' => $request->local_guardian,
+                'relationship' => $request->relationship,
+                'admission_status' => 1,
+                'created_by_id' => Auth()->user()->id,
+                'updated_by_id' => Auth()->user()->id
             ]);
-            if (User::where('first_name', $request->first_name)
-                ->where('contact_number', $request->contact_number)
-                ->exists()
-            ) {
-                return abort(403, 'Student already exists!');
-            } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
-                return abort(403, 'Email id already exists');
-            } else {
-                $student = User::create([
-                    'title' => strtoupper($request->title),
-                    'first_name' => strtoupper($request->first_name),
-                    'middle_name' => strtoupper($request->middle_name),
-                    'last_name' => strtoupper($request->last_name),
-                    'contact_number' => strtoupper($request->contact_number),
-                    'contact_number2' => strtoupper($request->contact_number2),
-                    'address_line1' => strtoupper($request->address_line1),
-                    'city' => strtoupper($request->city),
-                    'state' => strtoupper($request->state),
-                    'pin_code' => strtoupper($request->pin_code),
-                    'country' => strtoupper($request->country),
-                    'transport_id' => strtoupper($request->transport_id),
-                    'aadhaar_number' => strtoupper($request->aadhaar_number),
-                    'blood_group' => strtoupper($request->blood_group),
-                    'mother_tongue' => strtoupper($request->mother_tongue),
-                    'date_of_birth' => $request->date_of_birth,
-                    'place_of_birth' => strtoupper($request->place_of_birth),
-                    'gender' => strtoupper($request->gender),
-                    'father_name' => strtoupper($request->father_name),
-                    'mother_name' => strtoupper($request->mother_name),
-                    'remarks' => strtoupper($request->remarks),
-                    'termination_date' => $request->termination_date,
-                    'status' => strtoupper($request->status),
-                    'email' => strtolower($request->email),
-                    'password' => '12345678',
-                    'created_by' => Auth()->user()->id,
-                    'updated_by' => Auth()->user()->id,
-                ])->syncRoles('STUDENT');
 
-                $admission = StudentAdmission::create([
-                    'user_id' => $student->id,
-                    'registration_id' => $request->registration_number,
-                    'academic_session_id' => $request->acadamic_session,
-                    'student_quota_id' => $request->quota,
-                    'admission_class_id' => $request->class,
-                    'admission_section_id' => $request->section,
-                    'current_class_id' => $request->class,
-                    'current_section_id' => $request->section,
-                    'local_guardian_profile_id' => $request->local_guardian,
-                    'relationship' => $request->relationship,
-                    'admission_status' => 1,
-                    'created_by_id' => Auth()->user()->id,
-                    'updated_by_id' => Auth()->user()->id
-                ]);
+            // Generate School Email
+            $student_email = User::findOrFail($student->id);
+            $student_email->email_alternate = strtolower($student_email->id . '@srcspatna.com');
+            $student_email->save();
 
-                // Generate School Email
-                $student_email = User::findOrFail($student->id);
-                $student_email->email_alternate = strtolower($student_email->id . '@srcspatna.com');
-                $student_email->save();
-
-                return view('student.index')->with(["status" => "success", "message" => "Student ID: " . $student->id . " created"]);
-            }
-        } else return abort(403, "You don't have permission!");
+            return view('student.index')->with(["status" => "success", "message" => "Student ID: " . $student->id . " created"]);
+        }
     }
 
     /**
@@ -237,37 +246,41 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        if (Auth()->user()->can('student_show')) {
-            if (User::find($id) && User::find($id)->hasRole('STUDENT')) {
-                $user = User::leftJoin('model_has_roles as mhr', 'users.id', 'mhr.model_id')
-                    ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-                    ->leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
-                    ->leftJoin('student_registrations as sr', 'sa.registration_id', 'sr.id')
-                    ->leftJoin('users as lgp', 'sa.local_guardian_profile_id', 'lgp.id')
-                    ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
-                    ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
-                    ->leftJoin('transport_routes as tr', 'users.transport_id', 'tr.id')
-                    ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
-                    ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
-                    ->where('users.id', $id)
-                    ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport', 'users.aadhaar_number', 'users.blood_group', 'users.mother_tongue', 'users.date_of_birth', 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'sa.id as admission_id', 'sa.registration_id', 'sa.academic_session_id', 'sa.student_quota_id', 'sa.admission_class_id', 'sa.admission_section_id', 'sa.current_class_id', 'sa.current_section_id', 'sa.local_guardian_profile_id', 'sa.relationship', 'sa.admission_status', 'r.name as role_name', DB::raw("concat(lgp.id, ' | ', lgp.title, ' ',lgp.first_name, ' ',lgp.middle_name, ' ',lgp.last_name) as local_guardian_name"), 'tr.route_name as transport_route_name', 'sc.name as class_name', 'ss.name as section_name',)
-                    ->get();
+        if (!auth()->user()->can('student_show')) {
+            return abort(403, "You don't have permission!");
+        }
 
-                $local_guardians = User::leftJoin('model_has_roles as mhr', 'users.id', 'mhr.model_id')
-                    ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-                    ->whereNotIn('r.name', ['STUDENT', 'Super Admin'])
-                    ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name')
-                    ->get();
+        if (User::find($id) && User::find($id)->hasRole('STUDENT')) {
+            // Select user
+            $user = User::leftJoin('model_has_roles as mhr', 'users.id', 'mhr.model_id')
+                ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
+                ->leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
+                ->leftJoin('student_registrations as sr', 'sa.registration_id', 'sr.id')
+                ->leftJoin('users as lgp', 'sa.local_guardian_profile_id', 'lgp.id')
+                ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
+                ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
+                ->leftJoin('transport_routes as tr', 'users.transport_id', 'tr.id')
+                ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
+                ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
+                ->where('users.id', $id)
+                ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport', 'users.aadhaar_number', 'users.blood_group', 'users.mother_tongue', 'users.date_of_birth', 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'sa.id as admission_id', 'sa.registration_id', 'sa.academic_session_id', 'sa.student_quota_id', 'sa.admission_class_id', 'sa.admission_section_id', 'sa.current_class_id', 'sa.current_section_id', 'sa.local_guardian_profile_id', 'sa.relationship', 'sa.admission_status', 'r.name as role_name', DB::raw("concat(lgp.id, ' | ', lgp.title, ' ',lgp.first_name, ' ',lgp.middle_name, ' ',lgp.last_name) as local_guardian_name"), 'tr.route_name as transport_route_name', 'sc.name as class_name', 'ss.name as section_name',)
+                ->get();
 
-                $routes = TransportRoute::all();
-                $quotas = StudentQuota::all();
-                $acadamicSessions = AcademicSession::all();
-                $classes = StudentClass::all();
-                $sections = StudentSection::all();
+            // User guardian details
+            $local_guardians = User::leftJoin('model_has_roles as mhr', 'users.id', 'mhr.model_id')
+                ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
+                ->whereNotIn('r.name', ['STUDENT', 'Super Admin'])
+                ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name')
+                ->get();
 
-                return view('student.show')->with(['user' => $user[0], 'local_guardians' => $local_guardians, 'routes' => $routes, 'quotas' => $quotas, 'acadamic_sessions' => $acadamicSessions, 'classes' => $classes, 'sections' => $sections]);
-            } else return abort(404);
-        } else return abort(403, "You don't have permission!");
+            $routes = TransportRoute::all();
+            $quotas = StudentQuota::all();
+            $acadamicSessions = AcademicSession::all();
+            $classes = StudentClass::all();
+            $sections = StudentSection::all();
+
+            return view('student.show')->with(['user' => $user[0], 'local_guardians' => $local_guardians, 'routes' => $routes, 'quotas' => $quotas, 'acadamic_sessions' => $acadamicSessions, 'classes' => $classes, 'sections' => $sections]);
+        } else return abort(404);
     }
 
     /**
@@ -278,7 +291,7 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        if (Auth()->user()->can('student_edit')) {
+        if (auth()->user()->can('student_edit')) {
             return redirect(route('index'));
             // if (auth()->user()->can('user_update')) {
             //     $user = DB::table('users as u')
@@ -314,7 +327,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Auth()->user()->can('student_edit')) {
+        if (auth()->user()->can('student_edit')) {
             $request->validate([
                 'title' => 'required',
                 'first_name' => 'required',
@@ -394,7 +407,7 @@ class StudentController extends Controller
 
     public function changeClassSectionUpdate(Request $request)
     {
-        if (Auth()->user()->can('admission_edit')) {
+        if (auth()->user()->can('admission_edit')) {
             $request->validate([
                 'from_class' => 'required|integer',
                 'from_section' => 'required|integer',
@@ -416,7 +429,7 @@ class StudentController extends Controller
 
     public function getStudentsAjaxCall(Request $request)
     {
-        if (Auth()->user()->can('admission_edit')) {
+        if (auth()->user()->can('admission_edit')) {
             if ($request->ajax()) {
                 $class = $request->class;
                 $section = $request->section;
@@ -437,7 +450,7 @@ class StudentController extends Controller
 
     public function classStudents(Request $request)
     {
-        if (Auth()->user()->can('student_access')) {
+        if (auth()->user()->can('student_access')) {
             if ($request->ajax()) {
                 $students = DB::table('student_admissions as sa')
                     ->leftJoin('users as u', 'sa.user_id', 'u.id')
@@ -475,7 +488,7 @@ class StudentController extends Controller
 
     public function getClassStudentsStrengthAjaxCall(Request $request)
     {
-        if (Auth()->user()->can('student_access')) {
+        if (auth()->user()->can('student_access')) {
             if ($request->ajax()) {
                 $without = '__';
                 $classes = StudentClass::whereNotIn('name', ['__NONE'])->get();
