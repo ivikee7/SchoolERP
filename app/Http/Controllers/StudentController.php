@@ -47,12 +47,13 @@ class StudentController extends Controller
                     ->whereIn('r.name', ['STUDENT'])
                     ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'tr.route_name as transport_id', 'u.aadhaar_number', 'u.mother_tongue', DB::raw("date(u.date_of_birth) as date_of_birth"), 'u.place_of_birth', 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.termination_date', 'u.status', 'sa.admission_status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
                     ->get();
+
                 $datatables = DataTables($users)
                     ->editColumn('id', '{{$id}}')
                     ->addColumn('full_name', function ($user) {
                         return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
                     })
-//                    ->addColumn('student_class', '{{$class_name}} {{$section_name}}')
+                    //                    ->addColumn('student_class', '{{$class_name}} {{$section_name}}')
                     ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
                     ->addColumn('address', '{{$address_line1}} {{$city}} {{$state}} {{$country}} {{$pin_code}}')
                     ->editColumn('gender', function ($user) {
@@ -167,7 +168,8 @@ class StudentController extends Controller
             ]);
             if (User::where('first_name', $request->first_name)
                 ->where('contact_number', $request->contact_number)
-                ->exists()) {
+                ->exists()
+            ) {
                 return abort(403, 'Student already exists!');
             } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
                 return abort(403, 'Email id already exists');
