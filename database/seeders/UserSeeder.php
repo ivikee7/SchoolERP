@@ -34,7 +34,11 @@ class UserSeeder extends Seeder
             'status'=>1,
             'created_by'=>1,
             'updated_by'=>1,
+<<<<<<< HEAD
             'email' => 'superadmin@domain.local',
+=======
+            'email' => 'ivikee7@gmail.com',
+>>>>>>> parent of 58a8797 (Update UserSeeder.php)
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10)

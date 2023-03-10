@@ -53,7 +53,7 @@ class StudentController extends Controller
                     ->addColumn('full_name', function ($user) {
                         return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
                     })
-                    //                    ->addColumn('student_class', '{{$class_name}} {{$section_name}}')
+
                     ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
                     ->addColumn('address', '{{$address_line1}} {{$city}} {{$state}} {{$country}} {{$pin_code}}')
                     ->editColumn('gender', function ($user) {
@@ -224,11 +224,6 @@ class StudentController extends Controller
                 $student_email = User::findOrFail($student->id);
                 $student_email->email_alternate = strtolower($student_email->id . '@srcspatna.com');
                 $student_email->save();
-
-                // Delete Registration After Admission
-                // $delete_registration = StudentRegistration::findOrFail($request->registration_number);
-                // $delete_registration->deleted_at = NOW();
-                // $delete_registration->save();
 
                 return view('student.index')->with(["status" => "success", "message" => "Student ID: " . $student->id . " created"]);
             }
