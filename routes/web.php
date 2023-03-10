@@ -15,6 +15,7 @@ use App\Http\Controllers\Gsuite;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LeaveManagementController;
 use App\Http\Controllers\UserPermissionsController;
+use App\Http\Controllers\UserProfileController;
 use App\Models\PublicEnquiry;
 use App\Models\UserInformation;
 
@@ -53,7 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [HomeController::class, 'home'])->name('index');
 
     // Profile
-    Route::get('profile', [UserController::class, 'profile'])->name('profile');
+    Route::get('profile', [UserProfileController::class, 'index'])->name('profile');
 
     // User
     Route::prefix('/user')->group(function () {
