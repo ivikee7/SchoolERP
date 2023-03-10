@@ -52,11 +52,7 @@ class StudentController extends Controller
                     ->addColumn('full_name', function ($user) {
                         return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
                     })
-<<<<<<< HEAD
-
-=======
-//                    ->addColumn('student_class', '{{$class_name}} {{$section_name}}')
->>>>>>> parent of 41711c8 (Commit StudentController)
+                    //                    ->addColumn('student_class', '{{$class_name}} {{$section_name}}')
                     ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
                     ->addColumn('address', '{{$address_line1}} {{$city}} {{$state}} {{$country}} {{$pin_code}}')
                     ->editColumn('gender', function ($user) {
@@ -171,7 +167,8 @@ class StudentController extends Controller
             ]);
             if (User::where('first_name', $request->first_name)
                 ->where('contact_number', $request->contact_number)
-                ->exists()) {
+                ->exists()
+            ) {
                 return abort(403, 'Student already exists!');
             } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
                 return abort(403, 'Email id already exists');
