@@ -2,223 +2,169 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use App\Models\StudentAdmission;
 use App\Models\StudentPromotion;
 use App\Models\TransportRoute;
 use App\Models\User;
 use App\Models\UserInformation;
 use Illuminate\Http\Request;
+use App\Datatables\UserExporter;
+use Illuminate\Routing\Redirector;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Contracts\Foundation\Application;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse|\Yajra\DataTables\DataTableAbstract
      */
-    public function index(Request $request)
+    public function index(Request $request) : Application|Factory|View
     {
 
-        if (Auth()->user()->can('user_access')) {
-            if ($request->ajax()) {
-                $users = DB::table('users as u')
-                    ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
-                    ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-                    ->leftJoin('student_admissions as sa', 'u.id', 'sa.user_id')
-                    ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
-                    ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
-                    ->leftJoin('transport_routes as tr', 'u.transport_id', 'tr.id')
-                    ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
-                    ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
-                    ->leftJoin('users as ucn', 'u.created_by', 'ucn.id')
-                    ->leftJoin('users as uun', 'u.updated_by', 'uun.id')
-                    ->whereNotIn('r.name', ['Super Admin', 'STUDENT'])
-                    ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'u.aadhaar_number', 'u.mother_tongue', DB::raw("date(u.date_of_birth) as date_of_birth"), 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', 'tt.name as transport_type_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
-                    ->get();
-                $datatables = DataTables::of($users)
-                    ->editColumn('id', '{{$id}}')
-                    ->addColumn('full_name', function ($user) {
-                        return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
-                    })
-                    ->addColumn('transport', '{{$route_name}} {{$transport_type_name}}')
-                    ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
-                    ->addColumn('address', '{{$address_line1}}, {{$city}}, {{$state}}, {{$country}}, {{$pin_code}}')
-                    ->editColumn('gender', function ($users) {
-                        if ($users->gender == 'M') return 'Male';
-                        if ($users->gender == 'F') return 'Female';
-                        if ($users->gender == 'O') return 'Other';
-                    })
-                    ->editColumn('created_by', '{{$created_by_name}} {{$created_at}}')
-                    ->editColumn('updated_by', '{{$updated_by_name}} {{$updated_at}}')
-                    ->editColumn('status', function ($user) {
-                        if ($user->status == 0) return 'Inactive';
-                        if ($user->status == 1) return 'Active';
-                    })
-                    ->addColumn('action', function ($users) {
-                        $view = '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
-                        return $view;
-//                        if ($users->status == 0) return '<span class="bg-danger pl-1 pr-1 rounded">Suspended</span> ' . $view;
-//                        if ($users->status == 1) return '<span class="bg-success pl-1 pr-1 rounded">Active</span> ' . $view;
-                    })
-                    ->setRowClass(function ($user) {
-                        if ($user->status == 0) {
-                            return 'bg-warning';
-                        }
-                    });
-                $allGenders = ["Male","Female","Other"];
-                $allRoles = Role::distinct('name')->pluck('name');
-                $allStatus = ["Active","Inactive"];
-                $datatables->with([
-                    'allGenders' => $allGenders,
-                    'allRoles' => $allRoles,
-                    'allStatus' => $allStatus,
-                ]);
-                return $datatables->make(true);
-            }
+        if (! Auth()->user()->can('user_access')) {
+            abort(403, "You don't have permission!");
+        }
+
+        if (! $request->ajax()) {
             return view('user.index');
-        } else return abort(403, "You don't have permission!");
+        }
+
+        $users = DB::table('users as u')
+            ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
+            ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
+            ->leftJoin('student_admissions as sa', 'u.id', 'sa.user_id')
+            ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
+            ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
+            ->leftJoin('transport_routes as tr', 'u.transport_id', 'tr.id')
+            ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
+            ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
+            ->leftJoin('users as ucn', 'u.created_by', 'ucn.id')
+            ->leftJoin('users as uun', 'u.updated_by', 'uun.id')
+            ->whereNotIn('r.name', ['Super Admin', 'STUDENT'])
+            ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'u.aadhaar_number', 'u.mother_tongue', DB::raw("date(u.date_of_birth) as date_of_birth"), 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', 'tt.name as transport_type_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
+            ->get();
+
+        $datatables = UserExporter::index($users);
+
+        $allGenders = ["Male","Female","Other"];
+        $allRoles = Role::distinct('name')->pluck('name');
+        $allStatus = ["Active","Inactive"];
+
+        $datatables->with([
+            'allGenders' => $allGenders,
+            'allRoles' => $allRoles,
+            'allStatus' => $allStatus,
+        ]);
+
+        return $datatables->make();
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
-        if (Auth()->user()->can('user_create')) {
-            $roles = Role::all()
-                ->whereNotIn('name', 'Super Admin')
-                ->whereNotIn('name', 'STUDENT');
+        if (! Auth()->user()->can('user_create')) {
+            abort(403, "You don't have permission!");
+        }
 
-            $routes = TransportRoute::all();
-            return view('user.create', ['roles' => $roles, 'routes' => $routes]);
-        } else return abort(403, "You don't have permission!");
+        $roles = Role::all()
+            ->whereNotIn('name', 'Super Admin')
+            ->whereNotIn('name', 'STUDENT');
+
+        return view('user.create', [
+            'roles' => $roles,
+            'routes' => TransportRoute::all()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return Application|Factory|View
      */
     public function store(Request $request)
     {
-        if (Auth()->user()->can('user_create')) {
-            $request->validate([
-                // User
-                'role' => 'required',
-                'title' => 'required',
-                'first_name' => 'required',
-                'middle_name' => 'nullable',
-                'last_name' => 'required',
-                'contact_number' => 'required|integer',
-                'contact_number2' => 'nullable|integer',
-                'address_line1' => 'required',
-                'city' => 'required',
-                'state' => 'required',
-                'pin_code' => 'required|integer',
-                'country' => 'required',
-                'transport_id' => 'required|integer',
-                'aadhaar_number' => 'nullable|integer',
-                'blood_group' => 'required',
-                'mother_tongue' => 'required',
-                'date_of_birth' => 'required|date',
-                'place_of_birth' => 'required',
-                'gender' => 'required',
-                'father_name' => 'required',
-                'mother_name' => 'required',
-                'remarks' => 'nullable',
-                'status' => 'required|boolean',
-                'email' => 'nullable|email',
+        if ($this->userExists($request)) {
+            abort(422, 'User already exists!');
+        }
 
-                // User information
-                'joining_date' => 'required|date',
-                'allocated_casual_leave' => 'required|integer',
-                'allocated_sick_leave' => 'required|integer',
-                'pf_number' => 'nullable|integer',
-                'esi_number' => 'nullable|integer',
-                'bank_account_number' => 'nullable|integer',
-                'ifsc_code' => 'nullable',
-                'un_number' => 'nullable|integer',
-                'pan_number' => 'nullable',
-                'travel_allowance' => 'nullable|integer',
-                'gross_salary' => 'nullable|integer',
-                'basic_salary' => 'nullable|integer',
-                'grade_salary' => 'nullable|integer',
-                'pf' => 'required',
-            ]);
-            if (User::where('first_name', $request->first_name)
-                ->where('contact_number', $request->contact_number)
-                ->exists()) {
-                return abort(403, 'User already exists!');
-            } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
-                return abort(403, 'Email id already exists');
-            } else {
-                $user = User::create([
-                    'title' => strtoupper($request->title),
-                    'first_name' => strtoupper($request->first_name),
-                    'middle_name' => strtoupper($request->middle_name),
-                    'last_name' => strtoupper($request->last_name),
-                    'contact_number' => strtoupper($request->contact_number),
-                    'contact_number2' => strtoupper($request->contact_number2),
-                    'address_line1' => strtoupper($request->address_line1),
-                    'city' => strtoupper($request->city),
-                    'state' => strtoupper($request->state),
-                    'pin_code' => strtoupper($request->pin_code),
-                    'country' => strtoupper($request->country),
-                    'transport_id' => strtoupper($request->transport_id),
-                    'aadhaar_number' => strtoupper($request->aadhaar_number),
-                    'blood_group' => strtoupper($request->blood_group),
-                    'mother_tongue' => strtoupper($request->mother_tongue),
-                    'date_of_birth' => $request->date_of_birth,
-                    'place_of_birth' => strtoupper($request->place_of_birth),
-                    'gender' => strtoupper($request->gender),
-                    'father_name' => strtoupper($request->father_name),
-                    'mother_name' => strtoupper($request->mother_name),
-                    'remarks' => strtoupper($request->remarks),
-                    'termination_date' => $request->termination_date,
-                    'status' => strtoupper($request->status),
-                    'email' => strtolower($request->email),
-                    'password' => '12345678',
-                    'created_by' => strtoupper(Auth()->user()->id),
-                    'updated_by' => strtoupper(Auth()->user()->id),
-                ])->syncRoles($request->role);
+        if ($this->emailExists($request)) {
+            abort(422, 'Email id already exists');
+        }
 
-                $user_information = UserInformation::create([
-                    'user_id' => $user->id,
-                    'joining_date' => $request->joining_date,
-                    'allocated_casual_leave' => $request->allocated_casual_leave,
-                    'allocated_sick_leave' => $request->allocated_sick_leave,
-                    'pf_number' => $request->pf_number,
-                    'esi_number' => $request->esi_number,
-                    'bank_account_number' => $request->bank_account_number,
-                    'ifsc_code' => $request->ifsc_code,
-                    'un_number' => $request->un_number,
-                    'pan_number' => $request->pan_number,
-                    'travel_allowance' => $request->travel_allowance,
-                    'gross_salary' => $request->gross_salary,
-                    'basic_salary' => $request->basic_salary,
-                    'grade_salary' => $request->grade_salary,
-                    'pf' => $request->pf,
-                ]);
+        $user = User::create([
+            'title' => strtoupper($request->title),
+            'first_name' => strtoupper($request->first_name),
+            'middle_name' => strtoupper($request->middle_name),
+            'last_name' => strtoupper($request->last_name),
+            'contact_number' => strtoupper($request->contact_number),
+            'contact_number2' => strtoupper($request->contact_number2),
+            'address_line1' => strtoupper($request->address_line1),
+            'city' => strtoupper($request->city),
+            'state' => strtoupper($request->state),
+            'pin_code' => strtoupper($request->pin_code),
+            'country' => strtoupper($request->country),
+            'transport_id' => strtoupper($request->transport_id),
+            'aadhaar_number' => strtoupper($request->aadhaar_number),
+            'blood_group' => strtoupper($request->blood_group),
+            'mother_tongue' => strtoupper($request->mother_tongue),
+            'date_of_birth' => $request->date_of_birth,
+            'place_of_birth' => strtoupper($request->place_of_birth),
+            'gender' => strtoupper($request->gender),
+            'father_name' => strtoupper($request->father_name),
+            'mother_name' => strtoupper($request->mother_name),
+            'remarks' => strtoupper($request->remarks),
+            'termination_date' => $request->termination_date,
+            'status' => strtoupper($request->status),
+            'email' => strtolower($request->email),
+            'password' => '12345678',
+            'created_by' => strtoupper(Auth()->user()->id),
+            'updated_by' => strtoupper(Auth()->user()->id),
+        ])->syncRoles($request->role);
 
-                return view('user.index')->with(["status" => "success", "message" => "User successfully created | User ID: " . $user->id]);
-            }
-        } else return abort(403, "You don't have permission!");
+        $user->user_information()->create([
+            'user_id' => $user->id,
+            'joining_date' => $request->joining_date,
+            'allocated_casual_leave' => $request->allocated_casual_leave,
+            'allocated_sick_leave' => $request->allocated_sick_leave,
+            'pf_number' => $request->pf_number,
+            'esi_number' => $request->esi_number,
+            'bank_account_number' => $request->bank_account_number,
+            'ifsc_code' => $request->ifsc_code,
+            'un_number' => $request->un_number,
+            'pan_number' => $request->pan_number,
+            'travel_allowance' => $request->travel_allowance,
+            'gross_salary' => $request->gross_salary,
+            'basic_salary' => $request->basic_salary,
+            'grade_salary' => $request->grade_salary,
+            'pf' => $request->pf,
+        ]);
+
+        return view('user.index')->with([
+            "status" => "success",
+            "message" => "User successfully created | User ID: " . $user->id
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -254,102 +200,65 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return Application|RedirectResponse|Redirector
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        if (Auth()->user()->can('user_edit')) {
-            return redirect(route('index'));
-            // if (User::find($id)) {
-            //     if (auth()->user()->can('user_update')) {
-            //         $user = DB::table('users as u')
-            //             ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
-            //             ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-            //             ->leftJoin('transport_routes as tr', 'u.transport_id', 'tr.id')
-            //             ->where('u.id', $id)
-            //             ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'u.transport_id', 'u.aadhaar_number', 'u.blood_group',  'u.mother_tongue',  'u.date_of_birth',  'u.place_of_birth',  'u.gender',  'u.father_name',  'u.mother_name',  'u.remarks',  'u.termination_date',  'u.status',  'u.email', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name')
-            //             ->get();
-            //         $roles = Role::all();
-            //         return view('user.edit')->with(['user' => $user[0], 'roles' => $roles]);
-            //     } else {
-            //         return view('user.index')->with(["status" => "warning", "message" => "You don't have permission"]);
-            //     }
-            // } else {
-            //     abort(404);
-            // }
-        } else return abort(403, "You don't have permission!");
+        if (! Auth()->user()->can('user_edit')) {
+            abort(403, "You don't have permission!");
+        }
+
+        return redirect(route('index'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        if (Auth()->user()->can('user_edit')) {
-            if (User::find($id) && !User::find($id)->hasRole('Super Admin')) {
-                $request->validate([
-                    'role' => 'required',
-                    'title' => 'required',
-                    'first_name' => 'required',
-                    'middle_name' => 'nullable',
-                    'last_name' => 'required',
-                    'contact_number' => 'required|integer',
-                    'contact_number2' => 'nullable|integer',
-                    'address_line1' => 'required',
-                    'city' => 'required',
-                    'state' => 'required',
-                    'pin_code' => 'required|integer',
-                    'country' => 'required',
-                    'transport_id' => 'required|integer',
-                    'aadhaar_number' => 'nullable|integer',
-                    'blood_group' => 'required',
-                    'mother_tongue' => 'required',
-                    'date_of_birth' => 'required|date',
-                    'place_of_birth' => 'required',
-                    'gender' => 'required',
-                    'father_name' => 'required',
-                    'mother_name' => 'required',
-                    'remarks' => 'nullable',
-                    'termination_date' => 'nullable',
-                    'status' => 'required|boolean',
-                    'email' => 'nullable|email',
-                ]);
-                $user = User::findOrFail($id);
-                $user->title = strtoupper($request->title);
-                $user->first_name = strtoupper($request->first_name);
-                $user->middle_name = strtoupper($request->middle_name);
-                $user->last_name = strtoupper($request->last_name);
-                $user->contact_number = strtoupper($request->contact_number);
-                $user->contact_number2 = strtoupper($request->contact_number2);
-                $user->address_line1 = strtoupper($request->address_line1);
-                $user->city = strtoupper($request->city);
-                $user->state = strtoupper($request->state);
-                $user->pin_code = strtoupper($request->pin_code);
-                $user->country = strtoupper($request->country);
-                $user->transport_id = strtoupper($request->transport_id);
-                $user->aadhaar_number = strtoupper($request->aadhaar_number);
-                $user->blood_group = strtoupper($request->blood_group);
-                $user->mother_tongue = strtoupper($request->mother_tongue);
-                $user->date_of_birth = $request->date_of_birth;
-                $user->place_of_birth = strtoupper($request->place_of_birth);
-                $user->gender = strtoupper($request->gender);
-                $user->father_name = strtoupper($request->father_name);
-                $user->mother_name = strtoupper($request->mother_name);
-                $user->remarks = strtoupper($request->remarks);
-                $user->termination_date = $request->termination_date;
-                $user->status = strtoupper($request->status);
-                $user->email = strtolower($request->email);
-                $user->updated_by = Auth()->user()->id;
-                $user->save();
-                $user->syncRoles($request->role);
-                return Redirect::route('user.show', $id)->with(["status" => "success", "message" => "Success"]);
-            } else return abort(404);
-        } else return abort(403, "You don't have permission!");
+        if (! $user->hasRole('Super Admin')) {
+            abort(404);
+        }
+
+        $user->title = strtoupper($request->title);
+        $user->first_name = strtoupper($request->first_name);
+        $user->middle_name = strtoupper($request->middle_name);
+        $user->last_name = strtoupper($request->last_name);
+        $user->contact_number = strtoupper($request->contact_number);
+        $user->contact_number2 = strtoupper($request->contact_number2);
+        $user->address_line1 = strtoupper($request->address_line1);
+        $user->city = strtoupper($request->city);
+        $user->state = strtoupper($request->state);
+        $user->pin_code = strtoupper($request->pin_code);
+        $user->country = strtoupper($request->country);
+        $user->transport_id = strtoupper($request->transport_id);
+        $user->aadhaar_number = strtoupper($request->aadhaar_number);
+        $user->blood_group = strtoupper($request->blood_group);
+        $user->mother_tongue = strtoupper($request->mother_tongue);
+        $user->date_of_birth = $request->date_of_birth;
+        $user->place_of_birth = strtoupper($request->place_of_birth);
+        $user->gender = strtoupper($request->gender);
+        $user->father_name = strtoupper($request->father_name);
+        $user->mother_name = strtoupper($request->mother_name);
+        $user->remarks = strtoupper($request->remarks);
+        $user->termination_date = $request->termination_date;
+        $user->status = strtoupper($request->status);
+        $user->email = strtolower($request->email);
+        $user->updated_by = Auth()->user()->id;
+        $user->save();
+
+        $user->syncRoles($request->role);
+
+        return Redirect::route('user.show', $user)
+            ->with([
+                "status" => "success",
+                "message" => "Success"
+            ]);
     }
 
     public function informationUpdate(Request $request, $id)
@@ -424,7 +333,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
@@ -435,5 +344,17 @@ class UserController extends Controller
     public function profile()
     {
         return view('profile')->with(['user' => Auth()->user()]);
+    }
+
+    protected function userExists(Request $request)
+    {
+        return User::where('first_name', $request->first_name)
+            ->where('contact_number', $request->contact_number)
+            ->exists();
+    }
+
+    protected function emailExists(Request $request): bool
+    {
+        return User::where('email', $request->email)->exists() && $request->email != '';
     }
 }
