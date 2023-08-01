@@ -35,7 +35,7 @@ class BookController extends Controller
             ->leftJoin('languages as l', 'books.language_id', 'l.id')
             ->leftJoin('student_classes as sc', 'books.class_id', 'sc.id')
             ->leftJoin('subjects as s', 'books.subject_id', 's.id')
-            ->select('books.id', 'books.accession_number', 'books.book_title', 'books.book_edition', 'books.book_price', 'books.book_isbn', 'books.book_pages', 'books.book_note', 'books.book_author as author_name', 'bp.publisher_name', 'bp.publisher_location', 'bl.location_name', 'l.language_name', 'sc.name as class_name', 's.subject_name', 'bc.category_name', DB::raw("concat(ucb.first_name, ' ', ucb.middle_name, ' ', ucb.last_name) as creator"), DB::raw("concat(uub.first_name, ' ', uub.middle_name, ' ', uub.last_name) as updater"))
+            ->select('books.id', 'books.accession_number', 'books.book_title', 'books.book_edition', 'books.book_price', 'books.book_isbn', 'books.book_pages', 'books.book_note', 'books.book_author as author_name', 'books.purchased_at', 'bp.publisher_name', 'bp.publisher_location', 'bl.location_name', 'l.language_name', 'sc.name as class_name', 's.subject_name', 'bc.category_name', DB::raw("concat(ucb.first_name, ' ', ucb.middle_name, ' ', ucb.last_name) as creator"), DB::raw("concat(uub.first_name, ' ', uub.middle_name, ' ', uub.last_name) as updater"))
             ->get();
 
         return DataTables($books)
