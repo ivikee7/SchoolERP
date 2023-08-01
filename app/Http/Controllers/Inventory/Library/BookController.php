@@ -225,6 +225,7 @@ class BookController extends Controller
             'category_id' => 'required|integer',
             'supplier_id' => 'required|integer',
             'book_price' => 'required|integer',
+            'purchased_at' => 'required|date', // Tempreary
         ]);
 
         $book = Book::findOrFail($id);
@@ -243,6 +244,7 @@ class BookController extends Controller
         $book->category_id = $request->category_id;
         $book->supplier_id = $request->supplier_id;
         $book->book_price = $request->book_price;
+        $book->purchased_at = $request->purchased_at;
         $book->save();
 
         return redirect()->route('inventry.library.book.render');

@@ -266,8 +266,8 @@
                                                     <label for="" class="ml-1 mr-1">Price</label>
                                                     <input type="number"
                                                         class="form-control @error('book_price') border border-danger @enderror "
-                                                        name="book_price" @if (old('book_price'))
-                                                        value="{{ old('book_price') }}" @elseif ($book->book_price)
+                                                        name="book_price" @if(old('book_price'))
+                                                        value="{{ old('book_price') }}" @elseif($book->book_price)
                                                     value="{{ $book->book_price }}" @endif
                                                     placeholder="Price">
                                                 </div>
@@ -275,10 +275,19 @@
                                                     <label for="" class="ml-1 mr-1">Note</label>
                                                     <input type="text"
                                                         class="form-control @error('book_note') border border-danger @enderror "
-                                                        name="book_note" @if (old('book_note'))
-                                                        value="{{ old('book_note') }}" @elseif ($book->book_note)
+                                                        name="book_note" @if(old('book_note'))
+                                                        value="{{ old('book_note') }}" @elseif($book->book_note)
                                                     value="{{ $book->book_note }}" @endif
                                                     placeholder="Note">
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
+                                                    <label for="" class="ml-1 mr-1">Purchased Date</label>
+                                                    <input type="date"
+                                                        class="form-control @error('purchased_at') border border-danger @enderror "
+                                                        name="purchased_at" @if(old('purchased_at'))
+                                                        value="{{ old('purchased_at') }}" @elseif($book->purchased_at)
+                                                    value="{{ $book->purchased_at }}" @endif
+                                                    placeholder="Purchased Date">
                                                 </div>
                                             </div>
                                         </div>
