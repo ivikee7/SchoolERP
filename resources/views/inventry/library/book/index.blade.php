@@ -277,7 +277,7 @@
                     }
                 ],
                 initComplete: function(settings, json) {
-                    this.api().columns([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13]).every(function() {
+                    this.api().columns([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15]).every(function() {
                         var column = this;
                         var input = document.createElement("input");
                         input.className = "form-control form-control-sm";

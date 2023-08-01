@@ -213,7 +213,7 @@ class BookController extends Controller
 
         $request->validate([
             'book_title' => 'required',
-            'book_edition' => 'required',
+            'book_edition' => 'nullable',
             'book_note' => 'nullable',
             'book_pages' => 'required|integer',
             'book_isbn' => 'nullable',
