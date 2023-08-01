@@ -35,11 +35,13 @@ class BookController extends Controller
             ->leftJoin('languages as l', 'books.language_id', 'l.id')
             ->leftJoin('student_classes as sc', 'books.class_id', 'sc.id')
             ->leftJoin('subjects as s', 'books.subject_id', 's.id')
-            ->select('books.id', 'books.accession_number', 'books.book_title', 'books.book_edition', 'books.book_price', 'books.book_isbn', 'books.book_pages', 'books.book_note', 'books.book_author as author_name', 'books.purchased_at', 'bp.publisher_name', 'bp.publisher_location', 'bl.location_name', 'l.language_name', 'sc.name as class_name', 's.subject_name', 'bc.category_name', DB::raw("concat(ucb.first_name, ' ', ucb.middle_name, ' ', ucb.last_name) as creator"), DB::raw("concat(uub.first_name, ' ', uub.middle_name, ' ', uub.last_name) as updater"))
+            ->select('books.id', 'books.accession_number', 'books.book_title', 'books.book_edition', 'books.book_price', 'books.book_isbn', 'books.book_pages', 'books.book_note', 'books.book_author as author_name', 'books.purchased_at', 'books.created_at', 'books.updated_at', 'bp.publisher_name', 'bp.publisher_location', 'bl.location_name', 'l.language_name', 'sc.name as class_name', 's.subject_name', 'bc.category_name', 'ucb.first_name as ucb_first_name', 'ucb.middle_name as ucb_middle_name', 'ucb.last_name as ucb_last_name', 'uub.first_name as uub_first_name', 'uub.middle_name as uub_middle_name', 'uub.last_name as uub_last_name')
             ->get();
 
         return DataTables($books)
             ->editColumn('publisher_name', '{{$publisher_name}} @if(!$publisher_location == "") ({{ $publisher_location }}) @endif')
+            ->editColumn('creator', '{{$ucb_first_name}} {{$ucb_middle_name}} {{$ucb_last_name}} {{date("Y-m-d H:i:s", strtotime($created_at))}}')
+            ->editColumn('updater', '{{$uub_first_name}} {{$uub_middle_name}} {{$uub_last_name}} {{date("Y-m-d H:i:s", strtotime($updated_at))}}')
             ->editColumn('status', function ($books) {
                 $status = '<span class="bg-success badge rounded-pill">Available</span>';
                 if ($books->from('book_borrows')

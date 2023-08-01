@@ -85,12 +85,16 @@
                                         <th>Price</th>
                                         <th>Note</th>
                                         <th>Purchased At</th>
+                                        <th>Created By</th>
+                                        <th>Updated By</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tfoot style="display: table-row-group;">
                                     <tr>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -251,6 +255,16 @@
                     {
                         data: 'purchased_at',
                         name: 'purchased_at',
+                        visible: false
+                    },
+                    {
+                        data: 'creator',
+                        name: 'creator',
+                        visible: false
+                    },
+                    {
+                        data: 'updater',
+                        name: 'updater',
                         visible: false
                     },
                     {

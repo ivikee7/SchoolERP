@@ -22,11 +22,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if (! auth()->user()->can('user_access')) {
+        if (!auth()->user()->can('user_access')) {
             return abort(403, "You don't have permission!");
         }
 
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('user.index');
         }
 
@@ -48,7 +48,7 @@ class UserController extends Controller
         $datatables = DataTables::of($users)
             ->editColumn('id', '{{$id}}')
             ->addColumn('full_name', function ($user) {
-                return str_replace('  ', ' ', $user->first_name.' '.$user->middle_name.' '.$user->last_name);
+                return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
             })
             ->addColumn('transport', '{{$route_name}} {{$transport_type_name}}')
             ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
@@ -75,7 +75,7 @@ class UserController extends Controller
                 }
             })
             ->addColumn('action', function ($users) {
-                $view = '<a href='.URL::current().'/'.$users->id.' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
+                $view = '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
 
                 return $view;
             })
@@ -105,7 +105,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (! auth()->user()->can('user_create')) {
+        if (!auth()->user()->can('user_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -125,7 +125,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (! auth()->user()->can('user_create')) {
+        if (!auth()->user()->can('user_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -230,7 +230,7 @@ class UserController extends Controller
                 'pf' => $request->pf,
             ]);
 
-            return view('user.index')->with(['status' => 'success', 'message' => 'User successfully created | User ID: '.$user->id]);
+            return view('user.index')->with(['status' => 'success', 'message' => 'User successfully created | User ID: ' . $user->id]);
         }
     }
 
@@ -242,11 +242,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        if (! auth()->user()->can('user_show')) {
+        if (!auth()->user()->can('user_show')) {
             return abort(403, "You don't have permission!");
         }
 
-        if (User::find($id) && ! User::find($id)->hasAnyRole('STUDENT', 'Super Admin')) {
+        if (User::find($id) && !User::find($id)->hasAnyRole('STUDENT', 'Super Admin')) {
             $user = DB::table('users as u')
                 ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
                 ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
@@ -284,7 +284,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        if (! auth()->user()->can('user_edit')) {
+        if (!auth()->user()->can('user_edit')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -299,11 +299,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->can('user_edit')) {
+        if (!auth()->user()->can('user_edit')) {
             return abort(403, "You don't have permission!");
         }
 
-        if (! User::find($id)) {
+        if (!User::find($id)) {
             return abort(404);
         }
 
@@ -412,7 +412,7 @@ class UserController extends Controller
                 $user_information->pf = $request->pf;
                 $user_information->save();
 
-                return view('user.index')->with(['status' => 'success', 'message' => 'User successfully updated | User ID: '.$id]);
+                return view('user.index')->with(['status' => 'success', 'message' => 'User successfully updated | User ID: ' . $id]);
             } elseif (UserInformation::where('user_id', $id)
                 ->doesntExist()
             ) {
@@ -435,7 +435,7 @@ class UserController extends Controller
                     'pf' => $request->pf,
                 ]);
 
-                return view('user.index')->with(['status' => 'success', 'message' => 'User successfully created | User ID: '.$id]);
+                return view('user.index')->with(['status' => 'success', 'message' => 'User successfully created | User ID: ' . $id]);
             }
         } else {
             return abort(403, "You don't have permission!");
