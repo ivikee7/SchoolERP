@@ -19,10 +19,10 @@ class BookController extends Controller
 {
     public function render(Request $request)
     {
-        if (! Auth()->user()->can('library_access')) {
+        if (!Auth()->user()->can('library_access')) {
             return abort(404);
         }
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('inventry.library.book.index');
         }
 
@@ -61,18 +61,17 @@ class BookController extends Controller
                 return $status;
             })
             ->addColumn('action', function ($books) {
-                $view = "<a href='".route('inventry.library.book.edit', $books->id)."' class='btn btn-xs btn-primary'><i class='fas fa-tools'></i> Edit</a>";
+                $view = "<a href='" . route('inventry.library.book.edit', $books->id) . "' class='btn btn-xs btn-primary'><i class='fas fa-tools'></i> Edit</a>";
 
                 return $view;
             })
             ->rawColumns(['status', 'action'])
             ->make(true);
-
     }
 
     public function create(Request $request)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -100,7 +99,7 @@ class BookController extends Controller
     public function store(Request $request, Book $book)
     {
 
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -112,7 +111,7 @@ class BookController extends Controller
             'book_isbn' => 'nullable',
             'book_author' => 'required',
             'publisher_id' => 'required|integer',
-            'book_published_at' => 'nullable|digits:4|integer|min:1900|max:'.(date('Y') + 1),
+            'book_published_at' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
             'location_id' => 'required|integer',
             'language_id' => 'required|integer',
             'class_id' => 'nullable|integer',
@@ -131,7 +130,7 @@ class BookController extends Controller
         // );
 
         $number_of_book = (int) 1;
-        if (! $request->number_of_book == '') {
+        if (!$request->number_of_book == '') {
             $number_of_book = (int) $request->number_of_book;
         }
 
@@ -164,7 +163,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        if (! auth()->user()->can('library_access')) {
+        if (!auth()->user()->can('library_access')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -173,7 +172,7 @@ class BookController extends Controller
 
     public function edit($id)
     {
-        if (! auth()->user()->can('library_edit')) {
+        if (!auth()->user()->can('library_edit')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -202,57 +201,56 @@ class BookController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->can('library_manage')) {
+        if (!auth()->user()->can('library_edit')) {
             return abort(403, "You don't have permission!");
         }
 
-        if (! Book::find($id)) {
+        if (!Book::find($id)) {
             return abort(404);
         }
 
         $request->validate([
-            // 'book_title' => 'required',
-            // 'book_edition' => 'required',
-            // 'book_note' => 'nullable',
-            // 'book_pages' => 'required|integer',
-            // 'book_isbn' => 'nullable',
-            // 'book_author' => 'required',
-            // 'publisher_id' => 'required|integer',
-            // 'book_published_at' => 'nullable|digits:4|integer|min:1900|max:'.(date('Y') + 1),
+            'book_title' => 'required',
+            'book_edition' => 'required',
+            'book_note' => 'nullable',
+            'book_pages' => 'required|integer',
+            'book_isbn' => 'nullable',
+            'book_author' => 'required',
+            'publisher_id' => 'required|integer',
+            'book_published_at' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
             'location_id' => 'required|integer',
-            // 'language_id' => 'required|integer',
-            // 'class_id' => 'nullable|integer',
-            // 'subject_id' => 'nullable|integer',
-            // 'category_id' => 'required|integer',
-            // 'supplier_id' => 'required|integer',
-            // 'book_price' => 'required|integer',
+            'language_id' => 'required|integer',
+            'class_id' => 'nullable|integer',
+            'subject_id' => 'nullable|integer',
+            'category_id' => 'required|integer',
+            'supplier_id' => 'required|integer',
+            'book_price' => 'required|integer',
         ]);
 
         $book = Book::findOrFail($id);
-        // $book->book_title = strtoupper($request->book_title);
-        // $book->book_edition = strtoupper($request->book_edition);
-        // $book->book_note = strtoupper($request->book_note);
-        // $book->book_pages = $request->book_pages;
-        // $book->book_isbn = strtoupper($request->book_isbn);
-        // $book->book_author = strtoupper($request->book_author);
-        // $book->publisher_id = $request->publisher_id;
-        // $book->book_published_at = $request->book_published_at;
+        $book->book_title = strtoupper($request->book_title);
+        $book->book_edition = strtoupper($request->book_edition);
+        $book->book_note = strtoupper($request->book_note);
+        $book->book_pages = $request->book_pages;
+        $book->book_isbn = strtoupper($request->book_isbn);
+        $book->book_author = strtoupper($request->book_author);
+        $book->publisher_id = $request->publisher_id;
+        $book->book_published_at = $request->book_published_at;
         $book->location_id = $request->location_id;
-        // $book->language_id = $request->language_id;
-        // $book->class_id = $request->class_id;
-        // $book->subject_id = $request->subject_id;
-        // $book->category_id = $request->category_id;
-        // $book->supplier_id = $request->supplier_id;
-        // $book->book_price = $request->book_price;
+        $book->language_id = $request->language_id;
+        $book->class_id = $request->class_id;
+        $book->subject_id = $request->subject_id;
+        $book->category_id = $request->category_id;
+        $book->supplier_id = $request->supplier_id;
+        $book->book_price = $request->book_price;
         $book->save();
 
-        // return $request;
         return redirect()->route('inventry.library.book.render');
     }
 
     public function getAuthors(Request $request)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
         $authors = Book::get()
