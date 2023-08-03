@@ -67,7 +67,8 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div>
-                                    <form action="{{ route('inventry.library.book.store') }}" method="post" class="form-prevent-multiple-submits">
+                                    <form action="{{ route('inventry.library.book.store') }}" method="post"
+                                        class="form-prevent-multiple-submits">
                                         @csrf
                                         <div class="card">
                                             <div class="card-body">
@@ -81,7 +82,8 @@
                                                                 @foreach ($suppliers as $supplier)
                                                                     <option value="{{ $supplier->id }}"
                                                                         @if (old('supplier_id') == $supplier->id) selected @endif>
-                                                                        {{ $supplier->supplier_name }} @if (!$supplier->supplier_address == '')
+                                                                        {{ $supplier->supplier_name }}
+                                                                        @if (!$supplier->supplier_address == '')
                                                                             ({{ $supplier->supplier_address }})
                                                                         @endif
                                                                     </option>
@@ -110,30 +112,42 @@
                                                             name="book_published_at" value="{{ old('book_published_at') }}"
                                                             placeholder="Year Of Publish">
                                                     </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
+                                                    {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">Author</label>
                                                         <input type="text"
                                                             class="form-control @error('book_author') border border-danger @enderror "
                                                             id="search_input_author" name="book_author"
-                                                            value="{{ old('book_author') }}" placeholder="Author">
-                                                    </div>
-                                                    {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <label for="" class="ml-1 mr-1">Author</label>
-                                                        <select name="author_id" id=""
-                                                            class="form-control select2 @error('author_id') border border-danger @enderror">
-                                                            <option value="" selected disabled>Author</option>
-                                                            @if ($authors ?? '')
-                                                                @foreach ($authors as $author)
-                                                                    <option value="{{ $author->id }}"
-                                                                        @if (old('author_id') == $author->id) selected @endif>
-                                                                        {{ $author->author_name }} @if (!$author->author_note == '')
-                                                                            ({{ $author->author_note }})
-                                                                        @endif
-                                                                    </option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
+                                                            value="{{ old('book_author') }}"
+                                                            placeholder="Author">
                                                     </div> --}}
+
+                                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2"
+                                                        id="search_input_author">
+                                                        <label for="" class="ml-1 mr-1">Author</label>
+                                                        <input type="text" list="authors" id="author"
+                                                            class="form-control @error('book_author') border border-danger @enderror "
+                                                            name="book_author" value="{{ old('book_author') }}"
+                                                            placeholder="Author">
+                                                    </div>
+                                                    <datalist id="authors">
+                                                    </datalist>
+
+                                                    {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
+                                                    <label for="" class="ml-1 mr-1">Author</label>
+                                                    <select name="author_id" id=""
+                                                        class="form-control select2 @error('author_id') border border-danger @enderror">
+                                                        <option value="" selected disabled>Author</option>
+                                                        @if ($authors ?? '')
+                                                        @foreach ($authors as $author)
+                                                        <option value="{{ $author->id }}" @if (old('author_id') == $author->id) selected @endif>
+                                                            {{ $author->author_name }} @if (!$author->author_note == '')
+                                                            ({{ $author->author_note }})
+                                                            @endif
+                                                        </option>
+                                                        @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div> --}}
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">Publisher</label>
                                                         <select name="publisher_id" id=""
@@ -143,7 +157,8 @@
                                                                 @foreach ($publishers as $publisher)
                                                                     <option value="{{ $publisher->id }}"
                                                                         @if (old('publisher_id') == $publisher->id) selected @endif>
-                                                                        {{ $publisher->publisher_name }} @if (!$publisher->publisher_location == '')
+                                                                        {{ $publisher->publisher_name }}
+                                                                        @if (!$publisher->publisher_location == '')
                                                                             ({{ $publisher->publisher_location }})
                                                                         @endif
                                                                     </option>
@@ -152,25 +167,25 @@
                                                         </select>
                                                     </div>
                                                     {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <div class="form-group">
-                                                            <label>Auther</label>
-                                                            <select
-                                                                class="search_input_author form-control select2 @error('author_id') border border-danger @enderror"
-                                                                id="search_input_author" style="width: 100%;" name="author_id"
-                                                                placeholder="Auther">
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label>Auther</label>
+                                                        <select
+                                                            class="search_input_author form-control select2 @error('author_id') border border-danger @enderror"
+                                                            id="search_input_author" style="width: 100%;"
+                                                            name="author_id" placeholder="Auther">
+                                                        </select>
                                                     </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <div class="form-group">
-                                                            <label>Publisher</label>
-                                                            <select
-                                                                class="search_input_publisher form-control select2 @error('publisher_id') border border-danger @enderror"
-                                                                id="search_input_publisher" style="width: 100%;" name="publisher_id"
-                                                                placeholder="Publisher">
-                                                            </select>
-                                                        </div>
-                                                    </div> --}}
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
+                                                    <div class="form-group">
+                                                        <label>Publisher</label>
+                                                        <select
+                                                            class="search_input_publisher form-control select2 @error('publisher_id') border border-danger @enderror"
+                                                            id="search_input_publisher" style="width: 100%;"
+                                                            name="publisher_id" placeholder="Publisher">
+                                                        </select>
+                                                    </div>
+                                                </div> --}}
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">ISBN</label>
                                                         <input type="text"
@@ -263,12 +278,12 @@
                                                         </select>
                                                     </div>
                                                     {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <label for="" class="ml-1 mr-1">Number Of Books</label>
-                                                        <input type="integer"
-                                                            class="form-control @error('number_of_book') border border-danger @enderror "
-                                                            name="number_of_book" value="{{ old('number_of_book') }}"
-                                                            placeholder="Number Of Books">
-                                                    </div> --}}
+                                                    <label for="" class="ml-1 mr-1">Number Of Books</label>
+                                                    <input type="integer"
+                                                        class="form-control @error('number_of_book') border border-danger @enderror "
+                                                        name="number_of_book" value="{{ old('number_of_book') }}"
+                                                        placeholder="Number Of Books">
+                                                </div> --}}
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">Price</label>
                                                         <input type="integer"
@@ -302,7 +317,8 @@
                                             <!-- /.card-body -->
 
                                             <div class="card-footer">
-                                                <button type="save" class="btn btn-primary button-prevent-multiple-submits">Save</button>
+                                                <button type="save"
+                                                    class="btn btn-primary button-prevent-multiple-submits">Save</button>
                                             </div>
                                         </div>
                                         <!-- /.card -->
@@ -325,8 +341,8 @@
 @endsection()
 
 {{-- @push('scripts')
-    <script>
-        $(function() {
+<script>
+    $(function() {
             //Initialize Select2 Elements
             $('.select2_permission').select2()
         });
@@ -354,12 +370,12 @@
                 cache: true
             }
         });
-    </script>
+</script>
 @endpush --}}
 
 {{-- @push('scripts')
-    <script>
-        $(function() {
+<script>
+    $(function() {
             //Initialize Select2 Elements
             $('.select2_permission').select2()
         });
@@ -387,20 +403,49 @@
                 cache: true
             }
         });
-    </script>
+</script>
 @endpush --}}
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(function() {
             //Initialize Select2 Elements
-            $('.select2').select2()
+            $('.select2').select2();
 
             //Initialize Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
+            });
+
+            $("#search_input_author :input").on("keyup", function(e) {
+                e.preventDefault();
+                var el = $(this);
+                var id = $(this).val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{!! route('inventry.library.book.getAuthors') !!}",
+                    method: 'get',
+                    dataType: 'json',
+                    data: 'search_input_author=' + $(this).val(),
+                    success: function(response) {
+                        $('#authors').empty();
+                        $.each(response, function(key, value) {
+                            $("#authors").last().append(
+                                '<option value="' + value.book_author +
+                                '"></option>'
+                            );
+                        });
+                    },
+                    error: function(response) {
+                        alert('Failed!');
+                    }
+                });
             })
-        })
+        });
     </script>
     {{-- <script>
         $('#search_input_author').select2({

@@ -51,7 +51,6 @@ Route::get('/message', function () {
 
 // Auth Check
 Route::group(['middleware' => ['auth']], function () {
-
     // Theme Settings
     Route::get('/theme', [ThemeController::class, 'setttings'])->name('theme.setting');
 
@@ -240,7 +239,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         // Book
         Route::prefix('/book')->group(function () {
-
             Route::get('/buy', [App\Http\Controllers\Book\BookController::class, 'create'])->name('book.buy.create');
             Route::get('/sale', [App\Http\Controllers\Book\SaleController::class, 'create'])->name('book.sale.create');
             Route::post('/sale', [App\Http\Controllers\Book\SaleController::class, 'store'])->name('book.sale.store');
@@ -251,13 +249,6 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/get-classes', [App\Http\Controllers\Book\AssignController::class, 'getClasses'])->name('book.assign.get.classes');
                 Route::get('/get-books', [App\Http\Controllers\Book\AssignController::class, 'getBooks'])->name('book.assign.get.books');
             });
-            // Route::get('/', [BookController::class, 'render'])->name('book.sell.render');
-            // Route::get('/create', [BookController::class, 'create'])->name('book.sell.create');
-            // Route::post('/store', [BookController::class, 'store'])->name('book.sell.store');
-            // Route::get('/show', [BookController::class, 'show'])->name('book.sell.show');
-            // Route::get('/edit', [BookController::class, 'edit'])->name('book.sell.edit');
-            // Route::post('/update', [BookController::class, 'update'])->name('book.sell.update');
-
         });
     });
 
@@ -274,9 +265,11 @@ Route::group(['middleware' => ['auth']], function () {
             // Classroom
             Route::prefix('/classroom')->group(function () {
                 Route::group(['middleware' => ['permission:classroom_class_create']], function () {
-                    Route::get('/course/create', [function () {
-                        return view('google.workspace.classroom.create');
-                    }])->name('google.workspace.classroom.course.create');
+                    Route::get('/course/create', [
+                        function () {
+                            return view('google.workspace.classroom.create');
+                        },
+                    ])->name('google.workspace.classroom.course.create');
                     Route::post('/course/create', [CoursesController::class, 'createCourse'])->name('google.workspace.classroom.course.store');
                     Route::get('/{courseId}/delete', [CoursesController::class, 'deleteCourse'])->name('google.workspace.classroom.course.delete');
                 });

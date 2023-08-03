@@ -257,10 +257,16 @@ class BookController extends Controller
         if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
-        $authors = Book::get()
-            ->limit(100)
-            ->select('books.book_author')
-            ->get();
+
+        $authors = [];
+        if ($request->has('search_input_author')) {
+            $search_input_author = str_replace(' ', '%', $request->search_input_author);
+            $authors = Book::limit(10)
+                ->select('books.book_author')
+                ->where('books.book_author', 'like', '%' . $search_input_author . '%')
+                ->groupBy('books.book_author')
+                ->get();
+        }
 
         return response()->json($authors);
     }

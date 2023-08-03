@@ -602,7 +602,7 @@
         });
 
         /** On submit of the form disable the submit button */
-        $('.form-prevent-multiple-submits').on('submit', function () {
+        $('.form-prevent-multiple-submits').on('submit', function() {
             $('.button-prevent-multiple-submits').attr('disabled', true);
         });
 
@@ -646,7 +646,6 @@
                 });
             });
         });
-
     </script>
 
     @if (!empty(!empty($status)))
