@@ -439,9 +439,6 @@
                                 '"></option>'
                             );
                         });
-                    },
-                    error: function(response) {
-                        alert('Failed!');
                     }
                 });
             })
