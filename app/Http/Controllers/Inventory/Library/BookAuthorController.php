@@ -21,6 +21,7 @@ class BookAuthorController extends Controller
             $author = BookAuthor::limit(5)
                 ->select('book_authors.id', 'book_authors.author_name')
                 ->where('book_authors.author_name', 'like', '%'.$search_input_author.'%')
+                ->orderBy('book_authors.author_name', 'ASC')
                 ->get();
         }
 

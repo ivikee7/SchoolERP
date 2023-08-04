@@ -77,17 +77,17 @@ class BookController extends Controller
             return abort(403, "You don't have permission!");
         }
 
-        $authors = BookAuthor::all();
-        $publishers = BookPublisher::all();
-        $categories = BookCategory::all();
-        $locations = BookLocation::all();
-        $languages = Language::all();
-        $subjects = Subject::all();
+        // $authors = BookAuthor::orderBy('author_name', 'ASC')->get();
+        $publishers = BookPublisher::orderBy('publisher_name', 'ASC')->get();
+        $categories = BookCategory::orderBy('category_name', 'ASC')->get();
+        $locations = BookLocation::orderBy('location_name', 'ASC')->get();
+        $languages = Language::orderBy('language_name', 'ASC')->get();
+        $subjects = Subject::orderBy('subject_name', 'ASC')->get();
         $classes = StudentClass::all();
         $suppliers = BookSupplier::where('supplier_status', 1)->get();
 
         return view('inventory.library.book.create')->with([
-            'authors' => $authors,
+            // 'authors' => $authors,
             'publishers' => $publishers,
             'categories' => $categories,
             'locations' => $locations,
@@ -265,6 +265,7 @@ class BookController extends Controller
                 ->select('books.book_author')
                 ->where('books.book_author', 'like', '%' . $search_input_author . '%')
                 ->groupBy('books.book_author')
+                ->orderBy('books.book_author', 'ASC')
                 ->get();
         }
 

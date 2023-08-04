@@ -22,6 +22,7 @@ class BookPublisherController extends Controller
                 ->select('book_publishers.id', 'book_publishers.publisher_name', 'book_publishers.publisher_location')
                 ->where('book_publishers.publisher_name', 'like', '%'.$search_input_publisher.'%')
                 ->orWhere('book_publishers.publisher_location', 'like', '%'.$search_input_publisher.'%')
+                ->orderBy('book_publishers.publisher_name', 'ASC')
                 ->get();
         }
 

@@ -220,6 +220,7 @@ class BookBorrowController extends Controller
                     });
                 }
             })
+            ->orderBy('users.first_name', 'ASC')
             ->limit(100)
             ->select('users.id as user_id', 'users.father_name as user_farher_anme', DB::raw("concat(users.first_name, ' ', users.middle_name, ' ', users.last_name) as user_name"), 'sc.name as class_name', 'r.name as user_role')
             ->get();
