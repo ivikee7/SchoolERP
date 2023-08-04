@@ -606,6 +606,12 @@
             $('.button-prevent-multiple-submits').attr('disabled', true);
         });
 
+        /** Automatic focus search field  */
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
+    </script>
+    <script>
         $(document).ready(function() {
             $('#theme-style-save').on('click', function() {
                 var body = ($('body').prop("classList").value).replace('control-sidebar-slide-open', '');
