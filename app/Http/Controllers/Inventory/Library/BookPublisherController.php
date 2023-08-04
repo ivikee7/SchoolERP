@@ -35,7 +35,7 @@ class BookPublisherController extends Controller
         }
 
         if (! $request->ajax()) {
-            return view('inventry.library.book.publisher.index');
+            return view('inventory.library.book.publisher.index');
         }
 
         $publishers = BookPublisher::leftJoin('books as b', 'book_publishers.id', 'b.publisher_id')
@@ -60,7 +60,7 @@ class BookPublisherController extends Controller
 
     public function create(Request $request)
     {
-        return view('inventry.library.book.publisher.create');
+        return view('inventory.library.book.publisher.create');
     }
 
     public function store(Request $request)
@@ -101,7 +101,7 @@ class BookPublisherController extends Controller
         }
         $publisher = BookPublisher::findOrFail($id);
 
-        return view('inventry.library.book.publisher.edit')->with(['publisher' => $publisher]);
+        return view('inventory.library.book.publisher.edit')->with(['publisher' => $publisher]);
     }
 
     public function update($id, Request $request)

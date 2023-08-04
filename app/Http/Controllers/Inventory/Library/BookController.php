@@ -23,7 +23,7 @@ class BookController extends Controller
             return abort(404);
         }
         if (!$request->ajax()) {
-            return view('inventry.library.book.index');
+            return view('inventory.library.book.index');
         }
 
         $books = Book::leftJoin('users as ucb', 'books.created_by', 'ucb.id')
@@ -86,7 +86,7 @@ class BookController extends Controller
         $classes = StudentClass::all();
         $suppliers = BookSupplier::where('supplier_status', 1)->get();
 
-        return view('inventry.library.book.create')->with([
+        return view('inventory.library.book.create')->with([
             'authors' => $authors,
             'publishers' => $publishers,
             'categories' => $categories,
@@ -188,7 +188,7 @@ class BookController extends Controller
         $suppliers = BookSupplier::where('supplier_status', true)->get();
         $book = Book::findOrFail($id);
 
-        return view('inventry.library.book.edit')->with([
+        return view('inventory.library.book.edit')->with([
             'authors' => $authors,
             'publishers' => $publishers,
             'categories' => $categories,

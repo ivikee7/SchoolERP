@@ -15,7 +15,7 @@ class BookCategoryController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.category.index');
+            return view('inventory.library.book.category.index');
         }
 
         $categories = BookCategory::leftJoin('books as b', 'book_categories.id', 'b.category_id')
@@ -35,7 +35,7 @@ class BookCategoryController extends Controller
 
     public function create()
     {
-        return view('inventry.library.book.category.create');
+        return view('inventory.library.book.category.create');
     }
 
     public function store(Request $request)
@@ -73,7 +73,7 @@ class BookCategoryController extends Controller
 
         $category = BookCategory::findOrFail($id);
 
-        return view('inventry.library.book.category.show')->with(['category' => $category]);
+        return view('inventory.library.book.category.show')->with(['category' => $category]);
     }
 
     public function edit($id)
@@ -83,7 +83,7 @@ class BookCategoryController extends Controller
         }
         $category = BookCategory::findOrFail($id);
 
-        return view('inventry.library.book.category.edit')->with(['category' => $category]);
+        return view('inventory.library.book.category.edit')->with(['category' => $category]);
     }
 
     public function update($id, Request $request)
@@ -111,6 +111,6 @@ class BookCategoryController extends Controller
         $category->category_name = strtoupper($request->category_name);
         $category->save();
 
-        return view('inventry.library.book.category.index');
+        return view('inventory.library.book.category.index');
     }
 }

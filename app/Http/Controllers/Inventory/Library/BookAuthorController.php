@@ -33,7 +33,7 @@ class BookAuthorController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.author.index');
+            return view('inventory.library.book.author.index');
         }
 
         $authors = BookAuthor::leftJoin('books as b', 'book_authors.id', 'b.author_id')
@@ -54,7 +54,7 @@ class BookAuthorController extends Controller
 
     public function create()
     {
-        return view('inventry.library.book.author.create');
+        return view('inventory.library.book.author.create');
     }
 
     public function store(Request $request)
@@ -85,7 +85,7 @@ class BookAuthorController extends Controller
     {
         $author = BookAuthor::findOrFail($id);
 
-        return view('inventry.library.book.author.edit')->with(['author' => $author]);
+        return view('inventory.library.book.author.edit')->with(['author' => $author]);
     }
 
     public function update($id, Request $request)

@@ -15,7 +15,7 @@ class LocationController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.location.index');
+            return view('inventory.library.book.location.index');
         }
 
         $location = BookLocation::leftJoin('books as b', 'book_locations.id', 'b.location_id')
@@ -41,7 +41,7 @@ class LocationController extends Controller
             return abort(403, "You don't have permission!");
         }
 
-        return view('inventry.library.book.location.create');
+        return view('inventory.library.book.location.create');
     }
 
     public function store(Request $request)
@@ -80,7 +80,7 @@ class LocationController extends Controller
         }
         $location = BookLocation::all();
 
-        return view('inventry.library.book.location.show')->with(['location' => $location]);
+        return view('inventory.library.book.location.show')->with(['location' => $location]);
     }
 
     public function edit($id)
@@ -90,7 +90,7 @@ class LocationController extends Controller
         }
         $location = BookLocation::findOrFail($id);
 
-        return view('inventry.library.book.location.edit')->with(['location' => $location]);
+        return view('inventory.library.book.location.edit')->with(['location' => $location]);
     }
 
     public function update($id, Request $request)

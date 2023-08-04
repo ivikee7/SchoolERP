@@ -17,7 +17,7 @@ class BookBorrowController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.borrow.index');
+            return view('inventory.library.book.borrow.index');
         }
 
         $borrows = BookBorrow::whereNull('book_borrows.borrow_received_at')
@@ -64,7 +64,7 @@ class BookBorrowController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.borrow.returneds');
+            return view('inventory.library.book.borrow.returneds');
         }
 
         $borrows = BookBorrow::whereNotNull('book_borrows.borrow_received_at')
@@ -101,7 +101,7 @@ class BookBorrowController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.borrow.losts');
+            return view('inventory.library.book.borrow.losts');
         }
 
         $borrows = BookBorrow::whereNotNull('book_borrows.borrow_lost_at')
@@ -142,7 +142,7 @@ class BookBorrowController extends Controller
         $books = Book::all();
         $users = User::all();
 
-        return view('inventry.library.book.borrow.create')->with([
+        return view('inventory.library.book.borrow.create')->with([
             'books' => $books,
             'users' => $users,
         ]);

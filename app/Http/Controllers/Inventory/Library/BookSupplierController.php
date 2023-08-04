@@ -15,7 +15,7 @@ class BookSupplierController extends Controller
             return abort(404);
         }
         if (! $request->ajax()) {
-            return view('inventry.library.book.supplier.index');
+            return view('inventory.library.book.supplier.index');
         }
 
         $categories = BookSupplier::leftJoin('books as b', 'book_suppliers.id', 'b.supplier_id')
@@ -40,7 +40,7 @@ class BookSupplierController extends Controller
 
     public function create()
     {
-        return view('inventry.library.book.supplier.create');
+        return view('inventory.library.book.supplier.create');
     }
 
     public function store(Request $request)
@@ -88,7 +88,7 @@ class BookSupplierController extends Controller
 
         $supplier = BookSupplier::findOrFail($id);
 
-        return view('inventry.library.book.supplier.show')->with(['supplier' => $supplier]);
+        return view('inventory.library.book.supplier.show')->with(['supplier' => $supplier]);
     }
 
     public function edit($id)
@@ -98,7 +98,7 @@ class BookSupplierController extends Controller
         }
         $supplier = BookSupplier::findOrFail($id);
 
-        return view('inventry.library.book.supplier.edit')->with(['supplier' => $supplier]);
+        return view('inventory.library.book.supplier.edit')->with(['supplier' => $supplier]);
     }
 
     public function update($id, Request $request)
@@ -136,6 +136,6 @@ class BookSupplierController extends Controller
         $supplier->supplier_status = $request->supplier_status;
         $supplier->save();
 
-        return view('inventry.library.book.supplier.index');
+        return view('inventory.library.book.supplier.index');
     }
 }
