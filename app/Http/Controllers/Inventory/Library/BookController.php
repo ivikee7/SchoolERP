@@ -84,7 +84,7 @@ class BookController extends Controller
         $languages = Language::orderBy('language_name', 'ASC')->get();
         $subjects = Subject::orderBy('subject_name', 'ASC')->get();
         $classes = StudentClass::all();
-        $suppliers = BookSupplier::where('supplier_status', 1)->get();
+        $suppliers = BookSupplier::where('supplier_status', 1)->orderBy('supplier_name', 'ASC')->get();
 
         return view('inventory.library.book.create')->with([
             // 'authors' => $authors,
