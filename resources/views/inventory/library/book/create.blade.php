@@ -108,8 +108,6 @@
                                                             placeholder="Book Name">
                                                     </div>
                                                     <datalist id="books">
-                                                        <option value="Test"></option>
-                                                        <option value="Addisnal"></option>
                                                     </datalist>
 
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
