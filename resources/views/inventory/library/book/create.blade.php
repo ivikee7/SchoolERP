@@ -91,13 +91,27 @@
                                                             @endif
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
+                                                    {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">Book Name</label>
                                                         <input type="text"
                                                             class="form-control @error('book_title') border border-danger @enderror "
                                                             name="book_title" value="{{ old('book_title') }}"
                                                             placeholder="Book Name">
+                                                    </div> --}}
+
+                                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2"
+                                                        id="search_input_book_name">
+                                                        <label for="" class="ml-1 mr-1">Book Name</label>
+                                                        <input type="text" list="books" id="book"
+                                                            class="form-control @error('book_title') border border-danger @enderror "
+                                                            name="book_title" value="{{ old('book_title') }}"
+                                                            placeholder="Book Name">
                                                     </div>
+                                                    <datalist id="books">
+                                                        <option value="Test"></option>
+                                                        <option value="Addisnal"></option>
+                                                    </datalist>
+
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">Edition</label>
                                                         <input type="text"
@@ -109,7 +123,8 @@
                                                         <label for="" class="ml-1 mr-1">Year Of Publish</label>
                                                         <input type="year"
                                                             class="form-control @error('book_published_at') border border-danger @enderror "
-                                                            name="book_published_at" value="{{ old('book_published_at') }}"
+                                                            name="book_published_at"
+                                                            value="{{ old('book_published_at') }}"
                                                             placeholder="Year Of Publish">
                                                     </div>
                                                     {{-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
@@ -306,7 +321,8 @@
                                                             placeholder="Purchased Date">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <label for="" class="ml-1 mr-1">Accession Number</label>
+                                                        <label for="" class="ml-1 mr-1">Accession
+                                                            Number</label>
                                                         <input type="number"
                                                             class="form-control @error('accession_number') border border-danger @enderror "
                                                             name="accession_number" value="{{ old('accession_number') }}"
@@ -417,15 +433,14 @@
                 theme: 'bootstrap4'
             });
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $("#search_input_author :input").on("keyup", function(e) {
                 e.preventDefault();
-                var el = $(this);
-                var id = $(this).val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
                 $.ajax({
                     url: "{!! route('inventry.library.book.getAuthors') !!}",
                     method: 'get',
@@ -436,6 +451,27 @@
                         $.each(response, function(key, value) {
                             $("#authors").last().append(
                                 '<option value="' + value.book_author +
+                                '"></option>'
+                            );
+                        });
+                    }
+                });
+            })
+            $("#search_input_book_name :input").on("keyup", function(e) {
+                e.preventDefault();
+
+                console.log($(this).val());
+
+                $.ajax({
+                    url: "{!! route('inventry.library.book.getBooksTitle') !!}",
+                    method: 'get',
+                    dataType: 'json',
+                    data: 'search_input_book_name=' + $(this).val(),
+                    success: function(response) {
+                        $('#books').empty();
+                        $.each(response, function(key, value) {
+                            $("#books").last().append(
+                                '<option value="' + value.book_title +
                                 '"></option>'
                             );
                         });

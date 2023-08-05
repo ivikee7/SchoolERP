@@ -49,7 +49,7 @@
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('livewire.home') }}" class="nav-link">Home</a>
+                    <a href="{{ route('index') }}" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{ asset('contacts') }}" class="nav-link">Contact</a>
@@ -126,7 +126,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar main-sidebar-custom sidebar-dark-primary elevation-4">
             {{-- Brand Logo --}}
-            <a href="{{ route('livewire.home') }}" class="brand-link">
+            <a href="{{ route('index') }}" class="brand-link">
                 <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}"
                     class="brand-image img-circle elevation-3 bg-white p-1">
                 <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
@@ -177,7 +177,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('livewire.inventry.library.book.render') }}" class="nav-link">
+                                    <a href="{{ route('inventry.library.book.render') }}" class="nav-link">
 
                                         <i class="nav-icon fas fa-book-reader"></i>
                                         <p>Library</p>

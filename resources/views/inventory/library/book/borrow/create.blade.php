@@ -67,7 +67,8 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div>
-                                    <form action="{{ route('inventry.library.book.borrow.store') }}" method="post" class="form-prevent-multiple-submits">
+                                    <form action="{{ route('inventry.library.book.borrow.store') }}" method="post"
+                                        class="form-prevent-multiple-submits">
                                         @csrf
                                         <div class="card">
                                             <div class="card-body">
@@ -91,7 +92,8 @@
                                             <!-- /.card-body -->
 
                                             <div class="card-footer">
-                                                <button type="save" class="btn btn-primary button-prevent-multiple-submits">Save</button>
+                                                <button type="save"
+                                                    class="btn btn-primary button-prevent-multiple-submits">Save</button>
                                             </div>
                                         </div>
                                         <!-- /.card -->

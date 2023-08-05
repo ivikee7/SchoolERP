@@ -179,6 +179,7 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/edit/{id}', [App\Http\Controllers\Inventory\Library\BookController::class, 'edit'])->name('inventry.library.book.edit');
                 Route::post('/update/{id}', [App\Http\Controllers\Inventory\Library\BookController::class, 'update'])->name('inventry.library.book.update');
                 Route::get('/get-authors', [App\Http\Controllers\Inventory\Library\BookController::class, 'getAuthors'])->name('inventry.library.book.getAuthors');
+                Route::get('/get-books-title', [App\Http\Controllers\Inventory\Library\BookController::class, 'getBooksTitle'])->name('inventry.library.book.getBooksTitle');
             });
             Route::prefix('/location')->group(function () {
                 Route::get('/', [App\Http\Controllers\Inventory\Library\LocationController::class, 'render'])->name('inventry.library.book.location.render');
@@ -235,6 +236,18 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/get-users', [App\Http\Controllers\Inventory\Library\BookBorrowController::class, 'getUsers'])->name('inventry.library.book.borrow.getUsers');
                 Route::get('/get-books', [App\Http\Controllers\Inventory\Library\BookBorrowController::class, 'getBooks'])->name('inventry.library.book.borrow.getBooks');
             });
+
+
+
+        });
+
+        Route::prefix('/product')->group(function () {
+            Route::get('/', [App\Http\Controllers\Inventory\Product\ProductController::class, 'render'])->name('inventory.product.render');
+            Route::get('/create', [App\Http\Controllers\Inventory\Product\ProductController::class, 'create'])->name('inventory.product.create');
+            Route::post('/store', [App\Http\Controllers\Inventory\Product\ProductController::class, 'store'])->name('inventory.product.store');
+            Route::get('/show/{id}', [App\Http\Controllers\Inventory\Product\ProductController::class, 'show'])->name('inventory.product.show');
+            Route::get('/{id}/edit', [App\Http\Controllers\Inventory\Product\ProductController::class, 'edit'])->name('inventory.product.edit');
+            Route::post('/{id}/update', [App\Http\Controllers\Inventory\Product\ProductController::class, 'update'])->name('inventory.product.update');
         });
 
         // Book

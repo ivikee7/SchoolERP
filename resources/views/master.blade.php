@@ -381,44 +381,15 @@
                                         <p>Library</p>
                                     </a>
                                 </li>
-                                {{-- Books --}}
+                                {{-- Product --}}
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('inventory.product.render') }}" class="nav-link">
                                         <i class="nav-icon fas fa-books"></i>
-                                        <p>
-                                            Books
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                                        <p>Product</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('book.assign.render') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Assign</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('book.buy.create') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Buy</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('book.sale.create') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Sale</p>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                             </ul>
                         </li>
-
-
 
                         {{-- Google Workspace --}}
                         <li class="nav-item">

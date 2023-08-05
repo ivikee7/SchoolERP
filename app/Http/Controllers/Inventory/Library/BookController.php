@@ -271,4 +271,24 @@ class BookController extends Controller
 
         return response()->json($authors);
     }
+
+    public function getBooksTitle(Request $request)
+    {
+        if (!auth()->user()->can('library_create')) {
+            return abort(403, "You don't have permission!");
+        }
+
+        $books_title = [];
+        if ($request->has('search_input_book_name')) {
+            $search_input_book_name = str_replace(' ', '%', $request->search_input_book_name);
+            $books_title = book::limit(10)
+                ->select('books.book_title')
+                ->where('books.book_title', 'like', '%' . $search_input_book_name . '%')
+                ->groupBy('books.book_title')
+                ->orderBy('books.book_title', 'ASC')
+                ->get();
+        }
+
+        return response()->json($books_title);
+    }
 }
