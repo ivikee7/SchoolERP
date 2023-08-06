@@ -51,7 +51,7 @@ class BookPublisherController extends Controller
 
         return DataTables($publishers)
             ->addColumn('action', function ($publishers) {
-                $view = "<a href='".route('inventry.library.book.publisher.edit', $publishers->id)."' class='btn btn-xs btn-primary'><i class='fas fa-eye'></i> View</a>";
+                $view = "<a href='".route('inventry.library.book.publisher.edit', $publishers->id)."' class='btn btn-xs btn-primary'>Edit</a>";
 
                 return $view;
             })

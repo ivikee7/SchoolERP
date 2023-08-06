@@ -15,7 +15,8 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('dist/img/male1.png') }}" alt="User profile picture">
+                                        src="@if ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                                        alt="User profile picture">
                                 </div>
                                 <h3 class="profile-username text-center">
                                     {{ $user->id . ' | ' . $user->title . ' ' . $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}
@@ -111,8 +112,9 @@
                                             class="nav-link @if ($errors->any()) @else active @endif"
                                             href="#profile" data-toggle="tab">Additional information</a></li>
                                     @can('student_edit')
-                                        <li class="nav-item"><a class="nav-link @if ($errors->any()) active @endif"
-                                                href="#update" data-toggle="tab">Update</a>
+                                        <li class="nav-item"><a
+                                                class="nav-link @if ($errors->any()) active @endif" href="#update"
+                                                data-toggle="tab">Update</a>
                                         </li>
                                     @endcan
                                     <span class="float-right ml-1">
@@ -192,7 +194,7 @@
                                         </div>
                                     </div>
                                     @can('user_edit')
-                                        <div class="tab-pane @if($errors->any()) active @endif" id="update">
+                                        <div class="tab-pane @if ($errors->any()) active @endif" id="update">
                                             <form action="{{ route('student.update', $user->id) }}" method="post">
                                                 @csrf
                                                 @method('put')

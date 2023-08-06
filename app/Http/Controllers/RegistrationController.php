@@ -52,10 +52,10 @@ class RegistrationController extends Controller
                         if ($registrations->admission_id) {
                             $btn .= ' <span>ID'.$registrations->user_id.' A'.$registrations->admission_id.'</span>';
                         } elseif (! $registrations->admission_id) {
-                            $btn .= ' <button class="btn btn-xs btn-primary mt-1"><a href='.route('student.create', ['registration' => $registrations->id]).' class="text-white"> <i class="fas fa-user-plus"></i> Admission </a></button>';
+                            $btn .= '<button class="btn btn-xs btn-primary mt-1"><a href='.route('student.create', ['registration' => $registrations->id]).' class="text-white"><i class="fas fa-user-plus"></i>Admission</a></button>';
                         }
                         if (Auth()->user()->can('registration_delete')) {
-                            $btn .= ' <button class="btn btn-xs btn-danger mt-1 registration-delete" value="'.$registrations->id.'"><i class="fas fa-trash"></i> Delete </button>';
+                            $btn .= '<button class="btn btn-xs btn-danger mt-1 registration-delete" value="'.$registrations->id.'">Delete</button>';
                         }
 
                         return $btn;

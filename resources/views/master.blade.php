@@ -141,9 +141,9 @@
             <div class="sidebar">
                 {{-- Sidebar user panel (optional) --}}
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="{{ asset('dist/img/avatar5.png') }}" class="img-circle elevation-2"
-                            alt="User Image">
+                    <div class="image" style="">
+                        <img src="@if (Auth()->user()->gender == 'M') {{ asset('dist/img/male.png') }} @elseif (Auth()->user()->gender == 'F') {{ asset('dist/img/female.png') }} @elseif (Auth()->user()->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                            class="img-circle elevation-2" style="" alt="User">
                     </div>
                     <div class="info">
                         <a href="{{ route('profile') }}"

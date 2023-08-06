@@ -32,7 +32,7 @@ class UserPermissionsController extends Controller
                         return $span;
                     })
                     ->addColumn('action', function ($user) {
-                        $btn = '<a href="'.route('user_permission.edit', $user->id).'" class="mx-auto bg-warning m-1 p-1 rounded"> <i class="far fa-pen"></i> Edit</a>';
+                        $btn = '<a href="'.route('user_permission.edit', $user->id).'" class="mx-auto bg-warning m-1 p-1 rounded">Edit</a>';
 
                         return $btn;
                     })

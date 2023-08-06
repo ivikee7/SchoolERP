@@ -15,13 +15,14 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('dist/img/male1.png') }}" alt="User profile picture">
+                                        src="@if ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                                        alt="User profile picture">
                                 </div>
                                 <h3 class="profile-username text-center">
                                     {{ $user->title . ' ' . $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}
                                 </h3>
                                 <p class="text-muted text-center">
-                                    @foreach($user->roles->pluck('name') as $roleName)
+                                    @foreach ($user->roles->pluck('name') as $roleName)
                                         {{ $roleName }} |
                                     @endforeach
                                     @if ($user->gender == 'M')
@@ -107,7 +108,8 @@
                                                             <strong>Permissions: </strong>
                                                         </h3>
                                                         <div class="card-tools">
-                                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                            <button type="button" class="btn btn-tool"
+                                                                data-card-widget="collapse">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
                                                         </div>
@@ -132,7 +134,8 @@
                                                             <strong>Special Permissions: </strong>
                                                         </h3>
                                                         <div class="card-tools">
-                                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                            <button type="button" class="btn btn-tool"
+                                                                data-card-widget="collapse">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
                                                         </div>

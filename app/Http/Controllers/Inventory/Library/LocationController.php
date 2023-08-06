@@ -28,7 +28,7 @@ class LocationController extends Controller
         return DataTables($location)
             ->editColumn('location_name', '{{ $location_name }} @if(!$location_note == "") ({{ $location_note }}) @endif')
             ->addColumn('action', function ($location) {
-                $view = "<a href='".route('inventry.library.book.location.edit', $location->id)."' class='btn btn-xs btn-primary'><i class='fas fa-eye'></i> View</a>";
+                $view = "<a href='".route('inventry.library.book.location.edit', $location->id)."' class='btn btn-xs btn-primary'>Edit</a>";
 
                 return $view;
             })

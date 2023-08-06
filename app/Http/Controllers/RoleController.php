@@ -31,7 +31,7 @@ class RoleController extends Controller
                         return $span;
                     })
                     ->addColumn('action', function ($roles) {
-                        $btn = '<a href="'.route('role.edit', $roles->id).'" class="mx-auto bg-warning m-1 p-1 rounded"> <i class="far fa-pen"></i> Edit</a>';
+                        $btn = '<a href="'.route('role.edit', $roles->id).'" class="mx-auto bg-warning m-1 p-1 rounded">Edit</a>';
 
                         return $btn;
                     })

@@ -75,7 +75,7 @@ class UserController extends Controller
                 }
             })
             ->addColumn('action', function ($users) {
-                $view = '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
+                $view = '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary">View</a>';
 
                 return $view;
             })

@@ -15,7 +15,8 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('dist/img/male1.png') }}" alt="User profile picture">
+                                        src="@if ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                                        alt="User profile picture">
                                 </div>
                                 <div class="text-center">
                                     <a href="{{ route('image.index', $user->id) }}"><i class="fa-solid fa-user-pen"></i></a>
@@ -796,8 +797,10 @@
                                                                 <label for="">Image</label>
                                                                 <div class="input-group mb-3">
                                                                     <div class="custom-file">
-                                                                        <input type="file" name="image" class="custom-file-input" id="inputGroupFile03">
-                                                                        <label class="custom-file-label" for="inputGroupFile03">Choose file</label>
+                                                                        <input type="file" name="image"
+                                                                            class="custom-file-input" id="inputGroupFile03">
+                                                                        <label class="custom-file-label"
+                                                                            for="inputGroupFile03">Choose file</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -826,7 +829,8 @@
                                                                     placeholder="Joining Date">
                                                             </div>
                                                             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                                <label for="" class="ml-1 mr-1">Allocated Casual Leave</label>
+                                                                <label for="" class="ml-1 mr-1">Allocated Casual
+                                                                    Leave</label>
                                                                 <input type="text"
                                                                     class="form-control @error('allocated_casual_leave') border border-danger @enderror "
                                                                     name="allocated_casual_leave"
@@ -835,7 +839,8 @@
                                                                     placeholder="Allocated Casual Leave">
                                                             </div>
                                                             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                                <label for="" class="ml-1 mr-1">Allocated Sick Leave</label>
+                                                                <label for="" class="ml-1 mr-1">Allocated Sick
+                                                                    Leave</label>
                                                                 <input type="text"
                                                                     class="form-control @error('allocated_sick_leave') border border-danger @enderror "
                                                                     name="allocated_sick_leave"
@@ -862,7 +867,8 @@
                                                                     placeholder="ESI Number">
                                                             </div>
                                                             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                                <label for="" class="ml-1 mr-1">Bank Account Number</label>
+                                                                <label for="" class="ml-1 mr-1">Bank Account
+                                                                    Number</label>
                                                                 <input type="text"
                                                                     class="form-control @error('bank_account_number') border border-danger @enderror "
                                                                     name="bank_account_number"
@@ -877,8 +883,7 @@
                                                                     name="ifsc_code"
                                                                     @if (old('ifsc_code')) value="{{ old('ifsc_code') }}"
                                                                        @elseif($user->ifsc_code != '') value="{{ $user->ifsc_code }}" @endif
-                                                                    value="{{ old('ifsc_code') }}"
-                                                                    placeholder="IFSC Code">
+                                                                    value="{{ old('ifsc_code') }}" placeholder="IFSC Code">
                                                             </div>
                                                             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                                 <label for="" class="ml-1 mr-1">Un Number</label>
@@ -899,7 +904,8 @@
                                                                     placeholder="Pan Number">
                                                             </div>
                                                             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                                <label for="" class="ml-1 mr-1">Travel Allowance</label>
+                                                                <label for="" class="ml-1 mr-1">Travel
+                                                                    Allowance</label>
                                                                 <input type="text"
                                                                     class="form-control @error('travel_allowance') border border-danger @enderror "
                                                                     name="travel_allowance"

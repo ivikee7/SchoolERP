@@ -78,7 +78,7 @@ class StudentController extends Controller
             ->addColumn('action', function ($users) {
                 $status = '';
                 if (auth()->user()->can('student_show')) {
-                    $status .= '<a href='.URL::current().'/'.$users->id.' class="btn btn-xs btn-primary"><i class="fas fa-eye"></i> View</a>';
+                    $status .= '<a href='.URL::current().'/'.$users->id.' class="btn btn-xs btn-primary">View</a>';
                 }
 
                 return $status;
@@ -273,7 +273,7 @@ class StudentController extends Controller
                 ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
                 ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
                 ->where('users.id', $id)
-                ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport', 'users.aadhaar_number', 'users.blood_group', 'users.mother_tongue', 'users.date_of_birth', 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'sa.id as admission_id', 'sa.registration_id', 'sa.academic_session_id', 'sa.student_quota_id', 'sa.admission_class_id', 'sa.admission_section_id', 'sa.current_class_id', 'sa.current_section_id', 'sa.local_guardian_profile_id', 'sa.relationship', 'sa.admission_status', 'r.name as role_name', DB::raw("concat(lgp.id, ' | ', lgp.title, ' ',lgp.first_name, ' ',lgp.middle_name, ' ',lgp.last_name) as local_guardian_name"), 'tr.route_name as transport_route_name', 'sc.name as class_name', 'ss.name as section_name')
+                ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.gender', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport', 'users.aadhaar_number', 'users.blood_group', 'users.mother_tongue', 'users.date_of_birth', 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'sa.id as admission_id', 'sa.registration_id', 'sa.academic_session_id', 'sa.student_quota_id', 'sa.admission_class_id', 'sa.admission_section_id', 'sa.current_class_id', 'sa.current_section_id', 'sa.local_guardian_profile_id', 'sa.relationship', 'sa.admission_status', 'r.name as role_name', DB::raw("concat(lgp.id, ' | ', lgp.title, ' ',lgp.first_name, ' ',lgp.middle_name, ' ',lgp.last_name) as local_guardian_name"), 'tr.route_name as transport_route_name', 'sc.name as class_name', 'ss.name as section_name')
                 ->get();
 
             // User guardian details

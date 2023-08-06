@@ -45,12 +45,12 @@ class BookBorrowController extends Controller
                 return $status;
             })
             ->addColumn('return', function ($borrows) {
-                $return = "<a href='".route('inventry.library.book.borrow.return', $borrows->id)."' class='btn btn-xs btn-success text-nowrap'><i class='fas fa-undo'></i> Return</a>";
+                $return = "<a href='".route('inventry.library.book.borrow.return', $borrows->id)."' class='btn btn-xs btn-success text-nowrap'>Return</a>";
 
                 return $return;
             })
             ->addColumn('lost', function ($borrows) {
-                $lost = "<a href='".route('inventry.library.book.borrow.lost', $borrows->id)."' class='btn btn-xs btn-danger text-nowrap'><i class='fas fa-ban'></i> Lost</a>";
+                $lost = "<a href='".route('inventry.library.book.borrow.lost', $borrows->id)."' class='btn btn-xs btn-danger text-nowrap'>Lost</a>";
 
                 return $lost;
             })

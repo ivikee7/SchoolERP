@@ -26,7 +26,7 @@ class BookCategoryController extends Controller
 
         return DataTables($categories)
             ->addColumn('action', function ($categories) {
-                $view = "<a href='".route('inventry.library.book.category.edit', $categories->id)."' class='btn btn-xs btn-primary'><i class='fas fa-eye'></i> View</a>";
+                $view = "<a href='".route('inventry.library.book.category.edit', $categories->id)."' class='btn btn-xs btn-primary'>Edit</a>";
 
                 return $view;
             })

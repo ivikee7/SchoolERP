@@ -63,7 +63,7 @@ class BookController extends Controller
                 return $status;
             })
             ->addColumn('action', function ($books) {
-                $view = "<a href='" . route('inventry.library.book.edit', $books->id) . "' class='btn btn-xs btn-primary'><i class='fas fa-tools'></i> Edit</a>";
+                $view = "<a href='" . route('inventry.library.book.edit', $books->id) . "' class='btn btn-xs btn-primary'>Edit</a>";
 
                 return $view;
             })
