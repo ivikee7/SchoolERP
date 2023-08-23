@@ -26,10 +26,11 @@ class BookBorrowController extends Controller
             ->leftJoin('books as b', 'book_borrows.borrow_book_id', 'b.id')
             ->leftJoin('users as bib', 'book_borrows.borrow_issued_by', 'bib.id')
             ->leftJoin('users as bui', 'book_borrows.borrow_user_id', 'bui.id')
-            ->select('b.id as book_id', 'b.book_title', 'b.accession_number', 'book_borrows.id', 'book_borrows.borrow_issued_at', 'book_borrows.borrow_due_date', 'book_borrows.borrow_lost_at', 'bib.first_name as ussued_by_user', 'bui.id as user_id', 'bui.first_name', 'bui.middle_name', 'bui.last_name', 'bui.father_name')
+            ->select('b.id as book_id', 'b.book_title', 'b.book_price', 'b.accession_number', 'book_borrows.id', 'book_borrows.borrow_issued_at', 'book_borrows.borrow_due_date', 'book_borrows.borrow_lost_at', 'bib.first_name as ussued_by_user', 'bui.id as user_id', 'bui.first_name', 'bui.middle_name', 'bui.last_name', 'bui.father_name')
             ->get();
 
         return DataTables($borrows)
+        ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
             ->editColumn('borrow_issued_by', '{{ $ussued_by_user }}')
             ->addColumn('borrow_user', '{{ $user_id }} | {{ $first_name }} {{ $middle_name }} {{ $last_name }} | {{ $father_name }}')
             ->editColumn('status', function ($borrows) {
@@ -54,7 +55,7 @@ class BookBorrowController extends Controller
 
                 return $lost;
             })
-            ->rawColumns(['status', 'return', 'lost'])
+            ->rawColumns(['status', 'return', 'lost', 'book_title'])
             ->make(true);
     }
 
@@ -71,11 +72,12 @@ class BookBorrowController extends Controller
             ->leftJoin('books as b', 'book_borrows.borrow_book_id', 'b.id')
             ->leftJoin('users as bib', 'book_borrows.borrow_issued_by', 'bib.id')
             ->leftJoin('users as bui', 'book_borrows.borrow_user_id', 'bui.id')
-            ->select('b.id as book_id', 'b.book_title', 'book_borrows.id', 'b.accession_number', 'book_borrows.borrow_issued_at', 'book_borrows.borrow_due_date', 'book_borrows.borrow_lost_at', 'book_borrows.borrow_received_at', 'bib.first_name as ussued_by_user', 'bui.id as user_id', 'bui.first_name', 'bui.middle_name', 'bui.last_name', 'bui.father_name')
+            ->select('b.id as book_id', 'b.book_title', 'b.book_price', 'book_borrows.id', 'b.accession_number', 'book_borrows.borrow_issued_at', 'book_borrows.borrow_due_date', 'book_borrows.borrow_lost_at', 'book_borrows.borrow_received_at', 'bib.first_name as ussued_by_user', 'bui.id as user_id', 'bui.first_name', 'bui.middle_name', 'bui.last_name', 'bui.father_name')
 
             ->get();
 
         return DataTables($borrows)
+        ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
             ->editColumn('borrow_issued_by', '{{ $ussued_by_user }}')
             ->addColumn('borrow_user', '{{ $user_id }} | {{ $first_name }} {{ $middle_name }} {{ $last_name }} | {{ $father_name }}')
             ->editColumn('borrow_lost_at', function ($borrows) {
@@ -91,7 +93,7 @@ class BookBorrowController extends Controller
 
                 return $status;
             })
-            ->rawColumns(['borrow_lost_at', 'action'])
+            ->rawColumns(['borrow_lost_at', 'action', 'book_title'])
             ->make(true);
     }
 
@@ -108,10 +110,11 @@ class BookBorrowController extends Controller
             ->leftJoin('books as b', 'book_borrows.borrow_book_id', 'b.id')
             ->leftJoin('users as bib', 'book_borrows.borrow_issued_by', 'bib.id')
             ->leftJoin('users as bui', 'book_borrows.borrow_user_id', 'bui.id')
-            ->select('b.id as book_id', 'b.book_title', 'b.accession_number', 'book_borrows.id', 'book_borrows.borrow_issued_at', 'book_borrows.borrow_due_date', 'book_borrows.borrow_lost_at', 'bib.first_name as ussued_by_user', 'bui.id as user_id', 'bui.first_name', 'bui.middle_name', 'bui.last_name', 'bui.father_name')
+            ->select('b.id as book_id', 'b.book_title', 'b.book_price', 'b.accession_number', 'book_borrows.id', 'book_borrows.borrow_issued_at', 'book_borrows.borrow_due_date', 'book_borrows.borrow_lost_at', 'bib.first_name as ussued_by_user', 'bui.id as user_id', 'bui.first_name', 'bui.middle_name', 'bui.last_name', 'bui.father_name')
             ->get();
 
         return DataTables($borrows)
+        ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
             ->editColumn('borrow_issued_by', '{{ $ussued_by_user }}')
             ->addColumn('borrow_user', '{{ $user_id }} | {{ $first_name }} {{ $middle_name }} {{ $last_name }} | {{ $father_name }}')
             ->addColumn('borrow_status', function ($borrows) {
@@ -129,7 +132,7 @@ class BookBorrowController extends Controller
 
                 return $view;
             })
-            ->rawColumns(['borrow_lost_at', 'action', 'borrow_status'])
+            ->rawColumns(['borrow_lost_at', 'action', 'borrow_status', 'book_title'])
             ->make(true);
     }
 

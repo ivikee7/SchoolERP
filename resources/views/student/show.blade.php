@@ -55,6 +55,10 @@
                                         <li class="list-group-item">
                                             <b>Transport</b> <a class="float-right">{{ $user->transport_route_name }}</a>
                                         </li>
+                                        <li class="list-group-item">
+                                            <b>ID Card</b> <a class="float-right"
+                                                href="{{ route('id.card.render', $user->id) }}">Print</a>
+                                        </li>
                                     </ul>
                                 @endif
                             </div>

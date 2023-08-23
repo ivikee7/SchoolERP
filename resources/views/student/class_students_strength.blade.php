@@ -138,6 +138,7 @@
                 });
 
                 table.on('draw', function() {
+                    $("#total-strength").empty();
                     var response = table.ajax.json();
                     $("#total-strength").append(response.total);
                 })

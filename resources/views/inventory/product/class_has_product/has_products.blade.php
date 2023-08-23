@@ -12,12 +12,15 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Products</h3>
+                                <h3 class="card-title">Class Has Products</h3>
                                 <div class="card-title float-right">
+                                    <a href="{{ route('inventory.product.render') }}">
+                                        <button class="btn btn-sm btn-warning">Products</button>
+                                    </a>
                                     <a href="{{ route('inventory.product.class.render') }}">
                                         <button class="btn btn-sm btn-warning">Class Has Products</button>
                                     </a>
-                                    <a href="{{ route('inventory.product.create') }}">
+                                    <a href="{!! route('inventory.product.class.create', $id) !!}">
                                         <button class="btn btn-sm btn-success">New</button>
                                     </a>
                                 </div>
@@ -27,14 +30,18 @@
                                 <table class="table table-sm table-bordered table-striped display" style="width: 100%">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
+                                            <th>ID</th>
+                                            <th>Product</th>
                                             <th>Description</th>
+                                            <th>Price</th>
                                             <th>Category</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot style="display: table-row-group;">
                                         <tr>
+                                            <th></th>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -111,14 +118,22 @@
                 language: {
                     processing: "<i class='fas fa-2x fa-sync-alt fa-spin'></i>",
                 },
-                ajax: '{!! route('inventory.product.render') !!}',
+                ajax: '{!! route('inventory.product.class.has_product.render', $id) !!}',
                 columns: [{
+                        data: 'class_has_product_id',
+                        name: 'class_has_product_id'
+                    },
+                    {
                         data: 'product_name',
                         name: 'product_name'
                     },
                     {
                         data: 'product_description',
                         name: 'product_description'
+                    },
+                    {
+                        data: 'class_has_product_price',
+                        name: 'class_has_product_price'
                     },
                     {
                         data: 'product_category_name',

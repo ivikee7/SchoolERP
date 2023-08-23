@@ -115,6 +115,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('trashed', [EnquiryController::class, 'trashed'])->name('enquiry.trashed.index');
     });
 
+    // ID Card
+    Route::prefix('/id-card')->group(function () {
+        Route::GET('/{id}/print', [\App\Http\Controllers\IDCardController::class, 'render'])->name('id.card.render');
+    });
+
     // Website
     Route::prefix('/website')->group(function () {
         Route::get('/enquiry', [EnquiryPublicController::class, 'index'])->name('website.enquiry.index');
@@ -245,24 +250,48 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [App\Http\Controllers\Inventory\Product\ProductController::class, 'render'])->name('inventory.product.render');
             Route::get('/create', [App\Http\Controllers\Inventory\Product\ProductController::class, 'create'])->name('inventory.product.create');
             Route::post('/store', [App\Http\Controllers\Inventory\Product\ProductController::class, 'store'])->name('inventory.product.store');
-            Route::get('/show/{id}', [App\Http\Controllers\Inventory\Product\ProductController::class, 'show'])->name('inventory.product.show');
+            Route::get('/{id}/show', [App\Http\Controllers\Inventory\Product\ProductController::class, 'show'])->name('inventory.product.show');
             Route::get('/{id}/edit', [App\Http\Controllers\Inventory\Product\ProductController::class, 'edit'])->name('inventory.product.edit');
             Route::post('/{id}/update', [App\Http\Controllers\Inventory\Product\ProductController::class, 'update'])->name('inventory.product.update');
+
+            Route::prefix('/class')->group(function () {
+                Route::get('/', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'render'])->name('inventory.product.class.render');
+                Route::get('/{class_id}/has_products', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'classHasProducts'])->name('inventory.product.class.has_product.render');
+                Route::get('/{class_id}/create', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'create'])->name('inventory.product.class.create');
+                Route::post('/{class_id}/store', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'store'])->name('inventory.product.class.store');
+                Route::get('/{id}/show', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'show'])->name('inventory.product.class.show');
+                Route::get('/{id}/edit', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'edit'])->name('inventory.product.class.edit');
+                Route::post('/{id}/update', [App\Http\Controllers\Inventory\Product\ClassHasProductController::class, 'update'])->name('inventory.product.class.update');
+            });
+            Route::prefix('/sale')->group(function () {
+                Route::get('/', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'render'])->name('inventory.product.sale.render');
+                Route::get('/create', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'create'])->name('inventory.product.sale.create');
+                Route::post('/store', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'store'])->name('inventory.product.sale.store');
+                Route::get('/{id}/show', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'show'])->name('inventory.product.sale.show');
+                Route::get('/{id}/edit', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'edit'])->name('inventory.product.sale.edit');
+                Route::post('/{id}/update', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'update'])->name('inventory.product.sale.update');
+                Route::get('/{id}/invoice/print', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'invoicePrint'])->name('inventory.product.sale.invoice.print');
+                Route::get('/get-users', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getUsers'])->name('inventory.product.sale.getUsers');
+                Route::get('/get-book-of-class', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getBooksOfClass'])->name('inventory.product.sale.getBookOfClass');
+
+                Route::get('/student', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getUsers'])->name('inventory.product.sale.getStudents');
+                Route::post('/get-books', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getBooks'])->name('inventory.product.sale.getBooks');
+            });
         });
 
         // Book
-        Route::prefix('/book')->group(function () {
-            Route::get('/buy', [App\Http\Controllers\Book\BookController::class, 'create'])->name('book.buy.create');
-            Route::get('/sale', [App\Http\Controllers\Book\SaleController::class, 'create'])->name('book.sale.create');
-            Route::post('/sale', [App\Http\Controllers\Book\SaleController::class, 'store'])->name('book.sale.store');
+        // Route::prefix('/book')->group(function () {
+        //     Route::get('/buy', [App\Http\Controllers\Book\BookController::class, 'create'])->name('book.buy.create');
+        //     Route::get('/sale', [App\Http\Controllers\Book\SaleController::class, 'create'])->name('book.sale.create');
+        //     Route::post('/sale', [App\Http\Controllers\Book\SaleController::class, 'store'])->name('book.sale.store');
 
-            Route::prefix('/assign')->group(function () {
-                Route::get('/', [App\Http\Controllers\Book\AssignController::class, 'render'])->name('book.assign.render');
-                Route::get('/get-class-books/{id}', [App\Http\Controllers\Book\AssignController::class, 'classHasProducts'])->name('book.assign.get.class.books');
-                Route::get('/get-classes', [App\Http\Controllers\Book\AssignController::class, 'getClasses'])->name('book.assign.get.classes');
-                Route::get('/get-books', [App\Http\Controllers\Book\AssignController::class, 'getBooks'])->name('book.assign.get.books');
-            });
-        });
+        //     Route::prefix('/assign')->group(function () {
+        //         Route::get('/', [App\Http\Controllers\Book\AssignController::class, 'render'])->name('book.assign.render');
+        //         Route::get('/get-class-books/{id}', [App\Http\Controllers\Book\AssignController::class, 'classHasProducts'])->name('book.assign.get.class.books');
+        //         Route::get('/get-classes', [App\Http\Controllers\Book\AssignController::class, 'getClasses'])->name('book.assign.get.classes');
+        //         Route::get('/get-books', [App\Http\Controllers\Book\AssignController::class, 'getBooks'])->name('book.assign.get.books');
+        //     });
+        // });
     });
 
     // G-Suite

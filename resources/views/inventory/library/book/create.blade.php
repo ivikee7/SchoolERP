@@ -208,7 +208,7 @@
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">Pages</label>
-                                                        <input type="text"
+                                                        <input type="number" step="0.01"
                                                             class="form-control @error('book_pages') border border-danger @enderror "
                                                             name="book_pages" value="{{ old('book_pages') }}"
                                                             placeholder="Pages">

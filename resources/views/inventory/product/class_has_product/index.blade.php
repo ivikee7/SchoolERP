@@ -14,11 +14,8 @@
                             <div class="card-header">
                                 <h3 class="card-title">Products</h3>
                                 <div class="card-title float-right">
-                                    <a href="{{ route('inventory.product.class.render') }}">
-                                        <button class="btn btn-sm btn-warning">Class Has Products</button>
-                                    </a>
-                                    <a href="{{ route('inventory.product.create') }}">
-                                        <button class="btn btn-sm btn-success">New</button>
+                                    <a href="{{ route('inventory.product.render') }}">
+                                        <button class="btn btn-sm btn-warning">Products</button>
                                     </a>
                                 </div>
                             </div>
@@ -28,14 +25,12 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Category</th>
+                                            <th>Products</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot style="display: table-row-group;">
                                         <tr>
-                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -111,18 +106,14 @@
                 language: {
                     processing: "<i class='fas fa-2x fa-sync-alt fa-spin'></i>",
                 },
-                ajax: '{!! route('inventory.product.render') !!}',
+                ajax: '{!! route('inventory.product.class.render') !!}',
                 columns: [{
-                        data: 'product_name',
-                        name: 'product_name'
+                        data: 'class_name',
+                        name: 'class_name'
                     },
                     {
-                        data: 'product_description',
-                        name: 'product_description'
-                    },
-                    {
-                        data: 'product_category_name',
-                        name: 'product_category_name'
+                        data: 'products',
+                        name: 'products'
                     },
                     {
                         data: 'action',

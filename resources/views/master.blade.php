@@ -86,6 +86,21 @@
                         </form>
                     </div>
                 </li>
+                {{-- Cart --}}
+                @if (session()->get('cart'))
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-header">{{ '-' }}</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-center">
+                                -
+                            </a>
+                        </div>
+                    </li>
+                @endif
                 {{-- User manage it selt --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
@@ -386,6 +401,20 @@
                                     <a href="{{ route('inventory.product.render') }}" class="nav-link">
                                         <i class="nav-icon fas fa-books"></i>
                                         <p>Product</p>
+                                    </a>
+                                </li>
+                                {{-- Sale --}}
+                                <li class="nav-item">
+                                    <a href="{{ route('inventory.product.sale.render') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-books"></i>
+                                        <p>Sale</p>
+                                    </a>
+                                </li>
+                                {{-- Sale --}}
+                                <li class="nav-item">
+                                    <a href="{{ route('inventory.product.sale.getStudents') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-books"></i>
+                                        <p>Students</p>
                                     </a>
                                 </li>
                             </ul>

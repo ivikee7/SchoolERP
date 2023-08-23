@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('class_has_product_id');
             $table->bigInteger('class_id')->nullable()->unsigned();
             $table->bigInteger('product_id')->nullable()->unsigned();
-            $table->double('price', 10, 2)->nullable();
+            $table->double('class_has_product_price', 10, 2)->nullable();
             $table->bigInteger('created_by')->nullable()->unsigned();
             $table->bigInteger('updated_by')->nullable()->unsigned();
             $table->timestamps();

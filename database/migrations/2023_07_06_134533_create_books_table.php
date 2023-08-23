@@ -20,7 +20,7 @@ return new class extends Migration
             $table->year('book_published_at')->nullable();
             $table->string('book_note')->nullable();
             $table->double('book_price', 8, 2)->nullable();
-            $table->integer('book_pages')->nullable();
+            $table->double('book_pages', 8, 2)->nullable();
             $table->string('book_isbn', 100)->nullable();
             $table->string('book_author', 100)->nullable();
             $table->bigInteger('author_id')->unsigned()->nullable();

@@ -14,11 +14,8 @@
                             <div class="card-header">
                                 <h3 class="card-title">Products</h3>
                                 <div class="card-title float-right">
-                                    <a href="{{ route('inventory.product.class.render') }}">
-                                        <button class="btn btn-sm btn-warning">Class Has Products</button>
-                                    </a>
-                                    <a href="{{ route('inventory.product.create') }}">
-                                        <button class="btn btn-sm btn-success">New</button>
+                                    <a href="{{ route('inventory.product.sale.create') }}">
+                                        <button class="btn btn-sm btn-success">Sale</button>
                                     </a>
                                 </div>
                             </div>
@@ -27,14 +24,20 @@
                                 <table class="table table-sm table-bordered table-striped display" style="width: 100%">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Category</th>
+                                            <th>Invoice</th>
+                                            <th>Buyer</th>
+                                            <th>Total</th>
+                                            <th>Discount</th>
+                                            <th>Gross Total</th>
+                                            <th>Sold By</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot style="display: table-row-group;">
                                         <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -111,18 +114,32 @@
                 language: {
                     processing: "<i class='fas fa-2x fa-sync-alt fa-spin'></i>",
                 },
-                ajax: '{!! route('inventory.product.render') !!}',
+                ajax: "{!! route('inventory.product.sale.render') !!}",
                 columns: [{
-                        data: 'product_name',
-                        name: 'product_name'
+                        data: 'invoice',
+                        name: 'invoice'
                     },
                     {
-                        data: 'product_description',
-                        name: 'product_description'
+                        data: 'buyer',
+                        name: 'buyer'
                     },
                     {
-                        data: 'product_category_name',
-                        name: 'product_category_name'
+                        data: 'total',
+                        name: 'total',
+                        visible: false
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount',
+                        visible: false
+                    },
+                    {
+                        data: 'gross_total',
+                        name: 'gross_total'
+                    },
+                    {
+                        data: 'saler',
+                        name: 'saler'
                     },
                     {
                         data: 'action',

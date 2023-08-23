@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('product_invoices', function (Blueprint $table) {
             $table->id('product_invoice_id');
-            $table->bigInteger('buyer_id')->nullable()->unsigned();
-            $table->double('total_price', 10, 2)->nullable();
-            $table->double('discount', 10, 2)->nullable();
-            $table->double('total_payable_amount', 10, 2)->nullable();
+            $table->bigInteger('product_invoice_buyer_id')->nullable()->unsigned();
+            $table->double('product_invoice_subtotal', 10, 2)->nullable();
+            $table->double('product_invoice_discount', 10, 2)->nullable();
+            $table->double('product_invoice_gross_total', 10, 2)->nullable();
+            $table->datetime('product_invoice_due_date')->nullable();
             $table->bigInteger('created_by')->nullable()->unsigned();
             $table->bigInteger('updated_by')->nullable()->unsigned();
             $table->timestamps();
