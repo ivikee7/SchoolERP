@@ -15,7 +15,7 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="@if ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                                        src="@if (!empty($image->media_path)) {{ asset($image->media_path) }} @elseif ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
                                         alt="User profile picture">
                                 </div>
                                 <div class="text-center">
@@ -103,8 +103,8 @@
                                     </li> --}}
                                     @can('user_edit')
                                         <li class="nav-item"><a
-                                                class="nav-link @if ($errors->any()) active @endif " href="#update"
-                                                data-toggle="tab">Update</a>
+                                                class="nav-link @if ($errors->any()) active @endif "
+                                                href="#update" data-toggle="tab">Update</a>
                                         </li>
                                     @endcan
                                     <span class="float-right ml-1">

@@ -36,6 +36,7 @@ return new class extends Migration
             $table->enum('gender', ['M', 'F', 'O']);
             $table->string('father_name', 50);
             $table->string('mother_name', 50);
+            $table->bigInteger('media_id')->unsigned()->nullable();
             $table->string('remarks', 255)->nullable();
             $table->dateTime('termination_date')->nullable();
             $table->boolean('status');
@@ -49,6 +50,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('media_id')->references('id')->on('medias');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
         });

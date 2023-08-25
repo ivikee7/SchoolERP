@@ -22,7 +22,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if (!auth()->user()->can('user_access')) {
+        if (
+            !auth()
+                ->user()
+                ->can('user_access')
+        ) {
             return abort(403, "You don't have permission!");
         }
 
@@ -46,13 +50,13 @@ class UserController extends Controller
             ->get();
 
         $datatables = DataTables::of($users)
-            ->editColumn('id', '{{$id}}')
+            ->editColumn('id', '{{ $id }}')
             ->addColumn('full_name', function ($user) {
                 return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
             })
-            ->addColumn('transport', '{{$route_name}} {{$transport_type_name}}')
-            ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
-            ->addColumn('address', '{{$address_line1}}, {{$city}}, {{$state}}, {{$country}}, {{$pin_code}}')
+            ->addColumn('transport', '{{ $route_name }} {{ $transport_type_name }}')
+            ->addColumn('contact_number', '{{ $contact_number }}, {{ $contact_number2 }}')
+            ->addColumn('address', '{{ $address_line1 }}, {{ $city }}, {{ $state }}, {{ $country }}, {{ $pin_code }}')
             ->editColumn('gender', function ($users) {
                 if ($users->gender == 'M') {
                     return 'Male';
@@ -64,8 +68,8 @@ class UserController extends Controller
                     return 'Other';
                 }
             })
-            ->editColumn('created_by', '{{$created_by_name}} {{$created_at}}')
-            ->editColumn('updated_by', '{{$updated_by_name}} {{$updated_at}}')
+            ->editColumn('created_by', '{{ $created_by_name }} {{ $created_at }}')
+            ->editColumn('updated_by', '{{ $updated_by_name }} {{ $updated_at }}')
             ->editColumn('status', function ($user) {
                 if ($user->status == 0) {
                     return 'Inactive';
@@ -105,7 +109,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('user_create')) {
+        if (
+            !auth()
+                ->user()
+                ->can('user_create')
+        ) {
             return abort(403, "You don't have permission!");
         }
 
@@ -125,13 +133,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->can('user_create')) {
+        if (
+            !auth()
+                ->user()
+                ->can('user_create')
+        ) {
             return abort(403, "You don't have permission!");
         }
 
         // Validate request
         $request->validate([
-
             // User
             'role' => 'required',
             'title' => 'required',
@@ -174,9 +185,10 @@ class UserController extends Controller
             'grade_salary' => 'nullable|integer',
             'pf' => 'required',
         ]);
-        if (User::where('first_name', $request->first_name)
-            ->where('contact_number', $request->contact_number)
-            ->exists()
+        if (
+            User::where('first_name', $request->first_name)
+                ->where('contact_number', $request->contact_number)
+                ->exists()
         ) {
             return abort(403, 'User already exists!');
         } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
@@ -242,33 +254,87 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('user_show')) {
+        if (
+            !auth()
+                ->user()
+                ->can('user_show')
+        ) {
             return abort(403, "You don't have permission!");
         }
 
         if (User::find($id) && !User::find($id)->hasAnyRole('STUDENT', 'Super Admin')) {
-            $user = DB::table('users as u')
-                ->leftJoin('model_has_roles as mhr', 'u.id', 'mhr.model_id')
+            $user = User::find($id)
+                ->leftJoin('model_has_roles as mhr', 'users.id', 'mhr.model_id')
                 ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
-                ->leftJoin('user_information as ui', 'u.id', 'ui.user_id')
-                ->leftJoin('student_admissions as sa', 'u.id', 'sa.user_id')
+                ->leftJoin('user_information as ui', 'users.id', 'ui.user_id')
+                ->leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
                 ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
                 ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
-                ->leftJoin('transport_routes as tr', 'u.transport_id', 'tr.id')
+                ->leftJoin('transport_routes as tr', 'users.transport_id', 'tr.id')
                 ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
                 ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
                 ->whereNotIn('r.name', ['Super Admin'])
-                ->where('u.id', $id)
-                ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'tr.route_name as transport_route_name', 'u.aadhaar_number', 'u.blood_group', 'u.mother_tongue', 'u.date_of_birth', 'u.place_of_birth', 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', 'ui.joining_date', 'ui.termination_date', 'ui.allocated_casual_leave', 'ui.allocated_sick_leave', 'ui.pf_number', 'ui.esi_number', 'ui.bank_account_number', 'ui.ifsc_code', 'ui.un_number', 'ui.pan_number', 'ui.travel_allowance', 'ui.gross_salary', 'ui.basic_salary', 'ui.grade_salary', 'ui.salary_review_date', 'ui.pf')
+                ->where('users.id', $id)
+                ->select(
+                    'users.id',
+                    'users.title',
+                    'users.first_name',
+                    'users.middle_name',
+                    'users.last_name',
+                    'users.contact_number',
+                    'users.contact_number2',
+                    'users.address_line1',
+                    'users.city',
+                    'users.state',
+                    'users.pin_code',
+                    'users.country',
+                    'users.media_id',
+                    'tr.route_name as transport_route_name',
+                    'users.aadhaar_number',
+                    'users.blood_group',
+                    'users.mother_tongue',
+                    'users.date_of_birth',
+                    'users.place_of_birth',
+                    'users.gender',
+                    'users.father_name',
+                    'users.mother_name',
+                    'users.remarks',
+                    'users.status',
+                    'users.email',
+                    'users.email_alternate',
+                    'users.created_at',
+                    'users.updated_at',
+                    'r.name as role_name',
+                    'tr.route_name',
+                    'sc.name as class_name',
+                    'ss.name as section_name',
+                    'ui.joining_date',
+                    'ui.termination_date',
+                    'ui.allocated_casual_leave',
+                    'ui.allocated_sick_leave',
+                    'ui.pf_number',
+                    'ui.esi_number',
+                    'ui.bank_account_number',
+                    'ui.ifsc_code',
+                    'ui.un_number',
+                    'ui.pan_number',
+                    'ui.travel_allowance',
+                    'ui.gross_salary',
+                    'ui.basic_salary',
+                    'ui.grade_salary',
+                    'ui.salary_review_date',
+                    'ui.pf',
+                )
                 ->get();
 
-            $admissions = StudentAdmission::all();
-            $routes = TransportRoute::all();
+            $image = \App\Models\Media::find($user[0]->media_id);
+            $admissions = \App\Models\StudentAdmission::all();
+            $routes = \App\Models\TransportRoute::all();
             $roles = Role::all()
                 ->whereNotIn('name', 'Super Admin')
                 ->whereNotIn('name', 'STUDENT');
 
-            return view('user.show')->with(['user' => $user[0], 'roles' => $roles, 'routes' => $routes, 'admissions' => $admissions]);
+            return view('user.show')->with(['user' => $user[0], 'image'=>$image, 'roles' => $roles, 'routes' => $routes, 'admissions' => $admissions]);
         } elseif (User::find($id) && User::find($id)->hasAnyRole('STUDENT')) {
             return redirect(route('student.show', $id));
         } else {
@@ -284,7 +350,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('user_edit')) {
+        if (
+            !auth()
+                ->user()
+                ->can('user_edit')
+        ) {
             return abort(403, "You don't have permission!");
         }
 
@@ -299,7 +369,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('user_edit')) {
+        if (
+            !auth()
+                ->user()
+                ->can('user_edit')
+        ) {
             return abort(403, "You don't have permission!");
         }
 
@@ -373,7 +447,11 @@ class UserController extends Controller
 
     public function informationUpdate(Request $request, $id)
     {
-        if (Auth()->user()->can('user_create')) {
+        if (
+            Auth()
+                ->user()
+                ->can('user_create')
+        ) {
             $request->validate([
                 'joining_date' => 'required|date',
                 'allocated_casual_leave' => 'required|integer',
@@ -390,10 +468,7 @@ class UserController extends Controller
                 'grade_salary' => 'nullable|integer',
                 'pf' => 'required',
             ]);
-            if (UserInformation::where('user_id', $id)
-                ->exists()
-            ) {
-
+            if (UserInformation::where('user_id', $id)->exists()) {
                 $user_information = UserInformation::where('user_id', $id)->firstOrFail();
 
                 $user_information->joining_date = $request->joining_date;
@@ -413,10 +488,7 @@ class UserController extends Controller
                 $user_information->save();
 
                 return view('user.index')->with(['status' => 'success', 'message' => 'User successfully updated | User ID: ' . $id]);
-            } elseif (UserInformation::where('user_id', $id)
-                ->doesntExist()
-            ) {
-
+            } elseif (UserInformation::where('user_id', $id)->doesntExist()) {
                 $user_information = UserInformation::create([
                     'user_id' => $id,
                     'joining_date' => $request->joining_date,

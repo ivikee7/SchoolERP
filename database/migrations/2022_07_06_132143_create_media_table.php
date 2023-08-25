@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
-            $table->string('link');
-            $table->string('type', 50);
+            $table->string('media_title', 50);
+            $table->string('media_path');
+            $table->string('media_type', 50);
             $table->bigInteger('created_by')->unsigned();
             $table->bigInteger('updated_by')->unsigned();
             $table->timestamps();
