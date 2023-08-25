@@ -36,6 +36,8 @@ class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
+                // Auth()->user()->image = \App\Models\Media::find(Auth()->user()->media_id)->select('media_path')->get();
+                // dd('image_id: '.Auth()->user()->media_id.' & media_path:'.Auth()->user()->image[0]->media_path);
                 return redirect('/');
             }
         });

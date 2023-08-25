@@ -156,8 +156,9 @@
             <div class="sidebar">
                 {{-- Sidebar user panel (optional) --}}
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
                     <div class="image" style="">
-                        <img src="@if (Auth()->user()->gender == 'M') {{ asset('dist/img/male.png') }} @elseif (Auth()->user()->gender == 'F') {{ asset('dist/img/female.png') }} @elseif (Auth()->user()->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                        <img src="@if (!empty(Auth()->user()->media_id)) {{ asset(\App\Models\Media::find(Auth()->user()->media_id)->select('media_path')->get()[0]->media_path) }} @elseif (Auth()->user()->gender == 'M') {{ asset('dist/img/male.png') }} @elseif (Auth()->user()->gender == 'F') {{ asset('dist/img/female.png') }} @elseif (Auth()->user()->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
                             class="img-circle elevation-2" style="" alt="User">
                     </div>
                     <div class="info">
