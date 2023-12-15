@@ -42,13 +42,13 @@
                                                 </div>
                                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                     <label for="" class="ml-1 mr-1">Category</label>
-                                                    <select name="product_category_id" id=""
-                                                        class="form-control @error('product_category_id') border border-danger @enderror">
+                                                    <select name="product_product_category_id" id=""
+                                                        class="form-control @error('product_product_category_id') border border-danger @enderror">
                                                         <option value="" selected disabled>Category</option>
                                                         @if ($categories ?? '')
                                                             @foreach ($categories as $category)
                                                                 <option value="{{ $category->product_category_id }}"
-                                                                    @if (old('product_category_id') == $category->product_category_id) selected @endif>
+                                                                    @if (old('product_product_category_id') == $category->product_category_id) selected @endif>
                                                                     {{ $category->product_category_name }}
                                                                 </option>
                                                             @endforeach

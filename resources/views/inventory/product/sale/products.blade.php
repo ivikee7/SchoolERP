@@ -104,7 +104,7 @@
             placeholder: "Choose user...",
             // minimumInputLength: 2,
             ajax: {
-                url: '{{ route('inventory.product.sale.getUsers') }}',
+                url: '{{ route('inventory.product.sale.getProducts') }}',
                 dataType: 'json',
                 data: function(params) {
                     return {

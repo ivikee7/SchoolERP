@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('class_has_products', function (Blueprint $table) {
-            $table->id('class_has_product_id');
-            $table->bigInteger('class_id')->nullable()->unsigned();
-            $table->bigInteger('product_id')->nullable()->unsigned();
+            $table->uuid('class_has_product_id')->primary();
+            $table->uuid('class_has_product_class_id')->nullable();
+            $table->uuid('class_has_product_product_id')->nullable();
             $table->double('class_has_product_price', 10, 2)->nullable();
-            $table->bigInteger('created_by')->nullable()->unsigned();
-            $table->bigInteger('updated_by')->nullable()->unsigned();
-            $table->timestamps();
+            $table->bigInteger('class_has_product_created_by')->nullable()->unsigned();
+            $table->bigInteger('class_has_product_updated_by')->nullable()->unsigned();
+            $table->timestamp('class_has_product_created_at')->nullable();
+            $table->timestamp('class_has_product_updated_at')->nullable();
         });
     }
 

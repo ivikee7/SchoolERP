@@ -85,8 +85,8 @@
                                             <th>Price</th>
                                             <th>Note</th>
                                             <th>Purchased At</th>
-                                            <th>Created By</th>
-                                            <th>Updated By</th>
+                                            {{-- <th>Created By</th>
+                                            <th>Updated By</th> --}}
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -109,8 +109,8 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            {{-- <th></th>
+                                            <th></th> --}}
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -257,16 +257,16 @@
                         name: 'purchased_at',
                         visible: false
                     },
-                    {
-                        data: 'creator',
-                        name: 'creator',
-                        visible: false
-                    },
-                    {
-                        data: 'updater',
-                        name: 'updater',
-                        visible: false
-                    },
+                    // {
+                    //     data: 'creator',
+                    //     name: 'creator',
+                    //     visible: false
+                    // },
+                    // {
+                    //     data: 'updater',
+                    //     name: 'updater',
+                    //     visible: false
+                    // },
                     {
                         data: 'status',
                         name: 'status'
@@ -278,16 +278,16 @@
                 ],
                 initComplete: function(settings, json) {
                     this.api().columns([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15]).every(
-                function() {
-                        var column = this;
-                        var input = document.createElement("input");
-                        input.className = "form-control form-control-sm";
-                        $(input).appendTo($(column.footer()).empty())
-                            .on('change', function() {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val ? val : '', true, false).draw();
-                            });
-                    });
+                        function() {
+                            var column = this;
+                            var input = document.createElement("input");
+                            input.className = "form-control form-control-sm";
+                            $(input).appendTo($(column.footer()).empty())
+                                .on('change', function() {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? val : '', true, false).draw();
+                                });
+                        });
                 },
             });
             $(".dataTables_filter, .dataTables_paginate").addClass("d-md-inline float-md-right");

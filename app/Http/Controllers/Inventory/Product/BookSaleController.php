@@ -228,7 +228,7 @@ class BookSaleController extends Controller
 
     public function getProducts(Request $request)
     {
-        return $request;
+        // return $request;
         if (
             !Auth()
                 ->user()
@@ -241,8 +241,9 @@ class BookSaleController extends Controller
         }
 
         $sales = \App\Models\Inventory\Product\ClassHasProduct::leftJoin('products as p', 'class_has_products.class_has_product_id', 'p.product_id')
+            ->select('p.*')
             ->get();
-
+        dd($sales);
         return DataTables($sales)
             ->make(true);
     }

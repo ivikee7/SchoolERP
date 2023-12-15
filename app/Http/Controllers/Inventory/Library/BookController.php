@@ -39,10 +39,10 @@ class BookController extends Controller
             ->get();
 
         return DataTables($books)
-        ->editColumn('book_price', '₹{{$book_price}}')
+            ->editColumn('book_price', '₹{{$book_price}}')
             ->editColumn('publisher_name', '{{$publisher_name}} @if(!$publisher_location == "") ({{ $publisher_location }}) @endif')
-            ->editColumn('creator', '{{$ucb_first_name}} {{$ucb_middle_name}} {{$ucb_last_name}} {{date("Y-m-d H:i:s", strtotime($created_at))}}')
-            ->editColumn('updater', '{{$uub_first_name}} {{$uub_middle_name}} {{$uub_last_name}} {{date("Y-m-d H:i:s", strtotime($updated_at))}}')
+            // ->editColumn('creator', '{{$ucb_first_name}} {{$ucb_middle_name}} {{$ucb_last_name}} {{date("Y-m-d H:i:s", strtotime($created_at))}}')
+            // ->editColumn('updater', '{{$uub_first_name}} {{$uub_middle_name}} {{$uub_last_name}} {{date("Y-m-d H:i:s", strtotime($updated_at))}}')
             ->editColumn('status', function ($books) {
                 $status = '<span class="bg-success badge rounded-pill">Available</span>';
                 if ($books->from('book_borrows')
@@ -110,7 +110,7 @@ class BookController extends Controller
             'book_title' => 'required',
             'book_edition' => 'nullable',
             'book_note' => 'nullable',
-            'book_pages' => ['required','numeric', 'min:1','max:99999.99', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'book_pages' => ['required', 'numeric', 'min:1', 'max:99999.99', 'regex:/^\d+(\.\d{1,2})?$/'],
             'book_isbn' => 'nullable',
             'book_author' => 'required',
             'publisher_id' => 'required|integer',
@@ -216,7 +216,7 @@ class BookController extends Controller
             'book_title' => 'required',
             'book_edition' => 'nullable',
             'book_note' => 'nullable',
-            'book_pages' => ['required','numeric', 'min:1','max:99999.99', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'book_pages' => ['required', 'numeric', 'min:1', 'max:99999.99', 'regex:/^\d+(\.\d{1,2})?$/'],
             'book_isbn' => 'nullable',
             'book_author' => 'required',
             'publisher_id' => 'required|integer',

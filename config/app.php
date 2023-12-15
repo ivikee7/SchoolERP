@@ -189,6 +189,8 @@ return [
         // 'Example' => App\Facades\Example::class,
 
         // 'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+
+        'Helper' => App\Helpers\Helper::class,
     ])->toArray(),
 
 ];

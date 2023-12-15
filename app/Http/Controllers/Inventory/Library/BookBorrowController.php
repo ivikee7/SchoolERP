@@ -13,10 +13,10 @@ class BookBorrowController extends Controller
 {
     public function render(Request $request)
     {
-        if (! Auth()->user()->can('library_access')) {
+        if (!Auth()->user()->can('library_access')) {
             return abort(404);
         }
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('inventory.library.book.borrow.index');
         }
 
@@ -30,7 +30,7 @@ class BookBorrowController extends Controller
             ->get();
 
         return DataTables($borrows)
-        ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
+            ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
             ->editColumn('borrow_issued_by', '{{ $ussued_by_user }}')
             ->addColumn('borrow_user', '{{ $user_id }} | {{ $first_name }} {{ $middle_name }} {{ $last_name }} | {{ $father_name }}')
             ->editColumn('status', function ($borrows) {
@@ -46,12 +46,12 @@ class BookBorrowController extends Controller
                 return $status;
             })
             ->addColumn('return', function ($borrows) {
-                $return = "<a href='".route('inventry.library.book.borrow.return', $borrows->id)."' class='btn btn-xs btn-success text-nowrap'>Return</a>";
+                $return = "<a href='" . route('inventry.library.book.borrow.return', $borrows->id) . "' class='btn btn-xs btn-success text-nowrap'>Return</a>";
 
                 return $return;
             })
             ->addColumn('lost', function ($borrows) {
-                $lost = "<a href='".route('inventry.library.book.borrow.lost', $borrows->id)."' class='btn btn-xs btn-danger text-nowrap'>Lost</a>";
+                $lost = "<a href='" . route('inventry.library.book.borrow.lost', $borrows->id) . "' class='btn btn-xs btn-danger text-nowrap'>Lost</a>";
 
                 return $lost;
             })
@@ -61,10 +61,10 @@ class BookBorrowController extends Controller
 
     public function returneds(Request $request)
     {
-        if (! Auth()->user()->can('library_access')) {
+        if (!Auth()->user()->can('library_access')) {
             return abort(404);
         }
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('inventory.library.book.borrow.returneds');
         }
 
@@ -77,7 +77,7 @@ class BookBorrowController extends Controller
             ->get();
 
         return DataTables($borrows)
-        ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
+            ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
             ->editColumn('borrow_issued_by', '{{ $ussued_by_user }}')
             ->addColumn('borrow_user', '{{ $user_id }} | {{ $first_name }} {{ $middle_name }} {{ $last_name }} | {{ $father_name }}')
             ->editColumn('borrow_lost_at', function ($borrows) {
@@ -99,10 +99,10 @@ class BookBorrowController extends Controller
 
     public function losts(Request $request)
     {
-        if (! Auth()->user()->can('library_access')) {
+        if (!Auth()->user()->can('library_access')) {
             return abort(404);
         }
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('inventory.library.book.borrow.losts');
         }
 
@@ -114,13 +114,13 @@ class BookBorrowController extends Controller
             ->get();
 
         return DataTables($borrows)
-        ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
+            ->editColumn('book_title', '{{$book_title}} <span class="badge bg-secondary rounded-pill">(₹{{$book_price}})</span>')
             ->editColumn('borrow_issued_by', '{{ $ussued_by_user }}')
             ->addColumn('borrow_user', '{{ $user_id }} | {{ $first_name }} {{ $middle_name }} {{ $last_name }} | {{ $father_name }}')
             ->addColumn('borrow_status', function ($borrows) {
 
                 $status = '';
-                if (! $borrows->borrow_lost_at == '') {
+                if (!$borrows->borrow_lost_at == '') {
                     $status .= '<span class="bg-danger badge rounded-pill">Lost</span>';
                 }
 
@@ -138,7 +138,7 @@ class BookBorrowController extends Controller
 
     public function create(Request $request)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -153,7 +153,7 @@ class BookBorrowController extends Controller
 
     public function store(Request $request)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -175,7 +175,7 @@ class BookBorrowController extends Controller
 
     public function return($id)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -189,7 +189,7 @@ class BookBorrowController extends Controller
 
     public function lost($id)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -203,7 +203,7 @@ class BookBorrowController extends Controller
 
     public function getUsers(Request $request)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -218,7 +218,7 @@ class BookBorrowController extends Controller
                 foreach ($request->search_input_user as $item) {
                     $query->where(function ($q) use ($item, $columns) {
                         foreach ($columns as $column) {
-                            $q->orWhere($column, 'like', '%'.$item.'%');
+                            $q->orWhere($column, 'like', '%' . $item . '%');
                         }
                     });
                 }
@@ -233,7 +233,7 @@ class BookBorrowController extends Controller
 
     public function getBooks(Request $request)
     {
-        if (! auth()->user()->can('library_create')) {
+        if (!auth()->user()->can('library_create')) {
             return abort(403, "You don't have permission!");
         }
         $books = Book::leftJoin('book_publishers as bp', 'books.publisher_id', 'bp.id')
@@ -251,7 +251,7 @@ class BookBorrowController extends Controller
                 foreach ($request->search_input_book as $item) {
                     $query->where(function ($q) use ($item, $columns) {
                         foreach ($columns as $column) {
-                            $q->orWhere($column, 'like', '%'.$item.'%');
+                            $q->orWhere($column, 'like', '%' . $item . '%');
                         }
                     });
                 }

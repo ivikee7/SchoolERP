@@ -19,7 +19,9 @@ use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionsController;
 use App\Http\Controllers\UserProfileController;
+use App\Livewire\StoreManagementSystem\Seller;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,16 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// g
+// Route::get('/g', function () {
+//     \App\Models\Inventory\Product\ProductCategory::create([
+//         'product_category_name' => 'book'
+//     ])::create([
+//         'product_category_name' => 'store_management_system'
+//     ]);
+// });
+
 
 // Login
 Route::get('/login', function () {
@@ -241,9 +253,6 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/get-users', [App\Http\Controllers\Inventory\Library\BookBorrowController::class, 'getUsers'])->name('inventry.library.book.borrow.getUsers');
                 Route::get('/get-books', [App\Http\Controllers\Inventory\Library\BookBorrowController::class, 'getBooks'])->name('inventry.library.book.borrow.getBooks');
             });
-
-
-
         });
 
         Route::prefix('/product')->group(function () {
@@ -275,7 +284,8 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/get-book-of-class', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getBooksOfClass'])->name('inventory.product.sale.getBookOfClass');
 
                 Route::get('/student', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getUsers'])->name('inventory.product.sale.getStudents');
-                Route::post('/get-books', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getBooks'])->name('inventory.product.sale.getBooks');
+                // Route::post('/get-books', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getBooks'])->name('inventory.product.sale.getBooks');
+                Route::post('/get-books', [App\Http\Controllers\Inventory\Product\BookSaleController::class, 'getProducts'])->name('inventory.product.sale.getBooks');
             });
         });
 
@@ -324,5 +334,23 @@ Route::group(['middleware' => ['auth']], function () {
                 });
             });
         });
+    });
+
+    // LiveWire
+
+    // Store Management System
+    Route::prefix('/store-management-system')->group(function () {
+        Route::get('/seller', \App\Livewire\StoreManagementSystem\Seller::class)->name('store-management-system.seller');
+        Route::get('/{id}/products', \App\Livewire\StoreManagementSystem\Products::class)->name('store-management-system.products');
+        Route::get('/{id}/cart', \App\Livewire\StoreManagementSystem\Cart::class)->name('store-management-system.cart');
+        Route::get('/{id}/invoice-create', \App\Livewire\StoreManagementSystem\Invoice\InvoiceCreate::class)->name('store-management-system.invoice-create');
+        Route::get('/{id}/{product_invoice_id}/invoice-show', \App\Livewire\StoreManagementSystem\Invoice\InvoiceShow::class)->name('store-management-system.invoice');
+        Route::get('/{id}/{product_invoice_id}/invoice-print', \App\Livewire\StoreManagementSystem\Invoice\InvoicePrint::class)->name('store-management-system.invoice-print');
+        Route::get('/invoices', \App\Livewire\StoreManagementSystem\Invoice\Invoices::class)->name('store-management-system.invoices');
+    });
+
+    // Appointment
+    Route::prefix('/appointment')->group(function () {
+        Route::get('/', \App\Livewire\Appointment::class)->name('appointment');
     });
 });
