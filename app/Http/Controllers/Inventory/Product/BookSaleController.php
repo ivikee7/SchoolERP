@@ -12,7 +12,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -50,7 +50,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -72,7 +72,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -116,7 +116,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -142,7 +142,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -154,7 +154,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -166,7 +166,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
@@ -232,7 +232,7 @@ class BookSaleController extends Controller
         if (
             !Auth()
                 ->user()
-                ->can('book_sale_access')
+                ->can('product_sale')
         ) {
             return abort(403, "You don't have permission");
         }
