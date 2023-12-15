@@ -40,7 +40,7 @@
                         <div class="card-body">
                             <div class="row">
                                 @foreach ($products as $product)
-                                    <div class="col-sm-3">
+                                    <div class="col col-md-6 col-xl-4">
                                         <div class="info-box">
                                             <span class="info-box-icon bg-info">
                                                 <img src="{{ asset('/dist/img/avatar5.png') }}" class="border"
@@ -50,7 +50,9 @@
                                                 <span class="info-box-text">
                                                     {{ $product->product_name }}
                                                 </span>
-                                                <span class="info-box-number">Price
+                                                <span class="info-box-text">
+                                                    ({{ $product->product_description }})
+                                                </span> <span class="info-box-number">Price
                                                     ₹{{ $product->class_has_product_price }}</span>
                                                 <div class="progress">
                                                     {{-- <div class="progress-bar bg-info" style="width: 70%"></div> --}}

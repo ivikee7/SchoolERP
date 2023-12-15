@@ -25,22 +25,6 @@ class Helper
             ->get();
     }
 
-    public static function classHasProducts($class_id)
-    {
-        $data = Product::leftJoin('product_categories as pc', 'products.product_product_category_id', 'pc.product_category_id')
-            ->leftJoin('class_has_products as chp', 'products.product_id', 'chp.class_has_product_product_id')
-            ->where('pc.product_category_name', 'store_management_system')
-            ->where('chp.class_has_product_class_id', function ($query) use ($class_id) {
-                $query->select('current_class_id')
-                    ->from('student_admissions  as sa')
-                    ->where('sa.user_id', $class_id);
-            })
-            ->select('products.*', 'chp.*')
-            ->get();
-
-        return $data;
-    }
-
     public static function productInvoiceCreate($user_id, $subTotal, $discount)
     {
         return ProductInvoice::create([

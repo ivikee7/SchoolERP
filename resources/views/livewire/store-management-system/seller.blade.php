@@ -55,12 +55,9 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Class</th>
                                             <th>Father Name</th>
                                             <th>Mother Name</th>
-                                            <th>School Email</th>
-                                            <th>Address</th>
-                                            <th>Contact number</th>
-                                            <th>Contact number2</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -71,14 +68,9 @@
                                                 <td>{{ $user->first_name }} {{ $user->middle_name }}
                                                     {{ $user->last_name }}
                                                 </td>
+                                                <td>{{ $user->class_name }}</td>
                                                 <td>{{ $user->father_name }}</td>
                                                 <td>{{ $user->mother_name }}</td>
-                                                <td>{{ $user->email_alternate }}</td>
-                                                <td>{{ $user->address_line1 }}, {{ $user->city }},
-                                                    {{ $user->state }},
-                                                    {{ $user->pin_code }}</td>
-                                                <td>{{ $user->contact_number }}</td>
-                                                <td>{{ $user->contact_number2 }}</td>
                                                 <td><a href="{{ route('store-management-system.products', $user->id) }}"
                                                         wire:navigate class="btn btn-primary rounded-pill">
                                                         <i class="fas fa-arrow-right"></i>
