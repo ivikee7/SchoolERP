@@ -541,25 +541,23 @@
                         @endcan
 
                         {{-- {{ Store Management System }} --}}
-                        @can('role_access')
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-regular fa-user-tag"></i>
-                                    <p>
-                                        Store Management System
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="{{ route('store-management-system.seller') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Seller</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endcan
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-regular fa-user-tag"></i>
+                                <p>
+                                    Store Management System
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('store-management-system.seller') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Seller</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
                         {{-- Appointment --}}
                         <li class="nav-item">
