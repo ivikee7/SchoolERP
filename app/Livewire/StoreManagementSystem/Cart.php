@@ -82,7 +82,8 @@ class Cart extends Component
             exit();
         }
 
-        $invoiceSubTotal = Helper::invoiceSubTotal($user);
+        $invoiceSubTotal = Helper::cartSubTotal($user);
+
         $productInvoice = Helper::productInvoiceCreate($user, $invoiceSubTotal, $discount);
 
         foreach (Helper::cartUserHasProducts($user) as $product) {

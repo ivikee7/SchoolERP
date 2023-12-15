@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('class_has_products', function (Blueprint $table) {
             $table->uuid('class_has_product_id')->primary();
-            $table->uuid('class_has_product_class_id')->nullable();
+            $table->integer('class_has_product_class_id')->unsigned()->nullable();
             $table->uuid('class_has_product_product_id')->nullable();
             $table->double('class_has_product_price', 10, 2)->nullable();
             $table->bigInteger('class_has_product_created_by')->nullable()->unsigned();
