@@ -40,7 +40,7 @@
                 role="menu" data-accordion="false">
                 {{-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library --}}
 
-                {{-- Inventory Management --}}
+                {{-- Store Management System --}}
                 @can('store_management_system_access')
                     <li class="nav-item {{ Request::is('store-management-system*') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ Request::is('store-management-system*') ? 'active' : '' }}">
@@ -71,8 +71,10 @@
                             <p>Appointment</p>
                         </a>
                     </li>
+                @endcan
 
-                    {{-- WhatsApp --}}
+                {{-- WhatsApp --}}
+                @can('appointment_access')
                     <li class="nav-item">
                         <a href="{{ route('whatsapp') }}" wire:navigate
                             class="nav-link {{ Request::is('whatsapp*') ? 'active' : '' }}">

@@ -562,13 +562,14 @@
                         @endcan
 
                         {{-- Appointment --}}
-                        <li class="nav-item">
-                            <a href="{{ route('appointment') }}" wire:navigate class="nav-link">
-                                <i class="nav-icon fas fa-calendar-check"></i>
-                                <p>Appointment</p>
-                            </a>
-                        </li>
-
+                        @can('appointment_access')
+                            <li class="nav-item">
+                                <a href="{{ route('appointment') }}" wire:navigate class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-check"></i>
+                                    <p>Appointment</p>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </nav>
                 {{-- /.sidebar-menu --}}
