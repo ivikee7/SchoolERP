@@ -126,12 +126,12 @@ class InvoiceShow extends Component
 
         if ($this->payment_received < 0) {
             $this->dispatch('modal_close_payment');
-            Notification::alert($this, 'warning', 'Failed!', 'Please enter valid amount!');
+            Notification::alert($this, 'warning', 'Failed!', 'Negative amount not valid!');
             return;
             die();
         }
 
-        if ($this->product_invoice->product_payment_remaining_due < $this->payment_received) {
+        if ($this->product_invoice->product_payment_remaining_due >= $this->payment_received) {
             $this->dispatch('modal_close_payment');
             Notification::alert($this, 'warning', 'Failed!', 'Please enter valid amount!');
             return;
