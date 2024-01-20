@@ -127,7 +127,7 @@
             <div class="modal-content">
                 <form wire:submit="assignProducts({{ $class_id }})">
                     <div class="modal-header">
-                        <h4 class="modal-title">Create</h4>
+                        <h4 class="modal-title">Assign product to class</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -138,7 +138,7 @@
                                 <label for="" class="ml-1 mr-1">Class</label>
                                 <div class="form-group">
                                     <select class="form-control" wire:model="class_id">
-                                        <option disabled="disabled" selected>Select</option>
+                                        <option>Select</option>
                                         @foreach ($classes as $class)
                                             <option value="{{ $class->id }}">
                                                 {{ $class->name }}
@@ -151,7 +151,7 @@
                                 <label for="" class="ml-1 mr-1">Session</label>
                                 <div class="form-group">
                                     <select class="form-control" wire:model="academic_session_id">
-                                        <option disabled="disabled" selected>Select</option>
+                                        <option>Select</option>
                                         @foreach ($sessions as $session)
                                             <option value="{{ $session->id }}">
                                                 {{ $session->name }}
@@ -164,7 +164,7 @@
                                 <label for="" class="ml-1 mr-1">Product</label>
                                 <div class="form-group">
                                     <select class="form-control" wire:model="product_id">
-                                        <option disabled="disabled" selected>Select</option>
+                                        <option>Select</option>
                                         @foreach ($products as $product)
                                             <option value="{{ $product->product_id }}">
                                                 {{ $product->product_name }}
