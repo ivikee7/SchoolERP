@@ -41,43 +41,46 @@
                 {{-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library --}}
 
                 {{-- Inventory Management --}}
-                <li class="nav-item {{ Request::is('store-management-system*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ Request::is('store-management-system*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-warehouse"></i>
-                        <p>
-                            Store Management System
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('store-management-system.seller') }}" wire:navigate
-                                class="nav-link {{ Request::is('store-management-system/seller*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-book-reader"></i>
-                                <p>Seller</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                @can('store_management_system_access')
+                    <li class="nav-item {{ Request::is('store-management-system*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ Request::is('store-management-system*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-warehouse"></i>
+                            <p>
+                                Store Management System
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('store-management-system.seller') }}" wire:navigate
+                                    class="nav-link {{ Request::is('store-management-system/seller*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book-reader"></i>
+                                    <p>Seller</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
 
                 {{-- Appointment --}}
-                <li class="nav-item">
-                    <a href="{{ route('appointment') }}" wire:navigate
-                        class="nav-link {{ Request::is('appointment*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-calendar-check"></i>
-                        <p>Appointment</p>
-                    </a>
-                </li>
+                @can('appointment_access')
+                    <li class="nav-item">
+                        <a href="{{ route('appointment') }}" wire:navigate
+                            class="nav-link {{ Request::is('appointment*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-calendar-check"></i>
+                            <p>Appointment</p>
+                        </a>
+                    </li>
 
-                {{-- WhatsApp --}}
-                <li class="nav-item">
-                    <a href="{{ route('whatsapp') }}" wire:navigate
-                        class="nav-link {{ Request::is('whatsapp*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-calendar-check"></i>
-                        <p>WhatsApp</p>
-                    </a>
-                </li>
-
+                    {{-- WhatsApp --}}
+                    <li class="nav-item">
+                        <a href="{{ route('whatsapp') }}" wire:navigate
+                            class="nav-link {{ Request::is('whatsapp*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-calendar-check"></i>
+                            <p>WhatsApp</p>
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
