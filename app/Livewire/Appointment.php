@@ -27,6 +27,17 @@ class Appointment extends Component
     // public $appointment_created_by = '';
     // public $appointment_updated_by = '';
 
+
+    public function render()
+    {
+        $this->count_all = self::appointmentCount(null);
+        $this->count_schedule = self::appointmentCount(1);
+        $this->count_closed = self::appointmentCount(0);
+        $this->appointments = self::appointments($this->search, $this->status);
+
+        return view('livewire.appointment');
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -55,7 +66,7 @@ class Appointment extends Component
 
     public function appointments($search, $type)
     {
-        return ModelsAppointment::where(function (Builder $query) use ($search) {
+        $appointments_query = ModelsAppointment::where(function (Builder $query) use ($search) {
             $columns = ['appointments.appointment_name', 'appointments.appointment_clint_name', 'appointments.appointment_status'];
             foreach (explode(" ", $search) as $item) {
                 $query->where(function ($q) use ($item, $columns) {
@@ -64,16 +75,10 @@ class Appointment extends Component
                     }
                 });
             }
-        })->paginate(5);
-    }
+        });
 
-    public function render()
-    {
-        $this->count_all = self::appointmentCount(null);
-        $this->count_schedule = self::appointmentCount(1);
-        $this->count_closed = self::appointmentCount(0);
-        $this->appointments = self::appointments($this->search, $this->status);
+        dd($appointments_query->paginate(5));
 
-        return view('livewire.appointment');
+        return $appointments_query->paginate(5);
     }
 }

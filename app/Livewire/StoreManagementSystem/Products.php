@@ -3,6 +3,7 @@
 namespace App\Livewire\StoreManagementSystem;
 
 use App\Helpers\Helper;
+use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\Product;
 use App\Models\StoreManagementSystem\ProductCart;
 use App\Models\User;
@@ -56,8 +57,39 @@ class Products extends Component
             ->get();
     }
 
-    public function addToCart($user, $product)
+    public function addToCart($user_id, $product_id)
     {
-        return Helper::addToCart($user, $product);
+        $product_check = ProductCart::where('product_cart_buyer_id', $user_id)->where('product_cart_product_id', $product_id)->first();
+        $product_quantity = (!empty($product_check->product_cart_quantity)) ? $product_check->product_cart_quantity : null;
+        $product_quantity = $product_quantity + 1;
+
+        if ($product_quantity == 1) {
+            ProductCart::create([
+                'product_cart_buyer_id' => $user_id,
+                'product_cart_product_id' => $product_id,
+                'product_cart_quantity' => $product_quantity
+            ]);
+            Notification::alert($this, 'success', 'Success!', 'Successfully added!');
+            return;
+        }
+
+        self::addToCartIncrease($user_id, $product_id);
+    }
+
+    public function addToCartIncrease($user_id, $product)
+    {
+        $product_check = ProductCart::where('product_cart_buyer_id', $user_id)->where('product_cart_product_id', $product)->first();
+        $product_quantity = (!empty($product_check->product_cart_quantity)) ? $product_check->product_cart_quantity : null;
+
+        if (!$product_quantity >= 1) {
+            return false;
+        }
+
+        if ($product_quantity >= 1) {
+            ProductCart::where('product_cart_buyer_id', $user_id)
+                ->where('product_cart_product_id', $product)
+                ->update(['product_cart_quantity' => ($product_quantity + 1)]);
+            Notification::alert($this, 'success', 'Success!', 'Successfully increased!');
+        }
     }
 }

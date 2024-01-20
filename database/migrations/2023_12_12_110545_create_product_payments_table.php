@@ -17,6 +17,8 @@ return new class extends Migration
             $table->double('product_payment_total_due', 10, 2);
             $table->double('product_payment_payment_received', 10, 2);
             $table->double('product_payment_remaining_due', 10, 2);
+            $table->string('product_payment_method', 10)->nullable();
+            $table->string('product_payment_remarks', 50)->nullable();
             $table->bigInteger('product_payment_created_by')->unsigned()->nullable();
             $table->bigInteger('product_payment_updated_by')->unsigned()->nullable();
             $table->timestamp('product_payment_created_at')->nullable();

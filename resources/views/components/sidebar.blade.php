@@ -69,6 +69,15 @@
                     </a>
                 </li>
 
+                {{-- WhatsApp --}}
+                <li class="nav-item">
+                    <a href="{{ route('whatsapp') }}" wire:navigate
+                        class="nav-link {{ Request::is('whatsapp*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar-check"></i>
+                        <p>WhatsApp</p>
+                    </a>
+                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

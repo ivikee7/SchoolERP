@@ -18,33 +18,17 @@
                     </div>
                     <!-- info row -->
                     <div class="row invoice-info">
-                        <div class="col-sm-4 invoice-col">
-                            From
-                            <address>
-                                <strong>{{ Auth()->user()->first_name }} {{ Auth()->user()->middle_name }}
-                                    {{ Auth()->user()->last_name }}</strong><br>
-                                {{ Auth()->user()->address_line1 }}<br>
-                                {{ Auth()->user()->city }} {{ Auth()->user()->state }}
-                                {{ Auth()->user()->pin_code }}<br>
-                                Phone: {{ Auth()->user()->contact_number }}<br>
-                                Email: {{ Auth()->user()->email }}
-                            </address>
-                        </div>
                         <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-6 invoice-col">
                             To
                             <address>
                                 <strong>{{ $user->first_name }} {{ $user->middle_name }}
                                     {{ $user->last_name }}</strong><br>
                                 <span class="text-wrap">{{ $user->address_line1 }}</span><br>
-                                <span class="text-wrap">{{ $user->city }} {{ $user->state }}
-                                    {{ $user->pin_code }}</span><br>
-                                Phone: {{ $user->contact_number }}<br>
-                                Email: {{ $user->email }}
                             </address>
                         </div>
                         <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-6 invoice-col">
                             <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
                         </div>
                         <!-- /.col -->
@@ -147,33 +131,17 @@
                     </div>
                     <!-- info row -->
                     <div class="row invoice-info">
-                        <div class="col-sm-4 invoice-col">
-                            From
-                            <address>
-                                <strong>{{ Auth()->user()->first_name }} {{ Auth()->user()->middle_name }}
-                                    {{ Auth()->user()->last_name }}</strong><br>
-                                {{ Auth()->user()->address_line1 }}<br>
-                                {{ Auth()->user()->city }} {{ Auth()->user()->state }}
-                                {{ Auth()->user()->pin_code }}<br>
-                                Phone: {{ Auth()->user()->contact_number }}<br>
-                                Email: {{ Auth()->user()->email }}
-                            </address>
-                        </div>
                         <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-6 invoice-col">
                             To
                             <address>
                                 <strong>{{ $user->first_name }} {{ $user->middle_name }}
                                     {{ $user->last_name }}</strong><br>
                                 <span class="text-wrap">{{ $user->address_line1 }}</span><br>
-                                <span class="text-wrap">{{ $user->city }} {{ $user->state }}
-                                    {{ $user->pin_code }}</span><br>
-                                Phone: {{ $user->contact_number }}<br>
-                                Email: {{ $user->email }}
                             </address>
                         </div>
                         <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
+                        <div class="col-sm-6 invoice-col">
                             <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
                         </div>
                         <!-- /.col -->

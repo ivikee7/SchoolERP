@@ -63,6 +63,7 @@
                                                 <th>SubTotal</th>
                                                 <th>Discount</th>
                                                 <th>Total</th>
+                                                <th>Paid</th>
                                                 <th>Due</th>
                                                 <th>Action</th>
                                             </tr>
@@ -78,7 +79,10 @@
                                                     <td>{{ $invoice->product_invoice_discount }}
                                                     </td>
                                                     <td>{{ $invoice->product_invoice_gross_total }}</td>
-                                                    <td>{{ $invoice->product_invoice_gross_total }}</td>
+                                                    <td>{{ $invoice->product_invoice_gross_total - $invoice->product_invoice_due }}
+                                                    </td>
+                                                    <td>{{ $invoice->product_invoice_due }}
+                                                    </td>
                                                     <td><a wire:navigate class="btn btn-primary btn-xs"
                                                             href="{{ route('store-management-system.invoice', [$invoice->id, $invoice->product_invoice_id]) }}">Invoice</a>
                                                     </td>

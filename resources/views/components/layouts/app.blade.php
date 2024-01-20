@@ -32,10 +32,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     @livewireStyles
     @stack('styles')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="hold-transition layout-fixed layout-navbar-fixed layout-footer-fixed text-sm">
@@ -85,6 +86,31 @@
     <script src="{{ asset('dist/js/controller.js') }}"></script>
 
     @livewireScripts
+
+    {{-- @once
+        <script>
+            window.addEventListener('swal', function(e) {
+                Swal.fire(e.detail);
+            });
+        </script>
+    @endonce --}}
+    @once
+        <script>
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.on('swal', (event) => {
+                    Toast.fire(event[0]);
+                });
+            });
+        </script>
+    @endonce
+
     @stack('scripts')
 
     <script type="module">

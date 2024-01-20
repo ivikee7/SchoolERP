@@ -347,10 +347,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{id}/{product_invoice_id}/invoice-show', \App\Livewire\StoreManagementSystem\Invoice\InvoiceShow::class)->name('store-management-system.invoice');
         Route::get('/{id}/{product_invoice_id}/invoice-print', \App\Livewire\StoreManagementSystem\Invoice\InvoicePrint::class)->name('store-management-system.invoice-print');
         Route::get('/invoices', \App\Livewire\StoreManagementSystem\Invoice\Invoices::class)->name('store-management-system.invoices');
+        Route::get('/product-manage', \App\Livewire\StoreManagementSystem\ProductManage::class)->name('store-management-system.product-manage');
+        Route::get('/class-has-product', \App\Livewire\StoreManagementSystem\ClassHasProduct::class)->name('store-management-system.class-has-product');
+        Route::get('/{class_id}/class-has-product-manage', \App\Livewire\StoreManagementSystem\ClassHasProductManage::class)->name('store-management-system.class-has-product-manage');
     });
 
     // Appointment
     Route::prefix('/appointment')->group(function () {
         Route::get('/', \App\Livewire\Appointment::class)->name('appointment');
+    });
+
+    // Appointment
+    Route::prefix('/whatsapp')->group(function () {
+        Route::get('/', \App\Livewire\Meta\Whatsapp::class)->name('whatsapp');
     });
 });

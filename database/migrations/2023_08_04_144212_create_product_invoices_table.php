@@ -17,6 +17,7 @@ return new class extends Migration
             $table->double('product_invoice_subtotal', 10, 2)->nullable();
             $table->double('product_invoice_discount', 10, 2)->nullable();
             $table->double('product_invoice_gross_total', 10, 2)->nullable();
+            $table->double('product_invoice_due', 10, 2)->nullable();
             $table->datetime('product_invoice_due_date')->nullable();
             $table->bigInteger('product_invoice_created_by')->nullable()->unsigned();
             $table->bigInteger('product_invoice_updated_by')->nullable()->unsigned();

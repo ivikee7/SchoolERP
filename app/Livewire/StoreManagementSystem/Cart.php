@@ -4,6 +4,9 @@ namespace App\Livewire\StoreManagementSystem;
 
 use App\Models\StoreManagementSystem\ProductCart;
 use App\Helpers\Helper;
+use App\Livewire\Alert\Notification;
+use App\Models\Inventory\Product\ProductInvoice;
+use App\Models\Inventory\Product\ProductInvoiceItem;
 use Livewire\Component;
 
 class Cart extends Component
@@ -20,8 +23,8 @@ class Cart extends Component
         return view(
             'livewire.store-management-system.cart',
             [
-                'products' => Helper::cartUserHasProducts($this->id),
-                'total' => Helper::cartSubTotal($this->id)
+                'products' => self::cartUserHasProducts($this->id),
+                'total' => self::cartSubTotal($this->id)
             ]
         );
     }
@@ -33,6 +36,8 @@ class Cart extends Component
         }
 
         Helper::addToCartIncrease($user, $product);
+
+        Notification::alert($this, 'success', 'Success!', 'Successfully increased!');
     }
 
     public function addToCartDecrease($user, $product)
@@ -42,6 +47,8 @@ class Cart extends Component
         }
 
         Helper::addToCartDecrease($user, $product);
+
+        Notification::alert($this, 'success', 'Success!', 'Successfully decreased!');
     }
 
     public function addToCartRemove($user, $product)
@@ -58,6 +65,8 @@ class Cart extends Component
             ProductCart::where('product_cart_buyer_id', $user)
                 ->where('product_cart_product_id', $product)
                 ->delete();
+
+            Notification::alert($this, 'success', 'Success!', 'Product successfully removed from cart!');
         }
     }
 
@@ -73,25 +82,82 @@ class Cart extends Component
     public function cartClear($user_id)
     {
         Helper::cartClear($user_id);
-        return true;
+
+        Notification::alert($this, 'success', 'Success!', 'Cart successfully cleared!');
     }
 
     public function createInvoice($user, $discount = 0)
     {
-        if (!Helper::cartUserHasProducts($user)->count() > 0) {
+        if (!self::cartUserHasProducts($user)->count() > 0) {
             exit();
         }
 
-        $invoiceSubTotal = Helper::cartSubTotal($user);
+        $invoiceSubTotal = self::cartSubTotal($user);
 
-        $productInvoice = Helper::productInvoiceCreate($user, $invoiceSubTotal, $discount);
+        $productInvoice = self::productInvoiceCreate($user, $invoiceSubTotal, $discount);
 
-        foreach (Helper::cartUserHasProducts($user) as $product) {
-            Helper::productInvoiceItemCreate($productInvoice, $product);
+        foreach (self::cartUserHasProducts($user) as $product) {
+            self::productInvoiceItemCreate($productInvoice, $product);
         }
 
-        Helper::cartClear($user);
+        self::cartClear($user);
 
-        $this->redirect(route('store-management-system.invoice', [$this->id, $productInvoice->product_invoice_id]));
+        Notification::alert($this, 'success', 'Success!', 'Invoice successfully created!');
+
+        // $this->redirect(route('store-management-system.invoice', [$this->id, $productInvoice->product_invoice_id]));
+    }
+
+    public function cartUserHasProducts($user)
+    {
+        return ProductCart::leftJoin('products as p', 'product_carts.product_cart_product_id', 'p.product_id')
+            ->leftJoin('class_has_products as chp', 'p.product_id', 'chp.class_has_product_product_id')
+            ->leftJoin('product_categories as pc', 'p.product_product_category_id', 'pc.product_category_id')
+            ->where('chp.class_has_product_class_id', function ($query) use ($user) {
+                $query->select('current_class_id')
+                    ->from('student_admissions  as sa')
+                    ->where('sa.user_id', $user);
+            })
+            ->where('product_carts.product_cart_buyer_id', $user)
+            ->where('pc.product_category_name', 'store_management_system')
+            ->select('product_carts.*', 'p.*', 'chp.*')
+            ->get();
+    }
+
+    public function cartSubTotal($user_id)
+    {
+        $data = self::cartUserHasProducts($user_id);
+
+        $total = 0;
+
+        foreach ($data as $d) {
+            $total += $d->class_has_product_price * $d->product_cart_quantity;
+        }
+        return $total;
+    }
+
+    public static function productInvoiceCreate($user_id, $subTotal, $discount)
+    {
+        return ProductInvoice::create([
+            'product_invoice_buyer_id' => $user_id,
+            'product_invoice_subtotal' => $subTotal,
+            'product_invoice_discount' => $discount,
+            'product_invoice_gross_total' => ($subTotal - $discount),
+            'product_invoice_due' => ($subTotal - $discount),
+            'product_invoice_due_date' => now(),
+            'product_invoice_created_by' => Auth()->user()->id,
+            'product_invoice_updated_by' => Auth()->user()->id,
+        ]);
+    }
+
+    public function productInvoiceItemCreate($invoice, $product)
+    {
+        return ProductInvoiceItem::create([
+            'product_invoice_item_product_invoice_id' => $invoice->product_invoice_id,
+            'product_invoice_item_class_has_product_id' => $product->class_has_product_id,
+            'product_invoice_item_price' => $product->class_has_product_price,
+            'product_invoice_item_quantity' => $product->product_cart_quantity,
+            'product_invoice_item_created_by' => Auth()->user()->id,
+            'product_invoice_item_updated_by' => Auth()->user()->id,
+        ]);
     }
 }

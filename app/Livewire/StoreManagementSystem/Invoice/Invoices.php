@@ -16,7 +16,7 @@ class Invoices extends Component
     public function render()
     {
         return view('livewire.store-management-system.invoice.invoices', [
-            'invoices' => Helper::invoicesGet($this->search),
+            'invoices' => self::invoicesGet($this->search),
         ]);
     }
 

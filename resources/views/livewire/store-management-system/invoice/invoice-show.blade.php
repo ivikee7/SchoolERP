@@ -129,11 +129,11 @@
                                         <!-- accepted payments column -->
                                         <div class="col-5">
                                             <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                                                Etsy doostang zoodles disqus groupon greplin oooj voxy
+                                                {{-- Etsy doostang zoodles disqus groupon greplin oooj voxy
                                                 zoodles, weebly ning heekya handango imeem
                                                 plugg
                                                 dopplr jibjab, movity jajah plickers sifteo edmodo ifttt
-                                                zimbra.
+                                                zimbra. --}}
                                             </p>
                                         </div>
                                         <!-- /.col -->
@@ -146,15 +146,20 @@
                                                 <table class="table">
                                                     <tr>
                                                         <th style="width:50%">Subtotal:</th>
-                                                        <td>₹{{ $total }}</td>
+                                                        <td>₹{{ $product_invoice->product_invoice_subtotal }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Discount:</th>
+                                                        <td>₹{{ $product_invoice->product_invoice_discount }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Total:</th>
-                                                        <td>₹{{ $total }}</td>
+                                                        <td>₹{{ $product_invoice->product_invoice_gross_total }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Due:</th>
-                                                        <td>₹{{ $remaining_payment }}</td>
+                                                        <td>₹{{ $product_invoice->product_invoice_gross_total - $this->productInvoicePaidAmount($product_invoice->product_invoice_id) }}
+                                                        </td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -176,7 +181,12 @@
                                                 Payment
                                             </a> --}}
                                             <button type="button" class="btn btn-primary float-right"
-                                                data-toggle="modal" data-target="#modal-payment">
+                                                data-toggle="modal" data-target="#modal-discount">
+                                                ₹ Discount
+                                            </button>
+                                            <button type="button" class="btn btn-primary float-right"
+                                                data-toggle="modal" data-target="#modal-payment"
+                                                style="margin-right: 5px;">
                                                 ₹ Payment
                                             </button>
                                             {{-- <button type="button" class="btn btn-primary float-right"
@@ -208,6 +218,9 @@
                                                 <th>Paid</th>
                                                 <th>Due</th>
                                                 <th>Date</th>
+                                                <th>Received By</th>
+                                                <th>Method</th>
+                                                <th>Remarks</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -218,6 +231,12 @@
                                                     <td>₹{{ $invoice_payment->product_payment_payment_received }}</td>
                                                     <td>₹{{ $invoice_payment->product_payment_remaining_due }}</td>
                                                     <td>{{ $invoice_payment->product_payment_created_at }}
+                                                    </td>
+                                                    <td>{{ $this->user($invoice_payment->product_payment_created_by) }}
+                                                    </td>
+                                                    <td>{{ $invoice_payment->product_payment_method }}
+                                                    </td>
+                                                    <td>{{ $invoice_payment->product_payment_remarks }}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -234,6 +253,8 @@
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+
+    {{-- payment --}}
     <div class="modal fade" id="modal-payment" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -258,6 +279,60 @@
                                 <input wire:model="payment_received" name="payment_received" type="text"
                                     class="form-control" value="" placeholder="Received amount">
                             </div>
+                            <div class="col col-12">
+                                <label for="" class="ml-1 mr-1">Method</label>
+                                <select wire:model="product_payment_method" name="product_payment_method"
+                                    class="form-control">
+                                    <option @disabled(true) @selected(true)>Select</option>
+                                    <option value="Online">Online</option>
+                                    <option value="Cash">Cash</option>
+                                </select>
+                            </div>
+                            <div class="col col-12">
+                                <label for="" class="ml-1 mr-1">Remarks</label>
+                                <input wire:model="product_payment_remarks" name="product_payment_remarks"
+                                    type="text" class="form-control" value=""
+                                    placeholder="Payment remarks">
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- discount --}}
+    <div class="modal fade" id="modal-discount" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form wire:submit="discount('{{ $invoice[0]->product_invoice_id }}')" action="" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">Payment</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-12">
+                                <label for="" class="ml-1 mr-1">Payable</label>
+                                <input type="text" class="form-control" value="{{ $remaining_payment }}"
+                                    placeholder="Payable" @disabled(true)>
+                            </div>
+                            <div class="col col-12">
+                                <label for="" class="ml-1 mr-1">Discount amount</label>
+                                <input wire:model="payment_discount" name="payment_discount" type="text"
+                                    class="form-control" value="" placeholder="Discount amount">
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -273,3 +348,16 @@
     </div>
 </div>
 <!-- /.content-wrapper -->
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('modal_close_payment', (event) => {
+                $('#modal-payment').modal('hide');
+            });
+
+            Livewire.on('modal_close_discount', (event) => {
+                $('#modal-discount').modal('hide');
+            });
+        });
+    </script>
+@endpush

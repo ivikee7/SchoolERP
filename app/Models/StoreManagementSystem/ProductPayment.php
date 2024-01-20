@@ -17,6 +17,8 @@ class ProductPayment extends Model
         'product_payment_total_due',
         'product_payment_payment_received',
         'product_payment_remaining_due',
+        'product_payment_method',
+        'product_payment_remarks',
         'product_payment_created_by',
         'product_payment_updated_by',
     ];

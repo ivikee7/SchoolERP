@@ -14,6 +14,7 @@ class ClassHasProduct extends Model
 
     protected $fillable = [
         'class_has_product_class_id',
+        'class_has_product_academic_session_id',
         'class_has_product_product_id',
         'class_has_product_price',
         'class_has_product_created_by',

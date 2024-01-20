@@ -35,6 +35,9 @@
                                 <a href="{{ route('store-management-system.seller') }}" wire:navigate>
                                     <input type="button" value="Seller" class="btn btn-sm btn-primary" />
                                 </a>
+                                <a href="{{ route('store-management-system.invoices') }}" wire:navigate>
+                                    <input type="button" value="Invoices" class="btn btn-sm btn-primary" />
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
