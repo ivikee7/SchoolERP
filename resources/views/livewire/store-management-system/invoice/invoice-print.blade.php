@@ -102,9 +102,20 @@
                                         <th>Shipping:</th>
                                         <td>$5.80</td>
                                     </tr> --}}
+                                    @if ($product_invoice->product_invoice_discount > 0)
+                                        <tr>
+                                            <th>Discount:</th>
+                                            <td>₹{{ $product_invoice->product_invoice_discount }}</td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <th>Total:</th>
-                                        <td>₹{{ $total }}</td>
+                                        <td>₹{{ $product_invoice->product_invoice_gross_total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Due:</th>
+                                        <td>₹{{ $product_invoice->product_invoice_gross_total - $this->productInvoicePaidAmount($product_invoice->product_invoice_id) }}
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -215,9 +226,20 @@
                                         <th>Shipping:</th>
                                         <td>$5.80</td>
                                     </tr> --}}
+                                    @if ($product_invoice->product_invoice_discount > 0)
+                                        <tr>
+                                            <th>Discount:</th>
+                                            <td>₹{{ $product_invoice->product_invoice_discount }}</td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <th>Total:</th>
-                                        <td>₹{{ $total }}</td>
+                                        <td>₹{{ $product_invoice->product_invoice_gross_total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Due:</th>
+                                        <td>₹{{ $product_invoice->product_invoice_gross_total - $this->productInvoicePaidAmount($product_invoice->product_invoice_id) }}
+                                        </td>
                                     </tr>
                                 </table>
                             </div>

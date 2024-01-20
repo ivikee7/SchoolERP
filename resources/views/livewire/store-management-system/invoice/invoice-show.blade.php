@@ -148,10 +148,12 @@
                                                         <th style="width:50%">Subtotal:</th>
                                                         <td>₹{{ $product_invoice->product_invoice_subtotal }}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Discount:</th>
-                                                        <td>₹{{ $product_invoice->product_invoice_discount }}</td>
-                                                    </tr>
+                                                    @if ($product_invoice->product_invoice_discount > 0)
+                                                        <tr>
+                                                            <th>Discount:</th>
+                                                            <td>₹{{ $product_invoice->product_invoice_discount }}</td>
+                                                        </tr>
+                                                    @endif
                                                     <tr>
                                                         <th>Total:</th>
                                                         <td>₹{{ $product_invoice->product_invoice_gross_total }}</td>
