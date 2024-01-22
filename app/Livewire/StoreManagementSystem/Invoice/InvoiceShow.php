@@ -32,7 +32,7 @@ class InvoiceShow extends Component
     public function render()
     {
         $this->product_invoice = ProductInvoice::findOrFail($this->product_invoice_id);
-        $this->remaining_payment = self::invoiceRemaining($this->product_invoice_id);
+        // $this->remaining_payment = self::invoiceRemaining($this->product_invoice_id);
 
         return view('livewire.store-management-system.invoice.invoice-show', [
             'invoice' => Helper::productInvoiceGet($this->product_invoice_id),
@@ -105,6 +105,8 @@ class InvoiceShow extends Component
 
     public function payment($product_invoice_id)
     {
+        $product_invoice = ProductInvoice::findOrFail($product_invoice_id);
+
         $product_payment = ProductPayment::where('product_payment_product_invoice_id', $product_invoice_id)->get();
         $product_payment_total = 0;
         if (!empty($product_payment)) {
@@ -140,17 +142,18 @@ class InvoiceShow extends Component
 
         ProductPayment::create([
             'product_payment_product_invoice_id' => $product_invoice_id,
-            'product_payment_total_due' => $this->remaining_payment,
+            'product_payment_total_due' => $product_invoice->product_invoice_due,
             'product_payment_payment_received' => $this->payment_received,
-            'product_payment_remaining_due' => ($this->remaining_payment - $this->payment_received),
+            'product_payment_remaining_due' => ($product_invoice->product_invoice_due - $this->payment_received),
             'product_payment_method' => $this->product_payment_method,
             'product_payment_remarks' => $this->product_payment_remarks,
             'product_payment_created_by' => Auth()->user()->id,
             'product_payment_updated_by' => Auth()->user()->id,
         ]);
-        $invoice = ProductInvoice::findOrFail($product_invoice_id);
-        $invoice->product_invoice_due = ($this->remaining_payment - $this->payment_received);
-        $invoice->save();
+
+        // $invoice = ProductInvoice::findOrFail($product_invoice_id);
+        // $invoice->product_invoice_due = ($this->remaining_payment - $this->payment_received);
+        // $invoice->save();
 
         $this->payment_received = null;
         $this->dispatch('modal_close_payment');

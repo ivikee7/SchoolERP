@@ -32,9 +32,6 @@
                                     <a href="{{ route('store-management-system.seller') }}">
                                         <input type="button" value="Seller" class="btn btn-sm btn-primary">
                                     </a>
-                                    <a href="{{ route('store-management-system.invoice.payment') }}">
-                                        <input type="button" value="Payment" class="btn btn-sm btn-primary">
-                                    </a>
                                 </div>
                             </div>
                             <!-- /.card-header -->
@@ -72,22 +69,24 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($invoices as $key => $invoice)
+                                            @foreach ($payments as $key => $payment)
+                                                @dd($payment);
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
-                                                    <td>{{ $invoice->product_invoice_id }}</td>
-                                                    <td>{{ $invoice->first_name . ' ' . $invoice->middle_name . ' ' . $invoice->last_name }}
+                                                    <td>{{ $payment->product_payment_id }}</td>
+                                                    <td>{{ $payment->first_name . ' ' . $payment->middle_name . ' ' . $payment->last_name }}
                                                     </td>
-                                                    <td>{{ $invoice->product_invoice_subtotal }}</td>
-                                                    <td>{{ $invoice->product_invoice_discount }}
+                                                    <td>{{ $payment->product_payment_subtotal }}</td>
+                                                    <td>{{ $payment->product_payment_discount }}
                                                     </td>
-                                                    <td>{{ $invoice->product_invoice_gross_total }}</td>
-                                                    <td>{{ $invoice->product_invoice_gross_total - $invoice->product_invoice_due }}
+                                                    <td>{{ $payment->product_payment_gross_total }}</td>
+                                                    <td>{{ $payment->product_payment_gross_total - $payment->product_payment_due }}
                                                     </td>
-                                                    <td>{{ $invoice->product_invoice_due }}
+                                                    <td>{{ $payment->product_payment_due }}
                                                     </td>
-                                                    <td><a wire:navigate class="btn btn-primary btn-xs"
-                                                            href="{{ route('store-management-system.invoice', [$invoice->id, $invoice->product_invoice_id]) }}">Invoice</a>
+                                                    <td>
+                                                        {{-- <a wire:navigate class="btn btn-primary btn-xs"
+                                                            href="{{ route('store-management-system.invoice', [$payment->id, $payment->product_payment_id]) }}">Invoice</a> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -97,14 +96,14 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-5">
                                         Showing
-                                        {{ $invoices->perPage() * ($invoices->currentPage() - 1) + 1 }} to
-                                        {{ $invoices->perPage() * $invoices->currentPage() }} of
-                                        {{ $invoices->total() }}
+                                        {{ $payments->perPage() * ($payments->currentPage() - 1) + 1 }} to
+                                        {{ $payments->perPage() * $payments->currentPage() }} of
+                                        {{ $payments->total() }}
                                     </div>
                                     <div class="col-sm-12 col-md-7">
                                         <div class="d-flex flex-row-reverse">
-                                            @if (count($invoices))
-                                                {{ $invoices->links() }}
+                                            @if (count($payments))
+                                                {{ $payments->links() }}
                                             @endif
                                         </div>
                                     </div>
@@ -123,5 +122,4 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
 </main>

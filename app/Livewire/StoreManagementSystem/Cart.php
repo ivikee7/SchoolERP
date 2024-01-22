@@ -86,25 +86,22 @@ class Cart extends Component
         Notification::alert($this, 'success', 'Success!', 'Cart successfully cleared!');
     }
 
-    public function createInvoice($user, $discount = 0)
+    public function createInvoice($user_id, $discount = 0)
     {
-        if (!self::cartUserHasProducts($user)->count() > 0) {
+        if (!self::cartUserHasProducts($user_id)->count() > 0) {
             exit();
         }
 
-        $invoiceSubTotal = self::cartSubTotal($user);
+        $invoiceSubTotal = self::cartSubTotal($user_id);
+        $productInvoice = self::productInvoiceCreate($user_id, $invoiceSubTotal, $discount);
 
-        $productInvoice = self::productInvoiceCreate($user, $invoiceSubTotal, $discount);
-
-        foreach (self::cartUserHasProducts($user) as $product) {
+        foreach (self::cartUserHasProducts($user_id) as $product) {
             self::productInvoiceItemCreate($productInvoice, $product);
         }
 
-        self::cartClear($user);
-
+        self::cartClear($user_id);
         Notification::alert($this, 'success', 'Success!', 'Invoice successfully created!');
-
-        // $this->redirect(route('store-management-system.invoice', [$this->id, $productInvoice->product_invoice_id]));
+        $this->redirect(route('store-management-system.invoice', [$this->id, $productInvoice->product_invoice_id]), navigate: true);
     }
 
     public function cartUserHasProducts($user)
@@ -135,17 +132,17 @@ class Cart extends Component
         return $total;
     }
 
-    public static function productInvoiceCreate($user_id, $subTotal, $discount)
+    public static function productInvoiceCreate($user_id, $sub_total, $discounted_amount)
     {
         return ProductInvoice::create([
             'product_invoice_buyer_id' => $user_id,
-            'product_invoice_subtotal' => $subTotal,
-            'product_invoice_discount' => $discount,
-            'product_invoice_gross_total' => ($subTotal - $discount),
-            'product_invoice_due' => ($subTotal - $discount),
+            'product_invoice_subtotal' => $sub_total,
+            'product_invoice_discount' => $discounted_amount,
+            'product_invoice_gross_total' => ($sub_total - $discounted_amount),
+            'product_invoice_due' => ($sub_total - $discounted_amount),
             'product_invoice_due_date' => now(),
-            'product_invoice_created_by' => Auth()->user()->id,
-            'product_invoice_updated_by' => Auth()->user()->id,
+            'product_invoice_created_by' => auth()->user()->id,
+            'product_invoice_updated_by' => auth()->user()->id,
         ]);
     }
 

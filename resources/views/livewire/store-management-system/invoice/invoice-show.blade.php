@@ -273,8 +273,9 @@
                         <div class="row">
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Payable</label>
-                                <input type="text" class="form-control" value="{{ $remaining_payment }}"
-                                    placeholder="Payable" @disabled(true)>
+                                <input type="text" class="form-control"
+                                    value="{{ $product_invoice->product_invoice_due }}" placeholder="Payable"
+                                    @disabled(true)>
                             </div>
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Received amount</label>
@@ -327,8 +328,9 @@
                         <div class="row">
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Payable</label>
-                                <input type="text" class="form-control" value="{{ $remaining_payment }}"
-                                    placeholder="Payable" @disabled(true)>
+                                <input type="text" class="form-control"
+                                    value="{{ $product_invoice->product_invoice_due }}" placeholder="Payable"
+                                    @disabled(true)>
                             </div>
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Discount amount</label>

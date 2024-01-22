@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_invoice_items', function (Blueprint $table) {
-            $table->uuid('product_invoice_item_id')->primary();
-            $table->uuid('product_invoice_item_product_invoice_id')->nullable();
-            $table->uuid('product_invoice_item_class_has_product_id')->nullable();
+            $table->id('product_invoice_item_id');
+            $table->bigInteger('product_invoice_item_product_invoice_id')->nullable()->unsigned();
+            $table->bigInteger('product_invoice_item_class_has_product_id')->nullable()->unsigned();
             $table->double('product_invoice_item_price', 10, 2);
             $table->integer('product_invoice_item_quantity')->nullable()->unsigned();
             $table->bigInteger('product_invoice_item_created_by')->nullable()->unsigned();

@@ -3,7 +3,7 @@
         <!-- Main content -->
         <div class="row">
             <div class="col-6">
-                <section class="invoice">
+                <section class="invoice border p-2">
                     <!-- title row -->
                     <div class="row">
                         <div class="col-12">
@@ -19,16 +19,17 @@
                     <!-- info row -->
                     <div class="row invoice-info">
                         <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
+                        <div class="col-sm-9 invoice-col">
                             To
                             <address>
                                 <strong>{{ $user->first_name }} {{ $user->middle_name }}
                                     {{ $user->last_name }}</strong><br>
+                                <strong>{{ $user->class_name }} {{ $user->section_name }}</strong><br>
                                 <span class="text-wrap">{{ $user->address_line1 }}</span><br>
                             </address>
                         </div>
                         <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
+                        <div class="col-sm-3 invoice-col">
                             <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
                         </div>
                         <!-- /.col -->
@@ -85,9 +86,6 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-6">
-                            <p class="lead">Amount Due
-                                {{ date('Y-m-d', strtotime($invoice[0]->product_invoice_created_at)) }}</p>
-
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <tr>
@@ -127,7 +125,7 @@
                 <!-- /.content -->
             </div>
             <div class="col-6">
-                <section class="invoice">
+                <section class="invoice border p-2">
                     <!-- title row -->
                     <div class="row">
                         <div class="col-12">
@@ -143,16 +141,17 @@
                     <!-- info row -->
                     <div class="row invoice-info">
                         <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
+                        <div class="col-sm-9 invoice-col">
                             To
                             <address>
                                 <strong>{{ $user->first_name }} {{ $user->middle_name }}
                                     {{ $user->last_name }}</strong><br>
+                                <strong>{{ $user->class_name }} {{ $user->section_name }}</strong><br>
                                 <span class="text-wrap">{{ $user->address_line1 }}</span><br>
                             </address>
                         </div>
                         <!-- /.col -->
-                        <div class="col-sm-6 invoice-col">
+                        <div class="col-sm-3 invoice-col">
                             <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
                         </div>
                         <!-- /.col -->
@@ -209,9 +208,6 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-6">
-                            <p class="lead">Amount Due
-                                {{ date('Y-m-d', strtotime($invoice[0]->product_invoice_created_at)) }}</p>
-
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <tr>

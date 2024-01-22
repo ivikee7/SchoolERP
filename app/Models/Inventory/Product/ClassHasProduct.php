@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClassHasProduct extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     protected $primaryKey = 'class_has_product_id';
 

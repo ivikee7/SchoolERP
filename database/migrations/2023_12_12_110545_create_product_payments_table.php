@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_payments', function (Blueprint $table) {
-            $table->uuid('product_payment_id')->primary();
-            $table->uuid('product_payment_product_invoice_id')->nullable();
+            $table->id('product_payment_id');
+            $table->bigInteger('product_payment_product_invoice_id')->nullable()->unsigned();
             $table->double('product_payment_total_due', 10, 2);
             $table->double('product_payment_payment_received', 10, 2);
             $table->double('product_payment_remaining_due', 10, 2);

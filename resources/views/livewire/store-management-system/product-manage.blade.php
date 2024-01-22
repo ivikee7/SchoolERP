@@ -137,7 +137,7 @@
                                 <label for="" class="ml-1 mr-1">Product</label>
                                 <div class="form-group">
                                     <select class="form-control" wire:model="product_category_id">
-                                        <option disabled>Select</option>
+                                        <option>Select</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->product_category_id }}">
                                                 {{ $category->product_category_name }}

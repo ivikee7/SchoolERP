@@ -13,6 +13,7 @@ class InvoicePrint extends Component
     public $id;
     public $product_invoice_id;
     public $product_invoice;
+    public $user;
 
     public function mount($id, $product_invoice_id)
     {
@@ -23,11 +24,16 @@ class InvoicePrint extends Component
     public function render()
     {
         $this->product_invoice = ProductInvoice::findOrFail($this->product_invoice_id);
+        $this->user = User::leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
+            ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
+            ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
+            ->where('users.id', $this->id)
+            ->select('users.*', 'sc.name as class_name', 'ss.name as section_name')
+            ->first();
 
         return view('livewire.store-management-system.invoice.invoice-print', [
             'invoice' => Helper::productInvoiceGet($this->product_invoice_id),
             'products' => Helper::productInvoiceItemsGet($this->product_invoice_id),
-            'user' => User::findOrFail($this->id),
             'total' => Helper::invoiceSubTotal($this->product_invoice_id)
         ])->layout('components.layouts.base');
     }

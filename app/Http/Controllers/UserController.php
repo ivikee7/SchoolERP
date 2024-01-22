@@ -187,8 +187,8 @@ class UserController extends Controller
         ]);
         if (
             User::where('first_name', $request->first_name)
-                ->where('contact_number', $request->contact_number)
-                ->exists()
+            ->where('contact_number', $request->contact_number)
+            ->exists()
         ) {
             return abort(403, 'User already exists!');
         } elseif (User::where('email', $request->email)->exists() && $request->email != '') {
@@ -334,7 +334,7 @@ class UserController extends Controller
                 ->whereNotIn('name', 'Super Admin')
                 ->whereNotIn('name', 'STUDENT');
 
-            return view('user.show')->with(['user' => $user[0], 'image'=>$image, 'roles' => $roles, 'routes' => $routes, 'admissions' => $admissions]);
+            return view('user.show')->with(['user' => $user[0], 'image' => $image, 'roles' => $roles, 'routes' => $routes, 'admissions' => $admissions]);
         } elseif (User::find($id) && User::find($id)->hasAnyRole('STUDENT')) {
             return redirect(route('student.show', $id));
         } else {
@@ -449,8 +449,8 @@ class UserController extends Controller
     {
         if (
             Auth()
-                ->user()
-                ->can('user_create')
+            ->user()
+            ->can('user_create')
         ) {
             $request->validate([
                 'joining_date' => 'required|date',
