@@ -46,7 +46,7 @@
                                     <div class="col col-md-6 col-xl-4">
                                         <div class="info-box">
                                             <span class="info-box-icon bg-info">
-                                                <img src="{{ asset('/dist/img/avatar5.png') }}" class="border"
+                                                <img src="{{ asset('/dist/img/book.png') }}" class="border"
                                                     width="100" height="100" alt="Product">
                                             </span>
                                             <div class="info-box-content">
@@ -55,17 +55,22 @@
                                                 </span>
                                                 <span class="info-box-text">
                                                     ({{ $product->product_description }})
-                                                </span> <span class="info-box-number">Price
-                                                    ₹{{ $product->class_has_product_price }}</span>
+                                                </span>
                                                 <div class="progress">
                                                     {{-- <div class="progress-bar bg-info" style="width: 70%"></div> --}}
                                                 </div>
                                                 <span class="progress-description">
-                                                    <div class="d-flex flex-row-reverse">
-                                                        <input
-                                                            wire:click='addToCart({{ $id }}, "{{ $product->product_id }}")'
-                                                            type="button" class="btn btn-primary btn-sm"
-                                                            name="adToCart" value="Add To Cart" />
+                                                    <div class="row">
+                                                        <span class="col col-6">Price
+                                                            ₹{{ $product->class_has_product_price }}</span>
+                                                        <div class="col col-6">
+                                                            <div class="d-flex flex-row-reverse">
+                                                                <input
+                                                                    wire:click='addToCart({{ $id }}, "{{ $product->product_id }}")'
+                                                                    type="button" class="btn btn-primary btn-sm"
+                                                                    name="adToCart" value="Add To Cart" />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </span>
                                             </div>

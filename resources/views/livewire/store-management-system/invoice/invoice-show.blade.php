@@ -182,15 +182,29 @@
                                                 wire:click="payment('{{ $invoice[0]->product_invoice_id }}')">₹
                                                 Payment
                                             </a> --}}
-                                            <button type="button" class="btn btn-primary float-right"
-                                                data-toggle="modal" data-target="#modal-discount">
-                                                ₹ Discount
-                                            </button>
-                                            <button type="button" class="btn btn-primary float-right"
-                                                data-toggle="modal" data-target="#modal-payment"
-                                                style="margin-right: 5px;">
-                                                ₹ Payment
-                                            </button>
+                                            @can(auth()->user()->can('store_management_system_owner'))
+                                                @if (
+                                                    $product_invoice->product_invoice_gross_total -
+                                                        $this->productInvoicePaidAmount($product_invoice->product_invoice_id) >
+                                                        0)
+                                                    <button type="button" class="btn btn-primary float-right"
+                                                        data-toggle="modal" data-target="#modal-discount">
+                                                        ₹ Discount
+                                                    </button>
+                                                @endif
+                                            @endcan
+                                            @can(auth()->user()->can('store_management_system_manage'))
+                                                @if (
+                                                    $product_invoice->product_invoice_gross_total -
+                                                        $this->productInvoicePaidAmount($product_invoice->product_invoice_id) >
+                                                        0)
+                                                    <button type="button" class="btn btn-primary float-right"
+                                                        data-toggle="modal" data-target="#modal-payment"
+                                                        style="margin-right: 5px;">
+                                                        ₹ Payment
+                                                    </button>
+                                                @endif
+                                            @endcan
                                             {{-- <button type="button" class="btn btn-primary float-right"
                                                 style="margin-right: 5px;">
                                                 <i class="fas fa-download"></i> Generate PDF

@@ -53,6 +53,12 @@ class Products extends Component
                     ->from('student_admissions  as sa')
                     ->where('sa.user_id', $user_id);
             })
+            ->whereNotIn('chp.class_has_product_id', function ($query) use ($user_id) {
+                $query->select('pii.product_invoice_item_class_has_product_id')
+                    ->from('product_invoices as pi')
+                    ->leftJoin('product_invoice_items as pii', 'pi.product_invoice_id', 'pii.product_invoice_item_product_invoice_id')
+                    ->where('pi.product_invoice_buyer_id', $user_id);
+            })
             ->select('products.*', 'chp.*')
             ->get();
     }
