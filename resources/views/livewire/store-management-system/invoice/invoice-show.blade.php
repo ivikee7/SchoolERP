@@ -182,7 +182,7 @@
                                                 wire:click="payment('{{ $invoice[0]->product_invoice_id }}')">₹
                                                 Payment
                                             </a> --}}
-                                            @can(auth()->user()->can('store_management_system_owner'))
+                                            @can('store_management_system_owner')
                                                 @if (
                                                     $product_invoice->product_invoice_gross_total -
                                                         $this->productInvoicePaidAmount($product_invoice->product_invoice_id) >
@@ -193,7 +193,7 @@
                                                     </button>
                                                 @endif
                                             @endcan
-                                            @can(auth()->user()->can('store_management_system_manage'))
+                                            @can('store_management_system_manage')
                                                 @if (
                                                     $product_invoice->product_invoice_gross_total -
                                                         $this->productInvoicePaidAmount($product_invoice->product_invoice_id) >
