@@ -133,14 +133,14 @@ class InvoiceShow extends Component
             die();
         }
 
-        if ($this->payment_received > $this->product_invoice->product_payment_remaining_due) {
+        if ($this->payment_received > $this->product_invoice->product_invoice_due) {
             $this->dispatch('modal_close_payment');
             Notification::alert($this, 'warning', 'Failed!', 'Do not receive more than due!');
             return;
             die();
         }
 
-        if ($this->product_invoice->product_payment_remaining_due >= $this->payment_received) {
+        if (!$this->product_invoice->product_invoice_due >= $this->payment_received) {
             $this->dispatch('modal_close_payment');
             Notification::alert($this, 'warning', 'Failed!', 'Please enter valid amount!');
             return;
@@ -154,13 +154,13 @@ class InvoiceShow extends Component
             'product_payment_remaining_due' => ($product_invoice->product_invoice_due - $this->payment_received),
             'product_payment_method' => $this->product_payment_method,
             'product_payment_remarks' => $this->product_payment_remarks,
-            'product_payment_created_by' => Auth()->user()->id,
-            'product_payment_updated_by' => Auth()->user()->id,
+            'product_payment_created_by' => auth()->user()->id,
+            'product_payment_updated_by' => auth()->user()->id,
         ]);
 
-        // $invoice = ProductInvoice::findOrFail($product_invoice_id);
-        // $invoice->product_invoice_due = ($this->remaining_payment - $this->payment_received);
-        // $invoice->save();
+        $invoice = ProductInvoice::findOrFail($product_invoice_id);
+        $invoice->product_invoice_due = ($product_invoice->product_invoice_due - $this->payment_received);
+        $invoice->save();
 
         $this->payment_received = null;
         $this->dispatch('modal_close_payment');
