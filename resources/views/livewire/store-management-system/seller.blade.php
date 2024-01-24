@@ -25,7 +25,9 @@
                         <div class="card-header">
                             <h3 class="card-title">Seller</h3>
                             <div class="card-title float-right">
-
+                                <a href="{{ route('store-management-system.invoice.transaction') }}" wire:navigate>
+                                    <input type="button" value="Transaction" class="btn btn-sm btn-primary" />
+                                </a>
                                 <a href="{{ route('store-management-system.class-has-product') }}" wire:navigate>
                                     <input type="button" value="Class Has Product" class="btn btn-sm btn-primary" />
                                 </a>

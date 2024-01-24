@@ -38,6 +38,7 @@ class Invoices extends Component
                     });
                 }
             })
+            ->orderBy('product_invoice_id', 'desc')
             ->paginate(5);
 
         return $data;

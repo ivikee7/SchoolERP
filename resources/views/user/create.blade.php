@@ -107,8 +107,7 @@
                                                         <label for="" class="ml-1 mr-1">Email</label>
                                                         <input type="text"
                                                             class="form-control @error('email') border border-danger @enderror "
-                                                            name="email" value="{{ old('email') }}"
-                                                            placeholder="Email">
+                                                            name="email" value="{{ old('email') }}" placeholder="Email">
                                                     </div>
                                                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mt-2">
                                                         <label for="" class="ml-1 mr-1">Address Line1</label>
@@ -121,7 +120,8 @@
                                                         <label for="" class="ml-1 mr-1">City</label>
                                                         <input type="text"
                                                             class="form-control @error('city') border border-danger @enderror "
-                                                            name="city" value="{{ old('city') }}" placeholder="City">
+                                                            name="city" value="{{ old('city') }}"
+                                                            placeholder="City">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
                                                         <label for="" class="ml-1 mr-1">State</label>
@@ -142,13 +142,7 @@
                                                         <input type="text"
                                                             class="form-control @error('country') border border-danger @enderror "
                                                             name="country"
-                                                            value="@php
-                                                                if (old('country')) {
-                                                                    echo old('country');
-                                                                } else {
-                                                                    echo 'INDIA';
-                                                                }
-                                                            @endphp"
+                                                            value="@if (old('country')) {{ old('country') }} else {{ 'INDIA' }} @endif"
                                                             placeholder="Country">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
@@ -283,24 +277,27 @@
                                                         <label for="" class="ml-1 mr-1">Joining Date</label>
                                                         <input type="date"
                                                             class="form-control @error('joining_date') border border-danger @enderror "
-                                                            name="joining_date"
-                                                            value="{{ old('joining_date') }}"
+                                                            name="joining_date" value="{{ old('joining_date') }}"
                                                             placeholder="Joining Date">
                                                     </div>
 
 
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <label for="" class="ml-1 mr-1">Allocated Casual Leave</label>
+                                                        <label for="" class="ml-1 mr-1">Allocated Casual
+                                                            Leave</label>
                                                         <input type="text"
                                                             class="form-control @error('allocated_casual_leave') border border-danger @enderror "
-                                                            name="allocated_casual_leave" value="{{ old('allocated_casual_leave') }}"
+                                                            name="allocated_casual_leave"
+                                                            value="{{ old('allocated_casual_leave') }}"
                                                             placeholder="Allocated Casual Leave">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <label for="" class="ml-1 mr-1">Allocated Sick Leave</label>
+                                                        <label for="" class="ml-1 mr-1">Allocated Sick
+                                                            Leave</label>
                                                         <input type="text"
                                                             class="form-control @error('allocated_sick_leave') border border-danger @enderror "
-                                                            name="allocated_sick_leave" value="{{ old('allocated_sick_leave') }}"
+                                                            name="allocated_sick_leave"
+                                                            value="{{ old('allocated_sick_leave') }}"
                                                             placeholder="Allocated Sick Leave">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
@@ -318,10 +315,12 @@
                                                             placeholder="ESI Number">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">
-                                                        <label for="" class="ml-1 mr-1">Bank Account Number</label>
+                                                        <label for="" class="ml-1 mr-1">Bank Account
+                                                            Number</label>
                                                         <input type="text"
                                                             class="form-control @error('bank_account_number') border border-danger @enderror "
-                                                            name="bank_account_number" value="{{ old('bank_account_number') }}"
+                                                            name="bank_account_number"
+                                                            value="{{ old('bank_account_number') }}"
                                                             placeholder="Bank Account Number">
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-2">

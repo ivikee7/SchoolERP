@@ -351,6 +351,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/class-has-product', \App\Livewire\StoreManagementSystem\ClassHasProduct::class)->name('store-management-system.class-has-product');
         Route::get('/{class_id}/class-has-product-manage', \App\Livewire\StoreManagementSystem\ClassHasProductManage::class)->name('store-management-system.class-has-product-manage');
         Route::get('/payment', \App\Livewire\StoreManagementSystem\Invoice\Payment::class)->name('store-management-system.invoice.payment');
+        Route::get('/transaction', \App\Livewire\StoreManagementSystem\Invoice\Transaction::class)->name('store-management-system.invoice.transaction');
     });
 
     // Appointment
