@@ -87,6 +87,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form wire:submit="whatsappMessageSend">
+                    @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">New Appointment</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -96,14 +97,41 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-12 col-md-6 mt-2">
-                                <label for="" class="ml-1 mr-1">Whatsapp Numbers</label>
-                                <input wire:model="whatsapp_numbers" type="text" class="form-control"
-                                    placeholder="Whatsapp numbers">
+                                <label for="" class="ml-1 mr-1">Type</label>
+                                <select wire:model="type" @required(true) id=""
+                                    class="form-control @error('type') border border-danger @enderror">
+                                    <option value="" @selected(true)>Select</option>
+                                    <option value="template" @if (old('type') == 'template') selected @endif>Template
+                                    </option>
+                                    <option value="text" @if (old('type') == 'text') selected @endif>
+                                        Text</option>
+                                </select>
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
-                                <label for="" class="ml-1 mr-1">Message</label>
-                                <input wire:model="whatsapp_message" type="text" class="form-control"
-                                    placeholder="Message">
+                                <label for="" class="ml-1 mr-1">Template</label>
+                                <select wire:model="template" @required(true) id=""
+                                    class="form-control @error('template') border border-danger @enderror">
+                                    <option value="" @selected(true)>Select</option>
+                                    <option value="hello_world" @if (old('template') == 'hello_world') selected @endif>
+                                        hello_world
+                                    </option>
+                                    <option value="join_our_community_page"
+                                        @if (old('template') == 'join_our_community_page') selected @endif>
+                                        join_our_community_page</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="" class="ml-1 mr-1">Whatsapp Numbers</label>
+                                    <textarea wire:model="whatsapp_numbers" class="form-control" rows="3" placeholder="Number ..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="" class="ml-1 mr-1">Whatsapp Message</label>
+                                    <textarea wire:model="whatsapp_message" textarea[] class="form-control" rows="3" placeholder="Message ..."></textarea>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card -->
@@ -116,6 +144,7 @@
             </div>
         </div>
     </div>
+
 </div>
 <!-- /.content-wrapper -->
 

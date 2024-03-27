@@ -79,6 +79,6 @@ class Appointment extends Component
 
         dd($appointments_query->paginate(5));
 
-        return $appointments_query->paginate(5);
+        return $appointments_query;
     }
 }

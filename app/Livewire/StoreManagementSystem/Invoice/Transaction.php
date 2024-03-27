@@ -24,7 +24,7 @@ class Transaction extends Component
                 })
                 ->select('product_payments.*', 'pi.*')
                 ->orderBy('product_payment_id', 'desc')
-                ->paginate(10)
+                ->paginate(2000)
         ]);
     }
 

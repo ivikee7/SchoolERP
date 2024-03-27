@@ -299,8 +299,8 @@
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Method</label>
                                 <select wire:model="product_payment_method" name="product_payment_method"
-                                    class="form-control">
-                                    <option @disabled(true) @selected(true)>Select</option>
+                                    class="form-control" @required(true)>
+                                    <option @selected(true) value="">Select</option>
                                     <option value="Online">Online</option>
                                     <option value="Cash">Cash</option>
                                 </select>
@@ -308,8 +308,8 @@
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Remarks</label>
                                 <input wire:model="product_payment_remarks" name="product_payment_remarks"
-                                    type="text" class="form-control" value=""
-                                    placeholder="Payment remarks">
+                                    type="text" class="form-control" value="" placeholder="Payment remarks"
+                                    @required(true)>
                             </div>
                         </div>
                         <!-- /.card -->
@@ -348,8 +348,8 @@
                             </div>
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Discount amount</label>
-                                <input wire:model="payment_discount" name="payment_discount" type="text"
-                                    class="form-control" value="" placeholder="Discount amount">
+                                <input wire:model="payment_discount" name="payment_discount" type="number"
+                                    class="form-control" placeholder="Discount amount" min="0">
                             </div>
                         </div>
                         <!-- /.card -->

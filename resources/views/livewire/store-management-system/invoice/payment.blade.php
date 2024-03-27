@@ -36,75 +36,109 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="dt-buttons btn-group flex-wrap">
-
+                                <div class="row d-grid gap-3">
+                                    <div class="card col-sm-12 col-md-6 col-lg-4">
+                                        <div class="card-header">
+                                            <h3 class="card-title text-center">{{ auth()->user()->first_name }}</h3>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered table-striped display"
+                                                style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($payments as $key => $payment)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $payment->product_payment_gross_total }}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="form-group row d-flex">
-                                            <label class="col-sm col-form-label d-flex flex-row-reverse">Search:</label>
-                                            <div class="col-sm">
-                                                <input type="search" wire:model.live='search' class="form-control"
-                                                    placeholder="Search...">
-                                            </div>
+                                    <div class="card col-sm-12 col-md-6 col-lg-4">
+                                        <div class="card-header">
+                                            <h3 class="card-title text-center">{{ auth()->user()->first_name }}</h3>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered table-striped display"
+                                                style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($payments as $key => $payment)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $payment->product_payment_gross_total }}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-bordered table-striped display"
-                                        style="width: 100%">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Invoice</th>
-                                                <th>Buyer Name</th>
-                                                <th>SubTotal</th>
-                                                <th>Discount</th>
-                                                <th>Total</th>
-                                                <th>Paid</th>
-                                                <th>Due</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($payments as $key => $payment)
-                                                @dd($payment);
-                                                <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>{{ $payment->product_payment_id }}</td>
-                                                    <td>{{ $payment->first_name . ' ' . $payment->middle_name . ' ' . $payment->last_name }}
-                                                    </td>
-                                                    <td>{{ $payment->product_payment_subtotal }}</td>
-                                                    <td>{{ $payment->product_payment_discount }}
-                                                    </td>
-                                                    <td>{{ $payment->product_payment_gross_total }}</td>
-                                                    <td>{{ $payment->product_payment_gross_total - $payment->product_payment_due }}
-                                                    </td>
-                                                    <td>{{ $payment->product_payment_due }}
-                                                    </td>
-                                                    <td>
-                                                        {{-- <a wire:navigate class="btn btn-primary btn-xs"
-                                                            href="{{ route('store-management-system.invoice', [$payment->id, $payment->product_payment_id]) }}">Invoice</a> --}}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-5">
-                                        Showing
-                                        {{ $payments->perPage() * ($payments->currentPage() - 1) + 1 }} to
-                                        {{ $payments->perPage() * $payments->currentPage() }} of
-                                        {{ $payments->total() }}
+                                    <div class="card col-sm-12 col-md-6 col-lg-4">
+                                        <div class="card-header">
+                                            <h3 class="card-title text-center">{{ auth()->user()->first_name }}</h3>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered table-striped display"
+                                                style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($payments as $key => $payment)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $payment->product_payment_gross_total }}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-7">
-                                        <div class="d-flex flex-row-reverse">
-                                            @if (count($payments))
-                                                {{ $payments->links() }}
-                                            @endif
+                                    <div class="card col-sm-12 col-md-6 col-lg-4">
+                                        <div class="card-header">
+                                            <h3 class="card-title text-center">{{ auth()->user()->first_name }}</h3>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered table-striped display"
+                                                style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($payments as $key => $payment)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $payment->product_payment_gross_total }}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>

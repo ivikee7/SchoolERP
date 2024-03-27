@@ -67,6 +67,7 @@
                                             <th>Method</th>
                                             <th>Remarks</th>
                                             <th>By</th>
+                                            <th>At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -80,8 +81,11 @@
                                                 <td>{{ $transaction->product_payment_remaining_due }}</td>
                                                 <td>{{ $transaction->product_payment_method }}</td>
                                                 <td>{{ $transaction->product_payment_remarks }}</td>
-                                                <td>{{ $this->user($transaction->product_payment_created_by) }}
-                                                    ({{ $transaction->product_payment_created_at }})
+                                                <td>
+                                                    {{ $this->user($transaction->product_payment_created_by) }}
+                                                </td>
+                                                <td>
+                                                    {{ $transaction->product_payment_created_at }}
                                                 </td>
                                             </tr>
                                         @endforeach
