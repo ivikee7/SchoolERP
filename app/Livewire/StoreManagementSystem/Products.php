@@ -59,6 +59,12 @@ class Products extends Component
                     ->leftJoin('product_invoice_items as pii', 'pi.product_invoice_id', 'pii.product_invoice_item_product_invoice_id')
                     ->where('pi.product_invoice_buyer_id', $user_id);
             })
+            ->whereNotIn('products.product_id', function ($query) use ($user_id) {
+                $query->select('p_cart.product_cart_product_id')
+                    ->from('product_carts as p_cart')
+                    ->leftJoin('class_has_products as chp', 'p_cart.product_cart_product_id', 'chp.class_has_product_id')
+                    ->where('p_cart.product_cart_buyer_id', $user_id);
+            })
             ->select('products.*', 'chp.*')
             ->get();
     }
