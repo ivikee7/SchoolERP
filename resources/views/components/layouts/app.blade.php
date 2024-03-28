@@ -86,6 +86,7 @@
     <script src="{{ asset('dist/js/controller.js') }}"></script>
 
     @livewireScripts
+    @livewire('wire-elements-modal')
 
     {{-- @once
         <script>

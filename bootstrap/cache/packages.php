@@ -88,6 +88,13 @@
       0 => 'Spatie\\Permission\\PermissionServiceProvider',
     ),
   ),
+  'wire-elements/modal' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'LivewireUI\\Modal\\LivewireModalServiceProvider',
+    ),
+  ),
   'yajra/laravel-datatables-buttons' => 
   array (
     'providers' => 
