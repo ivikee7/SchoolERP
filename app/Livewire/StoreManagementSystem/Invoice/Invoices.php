@@ -4,6 +4,7 @@ namespace App\Livewire\StoreManagementSystem\Invoice;
 
 use App\Helpers\Helper;
 use App\Models\Inventory\Product\ProductInvoice;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -42,5 +43,11 @@ class Invoices extends Component
             ->paginate(5);
 
         return $data;
+    }
+
+    public function user($user_id)
+    {
+        $user =  User::findOrFail($user_id);
+        return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
     }
 }

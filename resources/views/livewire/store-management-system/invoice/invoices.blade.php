@@ -65,9 +65,15 @@
                                                 <th>Buyer Name</th>
                                                 <th>SubTotal</th>
                                                 <th>Discount</th>
+                                                <th>Discount By</th>
+                                                <th>Discount At</th>
                                                 <th>Total</th>
                                                 <th>Paid</th>
                                                 <th>Due</th>
+                                                <th>Created By</th>
+                                                <th>Updated By</th>
+                                                <th>Created At</th>
+                                                <th>Updated At</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -79,13 +85,17 @@
                                                     <td>{{ $invoice->first_name . ' ' . $invoice->middle_name . ' ' . $invoice->last_name }}
                                                     </td>
                                                     <td>{{ $invoice->product_invoice_subtotal }}</td>
-                                                    <td>{{ $invoice->product_invoice_discount }}
-                                                    </td>
+                                                    <td>{{ $invoice->product_invoice_discount }}</td>
+                                                    <td>{{ $this->user($invoice->product_invoice_discount_by) }}</td>
+                                                    <td>{{ $invoice->product_invoice_discount_at }}</td>
                                                     <td>{{ $invoice->product_invoice_gross_total }}</td>
                                                     <td>{{ $invoice->product_invoice_gross_total - $invoice->product_invoice_due }}
                                                     </td>
-                                                    <td>{{ $invoice->product_invoice_due }}
-                                                    </td>
+                                                    <td>{{ $invoice->product_invoice_due }}</td>
+                                                    <td>{{ $this->user($invoice->product_invoice_created_by) }}</td>
+                                                    <td>{{ $this->user($invoice->product_invoice_updated_by) }}</td>
+                                                    <td>{{ $invoice->product_invoice_created_at }}</td>
+                                                    <td>{{ $invoice->product_invoice_updated_at }}</td>
                                                     <td><a wire:navigate class="btn btn-primary btn-xs"
                                                             href="{{ route('store-management-system.invoice', [$invoice->id, $invoice->product_invoice_id]) }}">Invoice</a>
                                                     </td>

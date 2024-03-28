@@ -182,17 +182,22 @@
                                                 wire:click="payment('{{ $invoice[0]->product_invoice_id }}')">₹
                                                 Payment
                                             </a> --}}
-                                            @can('store_management_system_owner')
-                                                @if (
-                                                    $product_invoice->product_invoice_gross_total -
-                                                        $this->productInvoicePaidAmount($product_invoice->product_invoice_id) >
-                                                        0)
+                                            {{-- @can('store_management_system_owner')
+                                                @if ($product_invoice->product_invoice_gross_total - $this->productInvoicePaidAmount($product_invoice->product_invoice_id) > 0)
                                                     <button type="button" class="btn btn-primary float-right"
                                                         data-toggle="modal" data-target="#modal-discount">
                                                         ₹ Discount
                                                     </button>
                                                 @endif
+                                            @endcan --}}
+
+                                            @can('store_management_system_owner')
+                                                <button type="button" class="btn btn-primary float-right"
+                                                    data-toggle="modal" data-target="#modal-discount">
+                                                    ₹ Discount
+                                                </button>
                                             @endcan
+
                                             @can('store_management_system_manage')
                                                 @if (
                                                     $product_invoice->product_invoice_gross_total -
@@ -294,7 +299,8 @@
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Received amount</label>
                                 <input wire:model="payment_received" name="payment_received" type="text"
-                                    class="form-control" value="" placeholder="Received amount">
+                                    class="form-control" value="" placeholder="Received amount"
+                                    min="0">
                             </div>
                             <div class="col col-12">
                                 <label for="" class="ml-1 mr-1">Method</label>
@@ -309,7 +315,7 @@
                                 <label for="" class="ml-1 mr-1">Remarks</label>
                                 <input wire:model="product_payment_remarks" name="product_payment_remarks"
                                     type="text" class="form-control" value="" placeholder="Payment remarks"
-                                    @required(true)>
+                                    @required(true) minlength="0" maxlength="50">
                             </div>
                         </div>
                         <!-- /.card -->
