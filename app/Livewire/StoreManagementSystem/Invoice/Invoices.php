@@ -47,6 +47,10 @@ class Invoices extends Component
 
     public function user($user_id)
     {
+        if ($user_id == null) {
+            return null;
+        }
+
         $user =  User::findOrFail($user_id);
         return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
     }
