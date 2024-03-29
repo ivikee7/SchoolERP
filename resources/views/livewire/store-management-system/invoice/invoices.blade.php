@@ -81,7 +81,7 @@
                                                     <td>{{ $invoice->product_invoice_id }}</td>
                                                     <td>{{ $invoice->first_name . ' ' . $invoice->middle_name . ' ' . $invoice->last_name }}
                                                     </td>
-                                                    <td>{{ $this->getClass($invoice->product_invoice_buyer_id) }}
+                                                    <td>{{ $this->getClass($invoice->product_invoice_id) }}
                                                     </td>
                                                     <td>{{ $invoice->product_invoice_subtotal }}</td>
                                                     <td>{{ $invoice->product_invoice_discount }}</td>

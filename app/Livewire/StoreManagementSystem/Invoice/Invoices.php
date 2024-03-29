@@ -55,18 +55,25 @@ class Invoices extends Component
         return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
     }
 
-    public function getClass($user_id)
+    public function getClass($invoice_id)
     {
-        if ($user_id == null) {
+        if ($invoice_id == null) {
             return null;
         }
 
-        $user =  User::leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
-            ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
-            ->where('users.id', $user_id)
-            ->select('sc.name as class_name')
-            ->get();
+        // $user =  User::leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
+        //     ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
+        //     ->where('users.id', $user_id)
+        //     ->select('sc.name as class_name')
+        //     ->first();
 
-        return $user[0]->class_name;
+        $user = ProductInvoice::leftJoin('product_invoice_items as pii', 'product_invoices.product_invoice_id', 'pii.product_invoice_item_product_invoice_id')
+            ->leftJoin('class_has_products as chp', 'pii.product_invoice_item_class_has_product_id', 'chp.class_has_product_id')
+            ->leftJoin('student_classes as sc', 'chp.class_has_product_class_id', 'sc.id')
+            ->select('sc.name as class_name')
+            ->where('product_invoices.product_invoice_id', $invoice_id)
+            ->first();
+
+        return $user->class_name;
     }
 }
