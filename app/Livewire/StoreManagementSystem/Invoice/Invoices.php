@@ -40,7 +40,7 @@ class Invoices extends Component
                 }
             })
             ->orderBy('product_invoice_id', 'desc')
-            ->paginate(5);
+            ->paginate(2000);
 
         return $data;
     }
@@ -53,5 +53,20 @@ class Invoices extends Component
 
         $user =  User::findOrFail($user_id);
         return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
+    }
+
+    public function getClass($user_id)
+    {
+        if ($user_id == null) {
+            return null;
+        }
+
+        $user =  User::leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
+            ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
+            ->where('users.id', $user_id)
+            ->select('sc.name as class_name')
+            ->get();
+
+        return $user[0]->class_name;
     }
 }

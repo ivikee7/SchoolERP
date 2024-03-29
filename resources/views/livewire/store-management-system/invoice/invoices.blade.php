@@ -63,6 +63,7 @@
                                                 <th>#</th>
                                                 <th>Invoice</th>
                                                 <th>Buyer Name</th>
+                                                <th>Class</th>
                                                 <th>SubTotal</th>
                                                 <th>Discount</th>
                                                 <th>Total</th>
@@ -80,6 +81,8 @@
                                                     <td>{{ $invoice->product_invoice_id }}</td>
                                                     <td>{{ $invoice->first_name . ' ' . $invoice->middle_name . ' ' . $invoice->last_name }}
                                                     </td>
+                                                    <td>{{ $this->getClass($invoice->product_invoice_buyer_id) }}
+                                                    </td>
                                                     <td>{{ $invoice->product_invoice_subtotal }}</td>
                                                     <td>{{ $invoice->product_invoice_discount }}</td>
                                                     <td>{{ $invoice->product_invoice_gross_total }}</td>
@@ -96,6 +99,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
