@@ -3,7 +3,10 @@
 namespace App\Livewire\StoreManagementSystem\Invoice;
 
 use App\Helpers\Helper;
+use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\ProductInvoice;
+use App\Models\Inventory\Product\ProductInvoiceItem;
+use App\Models\StoreManagementSystem\ProductPayment;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -75,5 +78,28 @@ class Invoices extends Component
             ->first();
 
         return $user->class_name;
+    }
+
+    public function paymentNotReceived($invoice_id)
+    {
+        return ProductPayment::where('product_payment_product_invoice_id', $invoice_id)
+            ->exists();
+    }
+
+    public function destroy($invoice_id)
+    {
+        if (!auth()->user()->can('store_management_system_owner')) {
+            return Notification::alert($this, 'warning', 'Failed!', "You don't have permission!");
+        }
+
+        if (!ProductInvoice::find($invoice_id)) {
+            return Notification::alert($this, 'warning', 'Failed!', "Invoice not exists!");
+        }
+
+        ProductPayment::where('product_payment_product_invoice_id', $invoice_id)->delete();
+        ProductInvoiceItem::where('product_invoice_item_product_invoice_id', $invoice_id)->delete();
+        ProductInvoice::where('product_invoice_id', $invoice_id)->delete();
+
+        return Notification::alert($this, 'success', 'Success!', 'Successfully deleted!');
     }
 }

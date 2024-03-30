@@ -1,7 +1,7 @@
 <main>
     <div class="wrapper">
         <!-- Main content -->
-        <div class="row">
+        <div class="row" style="font-size:20px;">
             <div class="col-6">
                 <section class="invoice border p-2">
                     <!-- title row -->
@@ -43,7 +43,6 @@
                                 <thead>
                                     <tr>
                                         <th>Product</th>
-                                        <th>Description</th>
                                         <th>Price</th>
                                         <th>Qty</th>
                                         <th>Subtotal</th>
@@ -52,8 +51,10 @@
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
-                                            <td>{{ $product->product_name }}</td>
-                                            <td>{{ $product->product_description }}</td>
+                                            <td>{{ $product->product_name }} @if ($product->product_description)
+                                                    ({{ $product->product_description }})
+                                                @endif
+                                            </td>
                                             <td>₹{{ $product->product_invoice_item_price }}</td>
                                             <td>{{ $product->product_invoice_item_quantity }}</td>
                                             <td>₹{{ $product->product_invoice_item_quantity * $product->product_invoice_item_price }}
@@ -165,7 +166,6 @@
                                 <thead>
                                     <tr>
                                         <th>Product</th>
-                                        <th>Description</th>
                                         <th>Price</th>
                                         <th>Qty</th>
                                         <th>Subtotal</th>
@@ -174,8 +174,10 @@
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
-                                            <td>{{ $product->product_name }}</td>
-                                            <td>{{ $product->product_description }}</td>
+                                            <td>{{ $product->product_name }} @if ($product->product_description)
+                                                    ({{ $product->product_description }})
+                                                @endif
+                                            </td>
                                             <td>₹{{ $product->product_invoice_item_price }}</td>
                                             <td>{{ $product->product_invoice_item_quantity }}</td>
                                             <td>₹{{ $product->product_invoice_item_quantity * $product->product_invoice_item_price }}

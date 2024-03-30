@@ -93,6 +93,12 @@
                                                     <td>{{ $invoice->product_invoice_discount_at }}</td>
                                                     <td><a wire:navigate class="btn btn-primary btn-xs"
                                                             href="{{ route('store-management-system.invoice', [$invoice->id, $invoice->product_invoice_id]) }}">Invoice</a>
+                                                        @if (!$this->paymentNotReceived($invoice->product_invoice_id))
+                                                            <button
+                                                                onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
+                                                                wire:click="destroy({{ $invoice->product_invoice_id }})"
+                                                                class="btn btn-warning btn-xs">Delete!</button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
