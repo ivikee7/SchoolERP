@@ -88,7 +88,7 @@ class Invoices extends Component
 
     public function destroy($invoice_id)
     {
-        if (!auth()->user()->can('store_management_system_owner')) {
+        if (!auth()->user()->can('store_management_system_delete')) {
             return Notification::alert($this, 'warning', 'Failed!', "You don't have permission!");
         }
 
