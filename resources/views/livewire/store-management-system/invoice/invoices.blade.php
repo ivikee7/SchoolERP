@@ -71,6 +71,7 @@
                                                 <th>Due</th>
                                                 <th>Discount By</th>
                                                 <th>Discount At</th>
+                                                <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -91,6 +92,7 @@
                                                     <td>{{ $invoice->product_invoice_due }}</td>
                                                     <td>{{ $this->user($invoice->product_invoice_discount_by) }}</td>
                                                     <td>{{ $invoice->product_invoice_discount_at }}</td>
+                                                    <td>{{ $invoice->product_invoice_created_at }}</td>
                                                     <td><a wire:navigate class="btn btn-primary btn-xs"
                                                             href="{{ route('store-management-system.invoice', [$invoice->id, $invoice->product_invoice_id]) }}">Invoice</a>
                                                         @if (!$this->paymentNotReceived($invoice->product_invoice_id))
@@ -115,6 +117,7 @@
                                                 <th>{{ $invoices->sum('product_invoice_gross_total') - $invoices->sum('product_invoice_due') }}
                                                 </th>
                                                 <th>{{ $invoices->sum('product_invoice_due') }}</th>
+                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>

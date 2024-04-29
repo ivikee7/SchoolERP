@@ -73,13 +73,24 @@
                     </li>
                 @endcan
 
-                {{-- WhatsApp --}}
+                {{-- Appointment --}}
                 @can('appointment_access')
                     <li class="nav-item">
                         <a href="{{ route('whatsapp') }}" wire:navigate
                             class="nav-link {{ Request::is('whatsapp*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-calendar-check"></i>
                             <p>WhatsApp</p>
+                        </a>
+                    </li>
+                @endcan
+
+                {{-- User Daily Report --}}
+                @can('user_daily_report_access')
+                    <li class="nav-item">
+                        <a href="{{ route('user-daily-report') }}" wire:navigate
+                            class="nav-link {{ Request::is('user-daily-report*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-calendar-check"></i>
+                            <p>User Daily Report</p>
                         </a>
                     </li>
                 @endcan

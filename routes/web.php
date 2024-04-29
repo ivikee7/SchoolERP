@@ -359,8 +359,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', \App\Livewire\Appointment::class)->name('appointment');
     });
 
-    // Appointment
+    // WhatsApp
     Route::prefix('/whatsapp')->group(function () {
         Route::get('/', \App\Livewire\Meta\Whatsapp::class)->name('whatsapp');
+    });
+
+    // UserDailyReport
+    Route::prefix('/user-daily-report')->group(function () {
+        Route::get('/', \App\Livewire\UserDailyReport::class)->name('user-daily-report');
     });
 });
