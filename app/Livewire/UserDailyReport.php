@@ -127,7 +127,7 @@ class UserDailyReport extends Component
 
     public function deleteUserDailyReport($id)
     {
-        if (ModelsUserDailyReport::query()->where('user_daily_report_id', $id)->where('user_daily_report_user_id', auth()->user()->id)->exists()) {
+        if (!ModelsUserDailyReport::query()->where('user_daily_report_id', $id)->where('user_daily_report_user_id', auth()->user()->id)->exists()) {
             return Notification::alert($this, 'warning', 'Warning!', "You don't have permission to delete this report!");
         }
         ModelsUserDailyReport::where('user_daily_report_id', $id)->delete();
