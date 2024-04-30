@@ -109,6 +109,7 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Name</th>
+                                            <th>Role</th>
                                             <th>Description</th>
                                             <th>Start Time</th>
                                             <th>End Time</th>
@@ -125,6 +126,10 @@
                                             <th>
                                                 <input type="text" wire:model.live='search.name' class="form-control"
                                                     placeholder="Name">
+                                            </th>
+                                            <th>
+                                                <input type="text" wire:model.live='search.role' class="form-control"
+                                                    placeholder="Role">
                                             </th>
                                             <th><input type="text" wire:model.live='search.job_description'
                                                     class="form-control" placeholder="Job Description"></th>
@@ -159,7 +164,9 @@
                                     <tbody>
                                         @foreach ($userDailyReports as $key => $userDailyReport)
                                             <tr>
-                                                <td>{{ $userDailyReport->user_daily_report_created_by }}</td>
+                                                <td>{{ $userDailyReport->user_daily_report_user_id }}</td>
+                                                <td>{{ $this->user($userDailyReport->user_daily_report_user_id) }}
+                                                </td>
                                                 <td>{{ $this->user($userDailyReport->user_daily_report_user_id) }}
                                                 </td>
                                                 <td>{{ $userDailyReport->user_daily_report_job_description }}</td>

@@ -42,7 +42,7 @@ class UserDailyReport extends Component
         $columns = ['first_name', 'middle_name', 'last_name'];
         $job_description_array = ((isset($search['name'])) ? explode(' ', $search['name']) : null);
         $user_ids = [''];
-        if (isset($search['name']) && !$search['name'] = null) {
+        if (isset($search['name']) && !empty($search['name'])) {
             foreach ($job_description_array as $item) {
                 $user_ids = User::query()
                     ->from(with(new User)->getTable())
@@ -65,13 +65,19 @@ class UserDailyReport extends Component
             $data->where('user_daily_report_user_id', 'like', $search['id']);
         }
 
+        // dd($search['name']);
+
+        if (isset($search['name']) && !empty($search['name'])) {
+            $data->whereIn('user_daily_report_user_id', $user_ids);
+        }
+
         if (isset($search['start_date']['from']) && !empty($search['start_date']['from']) && isset($search['start_date']['to']) && !empty($search['start_date']['to'])) {
             $data->whereBetween('user_daily_report_start_time', [$search['start_date']['from'], $search['start_date']['to']]);
         }
 
-        if (!auth()->user()->can('user_daily_report_admin')) {
-        } elseif (!auth()->user()->can('user_daily_report_manage')) {
-        } elseif (!auth()->user()->can('user_daily_report_access')) {
+        if (auth()->user()->can('user_daily_report_admin')) {
+        } elseif (auth()->user()->can('user_daily_report_manage')) {
+        } elseif (auth()->user()->can('user_daily_report_access')) {
             $data->where('user_daily_report_user_id', auth()->user()->id);
         }
 
@@ -95,7 +101,7 @@ class UserDailyReport extends Component
 
         ModelsUserDailyReport::create([
             'user_daily_report_user_id' => auth()->user()->id,
-            'user_daily_report_job_description' => $this->job_description,
+            'user_daily_report_job_description' => strtoupper($this->job_description),
             'user_daily_report_start_time' => $this->start_time,
             'user_daily_report_end_time' => $this->end_time,
             'user_daily_report_total_time' => (date_diff(\Carbon\Carbon::parse($this->start_time), \Carbon\Carbon::parse($this->end_time))->format("%yY-%mM-%dD %h:%i:%s")),
