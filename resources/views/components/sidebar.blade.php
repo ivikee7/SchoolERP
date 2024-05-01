@@ -390,16 +390,6 @@
                     </li>
                 @endcan
 
-                {{-- Appointment --}}
-                @can('appointment_access')
-                    <li class="nav-item">
-                        <a href="{{ route('appointment') }}" wire:navigate class="nav-link">
-                            <i class="nav-icon fas fa-calendar-check"></i>
-                            <p>Appointment</p>
-                        </a>
-                    </li>
-                @endcan
-
                 {{-- User Daily Report --}}
                 @can('user_daily_report_access')
                     <li class="nav-item">
@@ -410,64 +400,6 @@
                         </a>
                     </li>
                 @endcan
-
-                {{-- Report Management System --}}
-                <li class="nav-item {{ Request::is('report-management-system*') ? 'menu-open' : '' }}">
-                    <a href="#"
-                        class="nav-link {{ Request::is('report-management-system*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-warehouse"></i>
-                        <p>
-                            Report Management System
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    {{-- User Daily Report --}}
-                    @can('user_daily_report_access')
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('user-daily-report') }}" wire:navigate
-                                    class="nav-link {{ Request::is('*user-daily-report*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-calendar-check"></i>
-                                    <p>User Daily Report</p>
-                                </a>
-                            </li>
-                        </ul>
-                    @endcan
-                    @can('user_daily_report_admin')
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('user-report-type') }}" wire:navigate
-                                    class="nav-link {{ Request::is('*user-report-type*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-calendar-check"></i>
-                                    <p>User Daily Report</p>
-                                </a>
-                            </li>
-                        </ul>
-                    @endcan
-
-                    {{-- <ul class="nav nav-treeview">
-                        @can('teacher_daily_report_access')
-                            <li class="nav-item">
-                                <a href="{{ route('teacher-daily-report') }}" wire:navigate
-                                    class="nav-link {{ Request::is('*teacher-daily-report*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-calendar-check"></i>
-                                    <p>Teacher Daily Report</p>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                    <ul class="nav nav-treeview">
-                        @can('teacher_transport_report_access')
-                            <li class="nav-item">
-                                <a href="{{ route('teacher-transport-report') }}" wire:navigate
-                                    class="nav-link {{ Request::is('*teacher-transport-report*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-calendar-check"></i>
-                                    <p>Teacher Trabnsport Report</p>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul> --}}
-                </li>
 
                 {{-- Store Management System --}}
                 @can('store_management_system_access')

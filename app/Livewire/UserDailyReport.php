@@ -164,7 +164,7 @@ class UserDailyReport extends Component
 
     public function userRoles()
     {
-        return Role::all();
+        return Role::whereNot('name', 'Super Admin')->get();
     }
 
     public function userRoleName($user_id)
