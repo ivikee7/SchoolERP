@@ -28,7 +28,7 @@ class UserDailyReport extends Component
     public function render()
     {
         $this->job_description_characters_count = strlen($this->job_description);
-        return view('livewire.user-daily-report', ['userDailyReports' => self::userDailyReports($this->search), 'user_report_types' => UserReportType::all(), 'user_roles' => self::userRoles()]);
+        return view('livewire.user-daily-report', ['userDailyReports' => self::userDailyReports($this->search), 'user_report_types' => UserReportType::query()->orderBy('user_report_type_name')->get(), 'user_roles' => self::userRoles()]);
     }
 
     public function updatingSearch()
@@ -164,7 +164,7 @@ class UserDailyReport extends Component
 
     public function userRoles()
     {
-        return Role::whereNot('name', 'Super Admin')->get();
+        return Role::whereNot('name', 'Super Admin')->orderBy('name')->get();
     }
 
     public function userRoleName($user_id)
