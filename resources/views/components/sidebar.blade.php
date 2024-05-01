@@ -12,7 +12,7 @@
         {{-- Sidebar user panel (optional) --}}
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img @if (\App\Models\Media::find(auth()->user()->media_id)->select('media_path')->get()[0]->media_path) src="{{ asset(\App\Models\Media::find(auth()->user()->media_id)->select('media_path')->get()[0]->media_path) }}" @else src="{{ asset('dist/img/avatar5.png') }}" @endif
+                <img @if (auth()->user()->media_id !== '') src="{{ asset(\App\Models\Media::find(auth()->user()->media_id)->select('media_path')->get()[0]->media_path) }}" @else src="{{ asset('dist/img/avatar5.png') }}" @endif
                     class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
