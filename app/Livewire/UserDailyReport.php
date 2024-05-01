@@ -5,9 +5,11 @@ namespace App\Livewire;
 use App\Livewire\Alert\Notification;
 use App\Models\User;
 use App\Models\UserDailyReport as ModelsUserDailyReport;
+use App\Models\UserReportType;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
 
 class UserDailyReport extends Component
 {
@@ -20,16 +22,13 @@ class UserDailyReport extends Component
     public $end_time;
     public $job_description_characters_count;
 
-    protected $rules = [
-        'job_description' => 'required|min:1',
-        'start_time' => 'required',
-        'end_time' => 'required|after:start_time'
-    ];
+    public $user_report_type_id;
+    public $user_report_type_name;
 
     public function render()
     {
         $this->job_description_characters_count = strlen($this->job_description);
-        return view('livewire.user-daily-report', ['userDailyReports' => self::userDailyReports($this->search)]);
+        return view('livewire.user-daily-report', ['userDailyReports' => self::userDailyReports($this->search), 'user_report_types' => UserReportType::all(), 'user_roles' => self::userRoles()]);
     }
 
     public function updatingSearch()
@@ -65,14 +64,21 @@ class UserDailyReport extends Component
             $data->where('user_daily_report_user_id', 'like', $search['id']);
         }
 
-        // dd($search['name']);
-
         if (isset($search['name']) && !empty($search['name'])) {
             $data->whereIn('user_daily_report_user_id', $user_ids);
         }
 
         if (isset($search['start_date']['from']) && !empty($search['start_date']['from']) && isset($search['start_date']['to']) && !empty($search['start_date']['to'])) {
             $data->whereBetween('user_daily_report_start_time', [$search['start_date']['from'], $search['start_date']['to']]);
+        }
+
+        if (isset($search['report_type_id']) && !empty($search['report_type_id'])) {
+            $data->where('user_daily_report_user_report_type_id', $search['report_type_id']);
+        }
+
+        if (isset($search['user_role_name']) && !empty($search['user_role_name'])) {
+            // dd(User::role($search['user_role_name'])->select('id')->get());
+            $data->whereIn('user_daily_report_user_id', User::role($search['user_role_name'])->select('id')->get());
         }
 
         if (auth()->user()->can('user_daily_report_admin')) {
@@ -86,21 +92,21 @@ class UserDailyReport extends Component
             ->paginate(5);
     }
 
-    public function save()
+    public function userReportStore()
     {
-
-        // dd(date_diff(\Carbon\Carbon::parse($this->start_time), \Carbon\Carbon::parse($this->end_time))->format("P %yY %mM %dD T %hH %iM %sS"));
-
-        // dd((\Carbon\Carbon::parse($this->end_time)->diff(\Carbon\Carbon::parse($this->start_time))->format('%H:%I:%S')));
-
         if (!auth()->user()->can('user_daily_report_access')) {
             return Notification::alert($this, 'warning', 'Failed!', "You don't have permission!");
         }
 
-        $this->validate();
+        $this->validate([
+            'job_description' => 'required|min:1',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time'
+        ]);
 
         ModelsUserDailyReport::create([
             'user_daily_report_user_id' => auth()->user()->id,
+            'user_daily_report_user_report_type_id' => $this->user_report_type_id,
             'user_daily_report_job_description' => strtoupper($this->job_description),
             'user_daily_report_start_time' => $this->start_time,
             'user_daily_report_end_time' => $this->end_time,
@@ -116,6 +122,26 @@ class UserDailyReport extends Component
         return Notification::alert($this, 'success', 'Success!', "Report successfully added!");
     }
 
+    public function reportTypeStore()
+    {
+        if (!auth()->user()->can('user_daily_report_admin')) {
+            return Notification::alert($this, 'warning', 'Failed!', "You don't have permission!");
+        }
+
+        $this->validate([
+            'user_report_type_name' => 'required|min:1|max:50',
+        ]);
+
+        UserReportType::create([
+            'user_report_type_name' => strtoupper($this->user_report_type_name),
+            'user_report_type_status' => true,
+        ]);
+
+        $this->user_report_type_name = null;
+
+        return Notification::alert($this, 'success', 'Success!', "Report successfully added!");
+    }
+
     public function user($user_id)
     {
         if ($user_id == null) {
@@ -124,6 +150,26 @@ class UserDailyReport extends Component
 
         $user =  User::findOrFail($user_id);
         return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
+    }
+
+    public function userReportTypeName($report_type_id)
+    {
+        if ($report_type_id == null) {
+            return null;
+        }
+
+        $report_type =  UserReportType::findOrFail($report_type_id);
+        return $report_type->user_report_type_name;
+    }
+
+    public function userRoles()
+    {
+        return Role::all();
+    }
+
+    public function userRoleName($user_id)
+    {
+        return User::findOrFail($user_id)->getRoleNames()->first();
     }
 
     public function searchReset()

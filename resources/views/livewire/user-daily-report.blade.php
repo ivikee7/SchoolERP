@@ -36,10 +36,16 @@
                         <div class="col col-sm-6">
                             <div class="float-right">
                                 <div class="btn-group">
+                                    <button class="btn btn-warning" type="button" data-toggle="collapse"
+                                        data-target="#collapseInputReportType" aria-expanded="false"
+                                        aria-controls="collapseInputReportType">
+                                        <i class="fas fa-plus-circle"></i> Add New
+                                        Report Type
+                                    </button>
                                     <button class="btn btn-primary" type="button" data-toggle="collapse"
-                                        data-target="#collapseInputForm" aria-expanded="false"
-                                        aria-controls="collapseInputForm">
-                                        <i class="fas fa-plus-circle"></i> User Daily
+                                        data-target="#collapseInputReport" aria-expanded="false"
+                                        aria-controls="collapseInputReport">
+                                        <i class="fas fa-plus-circle"></i> Add New
                                         Report
                                     </button>
                                     {{-- <button type="button" class="btn btn-default">All <span
@@ -56,9 +62,9 @@
                         </div>
                     </div>
 
-                    <div class="collapse" id="collapseInputForm">
+                    <div class="collapse" id="collapseInputReport">
                         <div class="card">
-                            <form wire:submit="save" method="POST">
+                            <form wire:submit="userReportStore" method="POST">
                                 @csrf
                                 <div class="card-body">
                                     <div class="row">
@@ -70,10 +76,26 @@
                                                 @endif
                                             </label>
                                             <textarea wire:model="job_description" type="text"
-                                                class="form-control @error('job_description') border border-danger @enderror " name="job_description" rows="4"
+                                                class="form-control @error('job_description') border border-danger @enderror " name="job_description" rows="7"
                                                 value="{{ old('job_description') }}" minlength="1" maxlength="255" placeholder="Job Description" @required(true)></textarea>
                                         </div>
                                         <div class="col-sm-12 col-lg-6">
+                                            <div class="col-sm-12 mt-2">
+                                                <label for="" class="ml-1 mr-1">Report Type</label>
+                                                <select wire:model="user_report_type_id" id=""
+                                                    class="form-control @error('user_report_type_name') border border-danger @enderror"
+                                                    @required(true)>
+                                                    <option value="" selected>Report Type</option>
+                                                    @if ($user_report_types ?? '')
+                                                        @foreach ($user_report_types as $user_report_type)
+                                                            <option value="{{ $user_report_type->user_report_type_id }}"
+                                                                @if (old('user_report_type_id') == $user_report_type->id) selected @endif>
+                                                                {{ $user_report_type->user_report_type_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
                                             <div class="col-sm-12 mt-2">
                                                 <label for="" class="ml-1 mr-1">Start Time</label>
                                                 <input wire:model="start_time" type="datetime-local"
@@ -98,6 +120,30 @@
                         </div>
                     </div>
 
+                    <div class="collapse" id="collapseInputReportType">
+                        <div class="card">
+                            <form wire:submit="reportTypeStore" method="POST">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 mt-2">
+                                            <label for="" class="ml-1 mr-1">User Report Type Name</label>
+                                            <input wire:model="user_report_type_name" type="text"
+                                                class="form-control @error('user_report_type_name') border border-danger @enderror "
+                                                name="user_report_type_name" rows="4"
+                                                value="{{ old('user_report_type_name') }}" minlength="1"
+                                                maxlength="50" placeholder="Report Type Name"
+                                                @required(true)></input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary float-right">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -110,6 +156,7 @@
                                             <th>Id</th>
                                             <th>Name</th>
                                             <th>Role</th>
+                                            <th>Type</th>
                                             <th>Description</th>
                                             <th>Start Time</th>
                                             <th>End Time</th>
@@ -120,16 +167,45 @@
                                     <tfoot style="display: table-row-group;">
                                         <tr>
                                             <th>
-                                                <input type="text" wire:model.live='search.id' class="form-control"
-                                                    placeholder="Id">
+                                                <input type="text" wire:model.live='search.id'
+                                                    class="form-control" placeholder="Id">
                                             </th>
                                             <th>
-                                                <input type="text" wire:model.live='search.name' class="form-control"
-                                                    placeholder="Name">
+                                                <input type="text" wire:model.live='search.name'
+                                                    class="form-control" placeholder="Name">
                                             </th>
                                             <th>
-                                                <input type="text" wire:model.live='search.role' class="form-control"
-                                                    placeholder="Role">
+                                                <select wire:model.live='search.user_role_name' id=""
+                                                    class="form-control @error('user_role_name') border border-danger @enderror"
+                                                    @required(true)>
+                                                    <option value="" selected>Role</option>
+                                                    @if ($user_roles ?? '')
+                                                        @foreach ($user_roles as $user_role)
+                                                            <option value="{{ $user_role->id }}"
+                                                                @if (old('user_role_name') == $user_role->name) selected @endif>
+                                                                {{ $user_role->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </th>
+                                            <th>
+                                                <div class="col">
+                                                    <select wire:model.live='search.report_type_id' id=""
+                                                        class="form-control @error('user_report_type_name') border border-danger @enderror"
+                                                        @required(true)>
+                                                        <option value="" selected>Report Type</option>
+                                                        @if ($user_report_types ?? '')
+                                                            @foreach ($user_report_types as $user_report_type)
+                                                                <option
+                                                                    value="{{ $user_report_type->user_report_type_id }}"
+                                                                    @if (old('user_report_type_id') == $user_report_type->id) selected @endif>
+                                                                    {{ $user_report_type->user_report_type_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
                                             </th>
                                             <th><input type="text" wire:model.live='search.job_description'
                                                     class="form-control" placeholder="Job Description"></th>
@@ -167,7 +243,9 @@
                                                 <td>{{ $userDailyReport->user_daily_report_user_id }}</td>
                                                 <td>{{ $this->user($userDailyReport->user_daily_report_user_id) }}
                                                 </td>
-                                                <td>{{ $this->user($userDailyReport->user_daily_report_user_id) }}
+                                                <td>{{ $this->userRoleName($userDailyReport->user_daily_report_user_id) }}
+                                                </td>
+                                                <td>{{ $this->userReportTypeName($userDailyReport->user_daily_report_user_report_type_id) }}
                                                 </td>
                                                 <td>{{ $userDailyReport->user_daily_report_job_description }}</td>
                                                 <td>{{ $userDailyReport->user_daily_report_start_time }}</td>

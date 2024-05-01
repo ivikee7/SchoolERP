@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_daily_reports', function (Blueprint $table) {
             $table->uuid('user_daily_report_id');
+            $table->uuid('user_daily_report_user_report_type_id');
             $table->bigInteger('user_daily_report_user_id')->nullable()->unsigned();
             $table->string('user_daily_report_job_description')->nullable();
             $table->timestamp('user_daily_report_start_time')->nullable();

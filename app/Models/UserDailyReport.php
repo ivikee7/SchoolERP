@@ -14,6 +14,7 @@ class UserDailyReport extends Model
 
     protected $fillable = [
         'user_daily_report_user_id',
+        'user_daily_report_user_report_type_id',
         'user_daily_report_job_description',
         'user_daily_report_start_time',
         'user_daily_report_end_time',

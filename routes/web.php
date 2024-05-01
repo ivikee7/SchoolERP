@@ -19,6 +19,7 @@ use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionsController;
 use App\Http\Controllers\UserProfileController;
+use App\Livewire\ImageController as LivewireImageController;
 use App\Livewire\StoreManagementSystem\Seller;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -92,6 +93,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('/image')->group(function () {
         Route::get('/{id}', [ImageController::class, 'index'])->name('image.index');
         Route::post('/{id}', [ImageController::class, 'update'])->name('image.update');
+
+        // Livewire
+        Route::get('/{id}', LivewireImageController::class)->name('image-controller.index');
     });
 
     // Student
@@ -364,8 +368,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', \App\Livewire\Meta\Whatsapp::class)->name('whatsapp');
     });
 
-    // UserDailyReport
-    Route::prefix('/user-daily-report')->group(function () {
-        Route::get('/', \App\Livewire\UserDailyReport::class)->name('user-daily-report');
+    // Report Management System
+    Route::prefix('/report-management-system')->group(function () {
+        // UserDailyReport
+        Route::prefix('/user-daily-report')->group(function () {
+            Route::get('/', \App\Livewire\UserDailyReport::class)->name('user-daily-report');
+            Route::get('/user-report_type', \App\Livewire\UserReportType::class)->name('user-report-type');
+        });
     });
 });

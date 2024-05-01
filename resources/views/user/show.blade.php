@@ -18,8 +18,11 @@
                                         src="@if (!empty(Auth()->user()->image)) {{ asset(Auth()->user()->image) }} @elseif ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
                                         alt="User profile picture">
                                 </div>
-                                <div class="text-center">
-                                    <a href="{{ route('image.index', $user->id) }}"><i class="fa-solid fa-user-pen"></i></a>
+                                <div class="text-center mt-1">
+                                    <div class="btn-group">
+                                        <a href="{{ route('image-controller.index', $user->id) }}"
+                                            class="btn btn-default"><i class="fa-solid fa-user-pen"></i></a>
+                                    </div>
                                 </div>
                                 <h3 class="profile-username text-center">
                                     {{ $user->id . ' | ' . $user->title . ' ' . $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}

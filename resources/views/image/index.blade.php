@@ -33,28 +33,26 @@
                                                             src="../../dist/img/user4-128x128.jpg"
                                                             alt="User profile picture">
                                                     </div>
-                                                        <input type="file" name="image" class="form form-control">
-                                                    </div>
+                                                    <input type="file" name="image" class="form form-control">
                                                 </div>
-                                                <br>
-                                                <button type="save" class="btn btn-block btn-primary">Save</button>
                                             </div>
+                                            <br>
+                                            <button type="save" class="btn btn-block btn-primary">Save</button>
                                         </div>
+                                    </form>
                                 </div>
-                                </form>
                             </div>
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
+                        <!-- /.card -->
                     </div>
-                    <!-- /.card -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
+                <!-- /.row -->
             </div>
-            <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
 @endsection()

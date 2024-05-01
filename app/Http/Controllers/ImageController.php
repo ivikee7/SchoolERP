@@ -17,4 +17,18 @@ class ImageController extends Controller
     public function update(Request $request, $id)
     {
     }
+
+    public function uploadImage(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+
+        $name = $request->file('image')->getClientOriginalName();
+
+        $path = $request->file('image')->store('public/images');
+
+        return redirect('image-form')->with('status', 'Uploaded............');
+    }
 }

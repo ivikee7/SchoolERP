@@ -15,9 +15,9 @@ class Media extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'link',
-        'type',
+        'media_title',
+        'media_path',
+        'media_type',
         'created_by',
         'updated_by',
     ];
