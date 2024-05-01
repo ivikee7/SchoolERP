@@ -11,8 +11,15 @@
     <div class="sidebar os-host-scrollbar-vertical-hidden">
         {{-- Sidebar user panel (optional) --}}
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            {{-- @dd(auth()->user()->media_id) --}}
+            {{-- @dd(\App\Models\Media::query()->findOrFail(auth()->user()->media_id)['media_path']) --}}
+            {{-- @dd(
+                \App\Models\Media::firstOrFail(auth()->user()->media_id)->select('media_path')->first()->pluck('media_path')
+            ) --}}
             <div class="image">
-                <img @if (auth()->user()->media_id !== '') src="{{ asset(\App\Models\Media::find(auth()->user()->media_id)->select('media_path')->get()[0]->media_path) }}" @else src="{{ asset('dist/img/avatar5.png') }}" @endif
+                <img @if (auth()->user()->media_id != '' &&
+                        auth()->user()->media_id != null &&
+                        \App\Models\Media::find(auth()->user()->media_id)->exists()) src="{{ asset('/' . \App\Models\Media::query()->findOrFail(auth()->user()->media_id)['media_path']) }}" @else src="{{ asset('dist/img/avatar5.png') }}" @endif
                     class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
