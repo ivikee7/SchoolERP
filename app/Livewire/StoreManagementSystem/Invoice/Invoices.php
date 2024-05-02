@@ -64,12 +64,6 @@ class Invoices extends Component
             return null;
         }
 
-        // $user =  User::leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
-        //     ->leftJoin('student_classes as sc', 'sa.current_class_id', 'sc.id')
-        //     ->where('users.id', $user_id)
-        //     ->select('sc.name as class_name')
-        //     ->first();
-
         $user = ProductInvoice::leftJoin('product_invoice_items as pii', 'product_invoices.product_invoice_id', 'pii.product_invoice_item_product_invoice_id')
             ->leftJoin('class_has_products as chp', 'pii.product_invoice_item_class_has_product_id', 'chp.class_has_product_id')
             ->leftJoin('student_classes as sc', 'chp.class_has_product_class_id', 'sc.id')
@@ -78,6 +72,21 @@ class Invoices extends Component
             ->first();
 
         return $user->class_name;
+    }
+
+    public function getSection($user_id)
+    {
+        if ($user_id == null) {
+            return null;
+        }
+
+        $user = User::query()
+            ->leftJoin('student_admissions as sa', 'users.id', 'sa.user_id')
+            ->leftJoin('student_sections as ss', 'sa.current_section_id', 'ss.id')
+            ->where('users.id', $user_id)
+            ->select('ss.name as section_name')
+            ->first();
+        return $user->section_name;
     }
 
     public function paymentNotReceived($invoice_id)
