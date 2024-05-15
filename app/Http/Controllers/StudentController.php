@@ -45,12 +45,13 @@ class StudentController extends Controller
             ->leftJoin('users as ucn', 'users.created_by', 'ucn.id')
             ->leftJoin('users as uun', 'users.updated_by', 'uun.id')
             ->whereIn('r.name', ['STUDENT'])
-            ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport_id', 'users.aadhaar_number', 'users.mother_tongue', DB::raw('date(users.date_of_birth) as date_of_birth'), 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'sa.admission_status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
+            ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport_id', 'users.aadhaar_number', 'users.mother_tongue', DB::raw('date(users.date_of_birth) as date_of_birth'), 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'sa.admission_status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'users.media_id', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
             ->get();
 
         $datatables = DataTables($users)
             ->editColumn('id', '{{$id}}')
             ->addColumn('profile_image', function ($user) {
+
                 $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
 
                 if ($user->gender == 'M') {
@@ -61,9 +62,9 @@ class StudentController extends Controller
                     $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
                 }
 
-                if (!$user->media_id == '' || !$user->media_id == null) {
-                    if (\App\Models\Media::find($user->media_id)->exists()) {
-                        $media = \App\Models\Media::query()->findOrFail($user->media_id)["media_path"];
+                if (!empty($user->media_id)) {
+                    if (\App\Models\Media::where('id', $user->media_id)->exists()) {
+                        $media = \App\Models\Media::findOrFail($user->media_id)["media_path"];
                         $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="' . $media . '" alt="' . str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name) . '"></div>';
                     }
                 }

@@ -52,6 +52,7 @@ class UserController extends Controller
         $datatables = DataTables::of($users)
             ->editColumn('id', '{{ $id }}')
             ->addColumn('profile_image', function ($user) {
+
                 $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
 
                 if ($user->gender == 'M') {
@@ -62,9 +63,9 @@ class UserController extends Controller
                     $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
                 }
 
-                if (!$user->media_id == '' || !$user->media_id == null) {
-                    if (\App\Models\Media::find($user->media_id)->exists()) {
-                        $media = \App\Models\Media::query()->findOrFail($user->media_id)["media_path"];
+                if (!empty($user->media_id)) {
+                    if (\App\Models\Media::where('id', $user->media_id)->exists()) {
+                        $media = \App\Models\Media::findOrFail($user->media_id)["media_path"];
                         $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="' . $media . '" alt="' . str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name) . '"></div>';
                     }
                 }

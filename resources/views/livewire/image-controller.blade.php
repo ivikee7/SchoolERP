@@ -20,7 +20,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="col col-6">
+            <div class="col">
                 <div class="card card-primary">
                     <div class="text-center">
                         <div class="card-header">
