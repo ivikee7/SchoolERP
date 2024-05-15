@@ -15,8 +15,14 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="@if (!empty($image->media_path)) {{ asset($image->media_path) }} @elseif ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                                        @if ($user->media_id != '' && $user->media_id != null && \App\Models\Media::find($user->media_id)->exists()) src="{{ asset('/' . \App\Models\Media::query()->findOrFail($user->media_id)['media_path']) }}" @elseif ($user->gender == 'M') src="{{ asset('/' . 'dist/img/male1.png') }}" @elseif ($user->gender == 'F') src="{{ asset('/' . 'dist/img/female1.png') }}" @elseif ($user->gender == 'O') src="{{ asset('/' . 'dist/img/boxed-bg.jpg') }}" @endif
                                         alt="User profile picture">
+                                </div>
+                                <div class="text-center mt-1">
+                                    <div class="btn-group">
+                                        <a href="{{ route('image-controller.index', $user->id) }}"
+                                            class="btn btn-default"><i class="fa-solid fa-user-pen"></i></a>
+                                    </div>
                                 </div>
                                 <h3 class="profile-username text-center">
                                     {{ $user->id . ' | ' . $user->title . ' ' . $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}

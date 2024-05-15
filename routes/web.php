@@ -369,11 +369,13 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     // Report Management System
-    Route::prefix('/report-management-system')->group(function () {
-        // UserDailyReport
-        Route::prefix('/user-daily-report')->group(function () {
-            Route::get('/', \App\Livewire\UserDailyReport::class)->name('user-daily-report');
-            Route::get('/user-report_type', \App\Livewire\UserReportType::class)->name('user-report-type');
-        });
+    Route::prefix('/user-daily-report')->group(function () {
+        Route::get('/', \App\Livewire\UserDailyReport::class)->name('user-daily-report');
+        Route::get('/user-report_type', \App\Livewire\UserReportType::class)->name('user-report-type');
+    });
+
+    // Substitution Management System
+    Route::prefix('/substitution')->group(function () {
+        Route::get('/', \App\Livewire\Class\Substitution::class)->name('substitution');
     });
 });

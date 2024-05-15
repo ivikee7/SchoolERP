@@ -1,30 +1,25 @@
-<!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    {{-- Brand Logo --}}
+    <!-- Brand Logo -->
     <a href="{{ route('index') }}" class="brand-link">
-        <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}"
-            class="brand-image img-circle elevation-3 bg-white p-1">
+        <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }} Logo" class="brand-image img-circle elevation-3 "
+            style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar os-host-scrollbar-vertical-hidden">
-        {{-- Sidebar user panel (optional) --}}
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img @if (auth()->user()->media_id != '' &&
-                        auth()->user()->media_id != null &&
-                        \App\Models\Media::find(auth()->user()->media_id)->exists()) src="{{ asset('/' . \App\Models\Media::query()->findOrFail(auth()->user()->media_id)['media_path']) }}" @else src="{{ asset('dist/img/avatar5.png') }}" @endif
-                    class="img-circle elevation-2" alt="User Image">
+                <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{{ route('profile') }}"
-                    class="d-block">{{ Auth()->user()->first_name . ' ' . Auth()->user()->last_name }}
+                <a href="#" class="d-block">{{ Auth()->user()->first_name . ' ' . Auth()->user()->last_name }}
                     | {{ Auth()->user()->id }}</a>
             </div>
         </div>
 
-        {{-- SidebarSearch Form --}}
+        <!-- SidebarSearch Form -->
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
                 <input class="form-control form-control-sidebar" type="search" placeholder="Search"
@@ -39,13 +34,13 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-legacy" data-widget="treeview"
-                role="menu" data-accordion="false">
-                {{-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library --}}
-
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+       with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-regular fa-users"></i>
                         <p>
                             User
                             <i class="right fas fa-angle-left"></i>
@@ -66,7 +61,6 @@
                                 </a>
                             </li>
                         @endcan
-
                         {{-- {{ Attendance Menu }} --}}
                         @can('attendance_access')
                             <li class="nav-item">
@@ -426,16 +420,9 @@
                         </ul>
                     </li>
                 @endcan
-
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
-
-    <div class="sidebar-custom">
-        <a href="#" class="btn btn-link"><i class="fas fa-cogs"></i></a>
-        <a href="#" class="btn btn-secondary hide-on-collapse pos-right">Help</a>
-    </div>
-    <!-- /.sidebar-custom -->
 </aside>

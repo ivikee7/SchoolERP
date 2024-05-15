@@ -1,4 +1,4 @@
-<div class="content-wrapper overlay">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">

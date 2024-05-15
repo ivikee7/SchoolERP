@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -117,27 +117,27 @@
 
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Appointment With</label>
-                                <input wire:model="appointment_name" type="text" class="form-control"
+                                <input wire:model.live="appointment_name" type="text" class="form-control"
                                     placeholder="Appointment With">
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Clint Name</label>
-                                <input wire:model="appointment_clint_name" type="text" class="form-control"
+                                <input wire:model.live="appointment_clint_name" type="text" class="form-control"
                                     placeholder="Clint Name">
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Remarks</label>
-                                <input wire:model="appointment_remark" type="text" class="form-control"
+                                <input wire:model.live="appointment_remark" type="text" class="form-control"
                                     placeholder="Remarks">
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Appointment Start</label>
-                                <input wire:model="appointment_start" type="datetime-local" class="form-control"
+                                <input wire:model.live="appointment_start" type="datetime-local" class="form-control"
                                     placeholder="Appointment Start">
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Appointment End</label>
-                                <input wire:model="appointment_end" type="datetime-local" class="form-control"
+                                <input wire:model.live="appointment_end" type="datetime-local" class="form-control"
                                     placeholder="Appointment End">
                             </div>
 

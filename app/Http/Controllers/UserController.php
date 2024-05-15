@@ -46,11 +46,30 @@ class UserController extends Controller
             ->leftJoin('users as ucn', 'u.created_by', 'ucn.id')
             ->leftJoin('users as uun', 'u.updated_by', 'uun.id')
             ->whereNotIn('r.name', ['Super Admin', 'STUDENT'])
-            ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'u.aadhaar_number', 'u.mother_tongue', DB::raw('date(u.date_of_birth) as date_of_birth'), 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', 'tt.name as transport_type_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
+            ->select('u.id', 'u.title', 'u.first_name', 'u.middle_name', 'u.last_name', 'u.contact_number', 'u.contact_number2', 'u.address_line1', 'u.city', 'u.state', 'u.pin_code', 'u.country', 'u.aadhaar_number', 'u.mother_tongue', DB::raw('date(u.date_of_birth) as date_of_birth'), 'u.gender', 'u.father_name', 'u.mother_name', 'u.remarks', 'u.status', 'u.email', 'u.email_alternate', 'u.created_at', 'u.updated_at', 'u.media_id', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', 'tt.name as transport_type_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
             ->get();
 
         $datatables = DataTables::of($users)
             ->editColumn('id', '{{ $id }}')
+            ->addColumn('profile_image', function ($user) {
+                $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
+
+                if ($user->gender == 'M') {
+                    $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/male.png" alt="' . $user->gender . '"></div></a>';
+                } elseif ($user->gender == 'F') {
+                    $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/female.png" alt="' . $user->gender . '"></div></a>';
+                } elseif ($user->gender == 'O') {
+                    $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
+                }
+
+                if (!$user->media_id == '' || !$user->media_id == null) {
+                    if (\App\Models\Media::find($user->media_id)->exists()) {
+                        $media = \App\Models\Media::query()->findOrFail($user->media_id)["media_path"];
+                        $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="' . $media . '" alt="' . str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name) . '"></div>';
+                    }
+                }
+                return $image;
+            })
             ->addColumn('full_name', function ($user) {
                 return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
             })
@@ -83,6 +102,7 @@ class UserController extends Controller
 
                 return $view;
             })
+            ->rawColumns(['action', 'profile_image'])
             ->setRowClass(function ($user) {
                 if ($user->status == 0) {
                     return 'bg-warning';

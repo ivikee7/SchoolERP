@@ -1,4 +1,4 @@
-<div class="content-wrapper overlay">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -125,18 +125,18 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Product Name</label>
-                                <input wire:model="product_name" type="text" class="form-control"
+                                <input wire:model.live="product_name" type="text" class="form-control"
                                     placeholder="Product Name">
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Product Description</label>
-                                <input wire:model="product_description" type="text" class="form-control"
+                                <input wire:model.live="product_description" type="text" class="form-control"
                                     placeholder="Product Description">
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Product</label>
                                 <div class="form-group">
-                                    <select class="form-control" wire:model="product_category_id">
+                                    <select class="form-control" wire:model.live="product_category_id">
                                         <option>Select</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->product_category_id }}">

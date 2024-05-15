@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Google\Workspace\Classroom;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Google\GoogleApiAuth;
 use Google\Client;
 use Google\Exception;
 use Google\Service\Classroom;
@@ -19,22 +20,38 @@ class CoursesController extends Controller
     TODO (developer) - See https://developers.google.com/identity for
      guides on implementing OAuth2 for your application. */
         $client = new Client();
-        $client->useApplicationDefaultCredentials();
+
+        // $client->useApplicationDefaultCredentials();
+        $client->setAuthConfig(env('GOOGLE_APPLICATION_CREDENTIALS'));
+
         $client->setSubject($email);
+
         $client->addScope('https://www.googleapis.com/auth/classroom.courses');
+
         $service = new Classroom($client);
+
         $courses = [];
+
         $pageToken = '';
 
+
+
         do {
+
             $params = [
+
                 'pageSize' => 5,
+
                 'pageToken' => $pageToken,
+
             ];
+
             $response = $service->courses->listCourses($params);
+
             $courses = array_merge($courses, $response->courses);
+
             $pageToken = $response->nextPageToken;
-        } while (! empty($pageToken));
+        } while (!empty($pageToken));
 
         return view('google.workspace.classroom.listCourses')->with(['status' => 'info', 'message' => 'Message', 'courses' => $courses]);
     }
@@ -62,7 +79,7 @@ class CoursesController extends Controller
             $course = new Course([
                 'name' => $request->class_name,
                 'section' => $request->class_name,
-                'descriptionHeading' => 'Welcome to '.$request->class_name,
+                'descriptionHeading' => 'Welcome to ' . $request->class_name,
                 'description' => $request->subject,
                 'room' => $request->room,
                 'ownerId' => 'me',
@@ -72,7 +89,7 @@ class CoursesController extends Controller
 
             return redirect()->route('google.workspace.classroom.listCourses')->with(['status' => 'info', 'message' => 'Message']);
         } catch (Exception $e) {
-            return 'Message: '.$e->getMessage();
+            return 'Message: ' . $e->getMessage();
         }
     }
 

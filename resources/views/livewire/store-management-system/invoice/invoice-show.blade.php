@@ -1,5 +1,5 @@
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -276,7 +276,7 @@
     <!-- /.content -->
 
     {{-- payment --}}
-    <div class="modal fade" id="modal-payment" style="display: none;" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="modal-payment" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <form wire:submit="payment('{{ $invoice[0]->product_invoice_id }}')" action="" method="post">
@@ -332,7 +332,7 @@
     </div>
 
     {{-- discount --}}
-    <div class="modal fade" id="modal-discount" style="display: none;" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="modal-discount" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <form wire:submit="discount('{{ $invoice[0]->product_invoice_id }}')" action="" method="post">

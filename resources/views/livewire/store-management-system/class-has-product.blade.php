@@ -1,4 +1,4 @@
-<div class="content-wrapper overlay">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -137,7 +137,7 @@
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Class</label>
                                 <div class="form-group">
-                                    <select class="form-control" wire:model="class_id">
+                                    <select class="form-control" wire:model.live="class_id">
                                         <option>Select</option>
                                         @foreach ($classes as $class)
                                             <option value="{{ $class->id }}">
@@ -150,7 +150,7 @@
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Session</label>
                                 <div class="form-group">
-                                    <select class="form-control" wire:model="academic_session_id">
+                                    <select class="form-control" wire:model.live="academic_session_id">
                                         <option>Select</option>
                                         @foreach ($sessions as $session)
                                             <option value="{{ $session->id }}">
@@ -163,7 +163,7 @@
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Product</label>
                                 <div class="form-group">
-                                    <select class="form-control" wire:model="product_id">
+                                    <select class="form-control" wire:model.live="product_id">
                                         <option>Select</option>
                                         @foreach ($products as $product)
                                             <option value="{{ $product->product_id }}">
@@ -175,7 +175,7 @@
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Price</label>
-                                <input wire:model="price" type="text" class="form-control" placeholder="Price">
+                                <input wire:model.live="price" type="text" class="form-control" placeholder="Price">
                             </div>
                         </div>
                         <!-- /.card -->

@@ -25,11 +25,11 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        if (! auth()->user()->can('student_access')) {
+        if (!auth()->user()->can('student_access')) {
             return abort(403, "You don't have permission!");
         }
 
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('student.index');
         }
 
@@ -47,10 +47,30 @@ class StudentController extends Controller
             ->whereIn('r.name', ['STUDENT'])
             ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'tr.route_name as transport_id', 'users.aadhaar_number', 'users.mother_tongue', DB::raw('date(users.date_of_birth) as date_of_birth'), 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'sa.admission_status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'r.name as role_name', 'tr.route_name', 'sc.name as class_name', 'ss.name as section_name', DB::raw("concat(ucn.first_name, ' ', ucn.middle_name, ' ', ucn.last_name) as created_by_name"), DB::raw("concat(uun.first_name, ' ', uun.middle_name, ' ', uun.last_name) as updated_by_name"))
             ->get();
+
         $datatables = DataTables($users)
             ->editColumn('id', '{{$id}}')
+            ->addColumn('profile_image', function ($user) {
+                $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
+
+                if ($user->gender == 'M') {
+                    $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/male.png" alt="' . $user->gender . '"></div></a>';
+                } elseif ($user->gender == 'F') {
+                    $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/female.png" alt="' . $user->gender . '"></div></a>';
+                } elseif ($user->gender == 'O') {
+                    $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="dist/img/boxed-bg.jpg" alt="' . $user->gender . '"></div></a>';
+                }
+
+                if (!$user->media_id == '' || !$user->media_id == null) {
+                    if (\App\Models\Media::find($user->media_id)->exists()) {
+                        $media = \App\Models\Media::query()->findOrFail($user->media_id)["media_path"];
+                        $image = '<a href="' . route('image-controller.index', $user->id) . '"><div class="text-center"><img class="img-circle" style="height:3em;width:3em;" src="' . $media . '" alt="' . str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name) . '"></div>';
+                    }
+                }
+                return $image;
+            })
             ->addColumn('full_name', function ($user) {
-                return str_replace('  ', ' ', $user->first_name.' '.$user->middle_name.' '.$user->last_name);
+                return str_replace('  ', ' ', $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name);
             })
             ->addColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
             ->addColumn('address', '{{$address_line1}} {{$city}} {{$state}} {{$country}} {{$pin_code}}')
@@ -78,12 +98,12 @@ class StudentController extends Controller
             ->addColumn('action', function ($users) {
                 $status = '';
                 if (auth()->user()->can('student_show')) {
-                    $status .= '<a href='.URL::current().'/'.$users->id.' class="btn btn-xs btn-primary">View</a>';
+                    $status .= '<a href=' . URL::current() . '/' . $users->id . ' class="btn btn-xs btn-primary">View</a>';
                 }
 
                 return $status;
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['status', 'action', 'profile_image'])
             ->setRowClass(function ($user) {
                 if ($user->admission_status == 0) {
                     return 'bg-warning';
@@ -112,11 +132,11 @@ class StudentController extends Controller
      */
     public function create(Request $request)
     {
-        if (! auth()->user()->can('student_create')) {
+        if (!auth()->user()->can('student_create')) {
             return abort(403, "You don't have permission!");
         }
 
-        if (! StudentAdmission::where('registration_id', $request->registration)->first()) {
+        if (!StudentAdmission::where('registration_id', $request->registration)->first()) {
             if (StudentRegistration::findOrFail($request->registration)) {
                 $registration = StudentRegistration::findOrFail($request->registration);
                 $local_guardians = DB::table('users as u')
@@ -145,7 +165,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        if (! auth()->user()->can('student_create')) {
+        if (!auth()->user()->can('student_create')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -241,10 +261,10 @@ class StudentController extends Controller
 
             // Generate School Email
             $student_email = User::findOrFail($student->id);
-            $student_email->email_alternate = strtolower($student_email->id.'@srcspatna.com');
+            $student_email->email_alternate = strtolower($student_email->id . '@srcspatna.com');
             $student_email->save();
 
-            return view('student.index')->with(['status' => 'success', 'message' => 'Student ID: '.$student->id.' created']);
+            return view('student.index')->with(['status' => 'success', 'message' => 'Student ID: ' . $student->id . ' created']);
         }
     }
 
@@ -256,7 +276,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        if (! auth()->user()->can('student_show')) {
+        if (!auth()->user()->can('student_show')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -273,10 +293,10 @@ class StudentController extends Controller
                 ->leftJoin('transport_vehicles as tv', 'tr.vehicle_id', 'tv.id')
                 ->leftJoin('transport_types as tt', 'tv.transport_type_id', 'tt.id')
                 ->where('users.id', $id)
-                ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.gender', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'users.media_id','tr.route_name as transport', 'users.aadhaar_number', 'users.blood_group', 'users.mother_tongue', 'users.date_of_birth', 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'sa.id as admission_id', 'sa.registration_id', 'sa.academic_session_id', 'sa.student_quota_id', 'sa.admission_class_id', 'sa.admission_section_id', 'sa.current_class_id', 'sa.current_section_id', 'sa.local_guardian_profile_id', 'sa.relationship', 'sa.admission_status', 'r.name as role_name', DB::raw("concat(lgp.id, ' | ', lgp.title, ' ',lgp.first_name, ' ',lgp.middle_name, ' ',lgp.last_name) as local_guardian_name"), 'tr.route_name as transport_route_name', 'sc.name as class_name', 'ss.name as section_name')
+                ->select('users.id', 'users.title', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.gender', 'users.contact_number', 'users.contact_number2', 'users.address_line1', 'users.city', 'users.state', 'users.pin_code', 'users.country', 'users.media_id', 'tr.route_name as transport', 'users.aadhaar_number', 'users.blood_group', 'users.mother_tongue', 'users.date_of_birth', 'users.place_of_birth', 'users.gender', 'users.father_name', 'users.mother_name', 'users.remarks', 'users.termination_date', 'users.status', 'users.email', 'users.email_alternate', 'users.created_at', 'users.updated_at', 'sa.id as admission_id', 'sa.registration_id', 'sa.academic_session_id', 'sa.student_quota_id', 'sa.admission_class_id', 'sa.admission_section_id', 'sa.current_class_id', 'sa.current_section_id', 'sa.local_guardian_profile_id', 'sa.relationship', 'sa.admission_status', 'r.name as role_name', DB::raw("concat(lgp.id, ' | ', lgp.title, ' ',lgp.first_name, ' ',lgp.middle_name, ' ',lgp.last_name) as local_guardian_name"), 'tr.route_name as transport_route_name', 'sc.name as class_name', 'ss.name as section_name')
                 ->get();
 
-                $image = \App\Models\Media::find($user[0]->media_id);
+            $image = \App\Models\Media::find($user[0]->media_id);
             // User guardian details
             $local_guardians = User::leftJoin('model_has_roles as mhr', 'users.id', 'mhr.model_id')
                 ->leftJoin('roles as r', 'mhr.role_id', 'r.id')
@@ -290,7 +310,7 @@ class StudentController extends Controller
             $classes = StudentClass::all();
             $sections = StudentSection::all();
 
-            return view('student.show')->with(['user' => $user[0], 'image'=>$image, 'local_guardians' => $local_guardians, 'routes' => $routes, 'quotas' => $quotas, 'acadamic_sessions' => $acadamicSessions, 'classes' => $classes, 'sections' => $sections]);
+            return view('student.show')->with(['user' => $user[0], 'image' => $image, 'local_guardians' => $local_guardians, 'routes' => $routes, 'quotas' => $quotas, 'acadamic_sessions' => $acadamicSessions, 'classes' => $classes, 'sections' => $sections]);
         } else {
             return abort(404);
         }
@@ -304,7 +324,7 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        if (! auth()->user()->can('student_edit')) {
+        if (!auth()->user()->can('student_edit')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -319,7 +339,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->can('student_edit')) {
+        if (!auth()->user()->can('student_edit')) {
             return abort(403, "You don't have permission!");
         }
 
@@ -403,7 +423,7 @@ class StudentController extends Controller
 
     public function changeClassSectionUpdate(Request $request)
     {
-        if (! auth()->user()->can('admission_edit')) {
+        if (!auth()->user()->can('admission_edit')) {
             return abort(403, "you don't have permission!");
         }
 
@@ -429,11 +449,11 @@ class StudentController extends Controller
 
     public function getStudentsAjaxCall(Request $request)
     {
-        if (! auth()->user()->can('admission_edit')) {
+        if (!auth()->user()->can('admission_edit')) {
             return abort(403, "you don't have permission!");
         }
 
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return abort(403, 'Ajax cll required!');
         }
 
@@ -455,11 +475,11 @@ class StudentController extends Controller
 
     public function classStudents(Request $request)
     {
-        if (! auth()->user()->can('student_access')) {
+        if (!auth()->user()->can('student_access')) {
             return abort(403, "you don't have permission!");
         }
 
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('student.class_students');
         }
 
@@ -476,7 +496,7 @@ class StudentController extends Controller
             ->editColumn('student_class', '{{$class_name}} {{$section_name}}')
             ->editColumn('contact_number', '{{$contact_number}}, {{$contact_number2}}')
             ->addColumn('password', function ($data) {
-                return ucfirst(str_replace(' ', '', strtolower($data->first_name).'@'.substr($data->contact_number, 0, 5)));
+                return ucfirst(str_replace(' ', '', strtolower($data->first_name) . '@' . substr($data->contact_number, 0, 5)));
             })
             ->editColumn('gender', function ($users) {
                 if ($users->gender == 'M') {
@@ -502,11 +522,11 @@ class StudentController extends Controller
 
     public function getClassStudentsStrengthAjaxCall(Request $request)
     {
-        if (! auth()->user()->can('student_access')) {
+        if (!auth()->user()->can('student_access')) {
             return abort(403, "you don't have permission!");
         }
 
-        if (! $request->ajax()) {
+        if (!$request->ajax()) {
             return view('student.class_students_strength');
         }
 

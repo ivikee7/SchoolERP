@@ -26,6 +26,7 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th>Image</th>
                                                 <th>Full Name</th>
                                                 <th>Role</th>
                                                 <th>Gender</th>
@@ -46,6 +47,7 @@
                                         </thead>
                                         <tfoot style="display: table-row-group;">
                                             <tr>
+                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -141,6 +143,10 @@
                             name: 'id'
                         },
                         {
+                            data: 'profile_image',
+                            name: 'profile_image'
+                        },
+                        {
                             data: 'full_name',
                             name: 'full_name'
                         },
@@ -219,7 +225,7 @@
                         }
                     ],
                     initComplete: function(settings, json) {
-                        this.api().columns([0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]).every(function() {
+                        this.api().columns([0, 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]).every(function() {
                             var column = this;
                             var input = document.createElement("input");
                             input.className = "form-control form-control-sm";
@@ -229,12 +235,12 @@
                                     column.search(val ? val : '', true, false).draw();
                                 });
                         });
-                        this.api().columns([2, 3, 15]).every(function() {
+                        this.api().columns([3, 4, 16]).every(function() {
                             var column = this;
                             // Generate select
                             var select = $(
                                     '<select class="form-control form-control-sm"><option value="">Show All</option></select>'
-                                    )
+                                )
                                 .appendTo($(column.footer()).empty())
                                 // Search when selection is changed
                                 .on('change', function() {
@@ -245,11 +251,11 @@
                             // Capture the data from the JSON to populate the select boxes with all the options
                             var extraData = (function(i) {
                                 switch (i) {
-                                    case 2:
-                                        return json.allRoles;
                                     case 3:
+                                        return json.allRoles;
+                                    case 4:
                                         return json.allGenders;
-                                    case 15:
+                                    case 16:
                                         return json.allStatus;
                                 }
                             })(column.index());

@@ -1,4 +1,4 @@
-<div class="content-wrapper overlay">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -133,7 +133,7 @@
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Class</label>
                                 <div class="form-group">
-                                    <select class="form-control" wire:model="class_has_product_class_id">
+                                    <select class="form-control" wire:model.live="class_has_product_class_id">
                                         <option disabled>Select</option>
                                         @foreach ($classes as $class)
                                             <option value="{{ $class->id }}">
@@ -146,7 +146,7 @@
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Product</label>
                                 <div class="form-group">
-                                    <select class="form-control" wire:model="class_has_product_product_id">
+                                    <select class="form-control" wire:model.live="class_has_product_product_id">
                                         <option disabled>Select</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->product_category_id }}">
@@ -158,7 +158,7 @@
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Price</label>
-                                <input wire:model="class_has_product_price" type="text" class="form-control"
+                                <input wire:model.live="class_has_product_price" type="text" class="form-control"
                                     placeholder="Price">
                             </div>
                         </div>
@@ -188,7 +188,7 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Appointment With</label>
-                                <input wire:model="appointment_name" type="text" class="form-control"
+                                <input wire:model.live="appointment_name" type="text" class="form-control"
                                     placeholder="Appointment With">
                             </div>
                         </div>

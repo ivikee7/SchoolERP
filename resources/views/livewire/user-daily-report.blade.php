@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -75,14 +75,14 @@
                                                     ({{ $job_description_characters_count }})
                                                 @endif
                                             </label>
-                                            <textarea wire:model="job_description" type="text"
+                                            <textarea wire:model.live="job_description" type="text"
                                                 class="form-control @error('job_description') border border-danger @enderror " name="job_description" rows="7"
                                                 value="{{ old('job_description') }}" minlength="1" maxlength="255" placeholder="Job Description" @required(true)></textarea>
                                         </div>
                                         <div class="col-sm-12 col-lg-6">
                                             <div class="col-sm-12 mt-2">
                                                 <label for="" class="ml-1 mr-1">Report Type</label>
-                                                <select wire:model="user_report_type_id" id=""
+                                                <select wire:model.live="user_report_type_id" id=""
                                                     class="form-control @error('user_report_type_name') border border-danger @enderror"
                                                     @required(true)>
                                                     <option value="" selected>Report Type</option>
@@ -98,14 +98,14 @@
                                             </div>
                                             <div class="col-sm-12 mt-2">
                                                 <label for="" class="ml-1 mr-1">Start Time</label>
-                                                <input wire:model="start_time" type="datetime-local"
+                                                <input wire:model.live="start_time" type="datetime-local"
                                                     class="form-control @error('start_time') border border-danger @enderror "
                                                     name="start_time" value="{{ old('start_time') }}"
                                                     placeholder="Start Time" @required(true)>
                                             </div>
                                             <div class="col-sm-12 mt-2">
                                                 <label for="" class="ml-1 mr-1">End Time</label>
-                                                <input wire:model="end_time" type="datetime-local"
+                                                <input wire:model.live="end_time" type="datetime-local"
                                                     class="form-control @error('end_time') border border-danger @enderror "
                                                     name="end_time" value="{{ old('end_time') }}" placeholder="End Time"
                                                     @required(true)>
@@ -128,7 +128,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6 mt-2">
                                             <label for="" class="ml-1 mr-1">User Report Type Name</label>
-                                            <input wire:model="user_report_type_name" type="text"
+                                            <input wire:model.live="user_report_type_name" type="text"
                                                 class="form-control @error('user_report_type_name') border border-danger @enderror "
                                                 name="user_report_type_name" rows="4"
                                                 value="{{ old('user_report_type_name') }}" minlength="1"

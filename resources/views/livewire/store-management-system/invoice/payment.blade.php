@@ -1,5 +1,5 @@
 <main>
-    <div class="content-wrapper">
+    <div>
         <x-loading-indicator />
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -11,8 +11,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ route('store-management-system.seller') }}">Seller</a>
+                            <li class="breadcrumb-item"><a href="{{ route('store-management-system.seller') }}">Seller</a>
                             </li>
                             <li class="breadcrumb-item active">Invoices</li>
                         </ol>

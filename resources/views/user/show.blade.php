@@ -15,7 +15,7 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="@if (!empty(Auth()->user()->image)) {{ asset(Auth()->user()->image) }} @elseif ($user->gender == 'M') {{ asset('dist/img/male1.png') }} @elseif ($user->gender == 'F') {{ asset('dist/img/female1.png') }} @elseif ($user->gender == 'O') {{ asset('dist/img/boxed-bg.jpg') }} @endif"
+                                        @if ($user->media_id != '' && $user->media_id != null && \App\Models\Media::find($user->media_id)->exists()) src="{{ asset('/' . \App\Models\Media::query()->findOrFail($user->media_id)['media_path']) }}" @elseif ($user->gender == 'M') src="{{ asset('/' . 'dist/img/male1.png') }}" @elseif ($user->gender == 'F') src="{{ asset('/' . 'dist/img/female1.png') }}" @elseif ($user->gender == 'O') src="{{ asset('/' . 'dist/img/boxed-bg.jpg') }}" @endif
                                         alt="User profile picture">
                                 </div>
                                 <div class="text-center mt-1">

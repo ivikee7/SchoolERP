@@ -24,48 +24,50 @@
                                 <div class="card-body" id="table_filters">
                                     <table class="table table-sm table-bordered table-striped">
                                         <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Full Name</th>
-                                            <th>Class</th>
-                                            <th>Section</th>
-                                            <th>Gender</th>
-                                            <th>Father Name</th>
-                                            <th>Mother Name</th>
-                                            <th>School Email</th>
-                                            <th>Remarks</th>
-                                            <th>Contact Number</th>
-                                            <th>Transport</th>
-                                            <th>Mother Tongue</th>
-                                            <th>Date of Birth</th>
-                                            <th>Address</th>
-                                            <th>Created By</th>
-                                            <th>Updated By</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Image</th>
+                                                <th>Full Name</th>
+                                                <th>Class</th>
+                                                <th>Section</th>
+                                                <th>Gender</th>
+                                                <th>Father Name</th>
+                                                <th>Mother Name</th>
+                                                <th>School Email</th>
+                                                <th>Remarks</th>
+                                                <th>Contact Number</th>
+                                                <th>Transport</th>
+                                                <th>Mother Tongue</th>
+                                                <th>Date of Birth</th>
+                                                <th>Address</th>
+                                                <th>Created By</th>
+                                                <th>Updated By</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
                                         </thead>
                                         <tfoot style="display: table-row-group;">
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
                                         </tfoot>
                                         <tbody>
                                         </tbody>
@@ -86,7 +88,7 @@
         <!-- /.content-wrapper -->
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 $('table').DataTable({
                     dom: 'lBfrtip',
                     lengthMenu: [
@@ -137,10 +139,13 @@
                         processing: "<i class='fas fa-2x fa-sync-alt fa-spin'></i>",
                     },
                     ajax: '{{ route('student.index') }}',
-                    columns: [
-                        {
+                    columns: [{
                             data: 'id',
                             name: 'id'
+                        },
+                        {
+                            data: 'profile_image',
+                            name: 'profile_image'
                         },
                         {
                             data: 'full_name',
@@ -221,48 +226,52 @@
                             data: 'action',
                             name: 'action',
                         }
-                    ]
-                    ,
-                    initComplete: function (settings, json) {
-                        this.api().columns([0, 1, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]).every(function () {
+                    ],
+                    initComplete: function(settings, json) {
+                        this.api().columns([0, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]).every(function() {
                             var column = this;
                             var input = document.createElement("input");
                             input.className = "form-control form-control-sm";
                             $(input).appendTo($(column.footer()).empty())
-                                .on('change', function () {
+                                .on('change', function() {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                     column.search(val ? val : '', true, false).draw();
                                 });
                         });
-                        this.api().columns([2, 3, 4, 16]).every(function () {
+                        this.api().columns([3, 4, 5, 17]).every(function() {
                             var column = this;
                             // Generate select
-                            var select = $('<select class="form-control form-control-sm"><option value="">Show All</option></select>')
+                            var select = $(
+                                    '<select class="form-control form-control-sm"><option value="">Show All</option></select>'
+                                )
                                 .appendTo($(column.footer()).empty())
                                 // Search when selection is changed
-                                .on('change', function () {
+                                .on('change', function() {
                                     var val = $(this).val();
-                                    column.search(this.value ? '^' + this.value + '$' : '', true, false).draw();
+                                    column.search(this.value ? '^' + this.value + '$' : '',
+                                        true, false).draw();
                                 });
                             // Capture the data from the JSON to populate the select boxes with all the options
-                            var extraData = (function (i) {
+                            var extraData = (function(i) {
                                 switch (i) {
-                                    case 2:
-                                        return json.allClasses;
                                     case 3:
-                                        return json.allSections;
+                                        return json.allClasses;
                                     case 4:
+                                        return json.allSections;
+                                    case 5:
                                         return json.allGenders;
-                                    case 16:
+                                    case 17:
                                         return json.allStatus;
                                 }
                             })(column.index());
                             // Draw select options
-                            extraData.forEach(function (d) {
+                            extraData.forEach(function(d) {
                                 if (column.search() === d) {
-                                    select.append('<option value="' + d + '" selected="selected">' + d + '</option>')
+                                    select.append('<option value="' + d +
+                                        '" selected="selected">' + d + '</option>')
                                 } else {
-                                    select.append('<option value="' + d + '">' + d + '</option>')
+                                    select.append('<option value="' + d + '">' + d +
+                                        '</option>')
                                 }
                             });
                         });

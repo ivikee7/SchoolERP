@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div>
     <x-loading-indicator />
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -98,7 +98,7 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Type</label>
-                                <select wire:model="type" @required(true) id=""
+                                <select wire:model.live="type" @required(true) id=""
                                     class="form-control @error('type') border border-danger @enderror">
                                     <option value="" @selected(true)>Select</option>
                                     <option value="template" @if (old('type') == 'template') selected @endif>Template
@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Template</label>
-                                <select wire:model="template" @required(true) id=""
+                                <select wire:model.live="template" @required(true) id=""
                                     class="form-control @error('template') border border-danger @enderror">
                                     <option value="" @selected(true)>Select</option>
                                     <option value="hello_world" @if (old('template') == 'hello_world') selected @endif>
@@ -123,14 +123,14 @@
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <div class="form-group">
                                     <label for="" class="ml-1 mr-1">Whatsapp Numbers</label>
-                                    <textarea wire:model="whatsapp_numbers" class="form-control" rows="3" placeholder="Number ..."></textarea>
+                                    <textarea wire:model.live="whatsapp_numbers" class="form-control" rows="3" placeholder="Number ..."></textarea>
                                 </div>
                             </div>
 
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <div class="form-group">
                                     <label for="" class="ml-1 mr-1">Whatsapp Message</label>
-                                    <textarea wire:model="whatsapp_message" textarea[] class="form-control" rows="3" placeholder="Message ..."></textarea>
+                                    <textarea wire:model.live="whatsapp_message" textarea[] class="form-control" rows="3" placeholder="Message ..."></textarea>
                                 </div>
                             </div>
                         </div>
