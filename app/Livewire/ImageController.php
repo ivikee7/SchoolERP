@@ -39,13 +39,23 @@ class ImageController extends Component
         $file_name = basename($image);
         $path = "storage/media/image/user";
 
-        $media = Media::create([
-            'media_title' => $id,
-            'media_path' => $path . '/' . $file_name,
-            'media_type' => 'image',
-            'created_by' => auth()->user()->id,
-            'updated_by' => auth()->user()->id,
-        ]);
+        if (!empty($user_details->media_id)) {
+            return Notification::alert($this, 'warning', 'Image upload!', "media already exists!");
+
+            // if (Media::findOrFail($user_details->media_id)->exists()) {
+            //     $media = Media::findOrFail($user_details->media_id);
+            // }
+        }
+
+        if (empty($user_details->media_id)) {
+            $media = Media::create([
+                'media_title' => $id,
+                'media_path' => $path . '/' . $file_name,
+                'media_type' => 'image',
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,
+            ]);
+        }
 
         $user = User::findOrFail($id);
         $user->media_id = $media->id;

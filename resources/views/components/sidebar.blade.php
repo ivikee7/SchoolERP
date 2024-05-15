@@ -96,6 +96,13 @@
                                             <p>Report Monthly</p>
                                         </a>
                                     </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('user-attendance.monthly') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Attendance Monthly New</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         @endcan

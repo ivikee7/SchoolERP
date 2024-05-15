@@ -378,4 +378,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('/substitution')->group(function () {
         Route::get('/', \App\Livewire\Class\Substitution::class)->name('substitution');
     });
+
+    // Substitution Management System
+    Route::prefix('/user-attendance')->group(function () {
+        Route::get('/', \App\Livewire\Attendance\UserAttendanceMonthly::class)->name('user-attendance.monthly');
+    });
 });
