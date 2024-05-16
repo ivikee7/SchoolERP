@@ -9,6 +9,7 @@
         "almasaeed2010/adminlte": "^3.2",
         "google/apiclient": "^2.16",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^3.6",
         "laravel/fortify": "^1.17",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
