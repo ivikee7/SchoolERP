@@ -28,12 +28,27 @@
                             <div class="card-header">
                                 <h3 class="card-title">Invoices</h3>
                                 <div class="card-title float-right">
-                                    <a href="{{ route('store-management-system.seller') }}">
-                                        <input type="button" value="Seller" class="btn btn-sm btn-primary">
-                                    </a>
-                                    <a href="{{ route('store-management-system.invoice.payment') }}">
-                                        <input type="button" value="Payment" class="btn btn-sm btn-primary">
-                                    </a>
+                                    <div class="row">
+                                        <div class="form-group pr-1">
+                                            <select class="form-control form-control-sm"
+                                                wire:model.live="acadamic_session">
+                                                <option @selected(true) @disabled(true)>select
+                                                </option>
+                                                @if ($acadamic_sessions)
+                                                    @foreach ($acadamic_sessions as $as)
+                                                        <option value="{{ $as->id }}">{{ $as->name }}</option>
+                                                    @endforeach
+                                                @endif
+
+                                            </select>
+                                        </div>
+                                        <a href="{{ route('store-management-system.seller') }}">
+                                            <input type="button" value="Seller" class="btn btn-sm btn-primary">
+                                        </a>
+                                        <a href="{{ route('store-management-system.invoice.payment') }}">
+                                            <input type="button" value="Payment" class="btn btn-sm btn-primary">
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.card-header -->
@@ -151,6 +166,48 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
+
+                {{-- Date Details --}}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Overview</h3>
+                                <div class="card-title float-right">
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-striped display"
+                                        style="width: 100%">
+                                        <tr>
+                                            <th>SubTotal</th>
+                                            <th>Discount</th>
+                                            <th>Total</th>
+                                            <th>Received</th>
+                                            <th>Due</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ (float) $transactions_total['sub_total'] }}</td>
+                                            <td>{{ (float) $transactions_total['discount'] }}</td>
+                                            <td>{{ (float) $transactions_total['gross_total'] }}</td>
+                                            <td>{{ (float) $transactions_total['gross_total'] - (float) $transactions_total['due'] }}
+                                            </td>
+                                            <td>{{ (float) $transactions_total['due'] }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                {{-- Date Details End --}}
+
             </div>
             <!-- /.container-fluid -->
         </section>

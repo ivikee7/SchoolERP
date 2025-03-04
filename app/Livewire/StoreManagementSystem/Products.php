@@ -8,6 +8,7 @@ use App\Models\Inventory\Product\Product;
 use App\Models\StoreManagementSystem\ProductCart;
 use App\Models\User;
 use Livewire\Component;
+use App\Models\StudentAdmission;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -26,9 +27,7 @@ class Products extends Component
     public function render()
     {
         User::findOrFail($this->id);
-
-        $this->products = self::classHasProducts($this->id);
-
+        $this->products = self::classHasProducts($this->id)->where('class_has_product_academic_session_id', StudentAdmission::where('user_id', $this->id)->pluck('academic_session_id'));
         $this->addToCartCountProducts = Helper::addToCartCountProducts($this->id);
 
         return view('livewire.store-management-system.products');

@@ -29,15 +29,29 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#modal-create-add"><i class="fas fa-plus-circle"></i> Add New</button>
                             <div class="card-title float-right">
-                                <a href="{{ route('store-management-system.product-manage') }}" wire:navigate>
-                                    <input type="button" value="Manage Product" class="btn btn-sm btn-primary" />
-                                </a>
-                                <a href="{{ route('store-management-system.seller') }}" wire:navigate>
-                                    <input type="button" value="Seller" class="btn btn-sm btn-primary" />
-                                </a>
-                                <a href="{{ route('store-management-system.invoices') }}" wire:navigate>
-                                    <input type="button" value="Invoices" class="btn btn-sm btn-primary" />
-                                </a>
+                                <div class="row">
+                                    <div class="form-group pr-1">
+                                        <select class="form-control form-control-sm" wire:model.live="acadamic_session">
+                                            <option @selected(true) @disabled(true)>select
+                                            </option>
+                                            @if ($acadamic_sessions)
+                                                @foreach ($acadamic_sessions as $as)
+                                                    <option value="{{ $as->id }}">{{ $as->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <a href="{{ route('store-management-system.product-manage') }}" wire:navigate>
+                                        <input type="button" value="Manage Product" class="btn btn-sm btn-primary" />
+                                    </a>
+                                    <a href="{{ route('store-management-system.seller') }}" wire:navigate>
+                                        <input type="button" value="Seller" class="btn btn-sm btn-primary" />
+                                    </a>
+                                    <a href="{{ route('store-management-system.invoices') }}" wire:navigate>
+                                        <input type="button" value="Invoices" class="btn btn-sm btn-primary" />
+                                    </a>
+
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -74,7 +88,7 @@
                                                 <td>{{ $class_has_product->id }}</td>
                                                 <td>{{ $class_has_product->class_name }}</td>
                                                 <td>
-                                                    @foreach ($this->getProductsOfClass($class_has_product->id) as $product)
+                                                    @foreach ($this->getProductsOfClass($class_has_product->id, $acadamic_session) as $product)
                                                         <span
                                                             class="badge badge-primary">{{ $product->product_name . '(' . $product->academic_session_name . ')' . ' ₹' . $product->class_has_product_price }}</span>
                                                     @endforeach
@@ -175,7 +189,8 @@
                             </div>
                             <div class="col-sm-12 col-md-6 mt-2">
                                 <label for="" class="ml-1 mr-1">Price</label>
-                                <input wire:model.live="price" type="text" class="form-control" placeholder="Price">
+                                <input wire:model.live="price" type="text" class="form-control"
+                                    placeholder="Price">
                             </div>
                         </div>
                         <!-- /.card -->

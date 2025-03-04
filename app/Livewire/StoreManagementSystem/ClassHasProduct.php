@@ -17,6 +17,7 @@ class ClassHasProduct extends Component
     use WithPagination;
 
     public $search;
+    public $acadamic_session = '';
 
     // form values
     public $class_id;
@@ -51,15 +52,17 @@ class ClassHasProduct extends Component
         return view('livewire.store-management-system.class-has-product', [
             'class_has_products' => StudentClass::where('student_classes.name', 'LIKE', "%{$this->search}%")
                 ->select('student_classes.id', 'student_classes.name as class_name')
-                ->paginate(20)
+                ->paginate(20),
+            'acadamic_sessions' => self::acadamic_sessions()
         ]);
     }
 
-    public function getProductsOfClass($class_id)
+    public function getProductsOfClass($class_id, $acadamic_session_id)
     {
         return ProductClassHasProduct::leftJoin('products as p', 'class_has_products.class_has_product_product_id', 'p.product_id')
             ->leftJoin('academic_sessions as ac', 'class_has_products.class_has_product_academic_session_id', 'ac.id')
             ->where('class_has_products.class_has_product_class_id', $class_id)
+            ->where('class_has_products.class_has_product_academic_session_id', $acadamic_session_id)
             ->where('ac.session_end', '>', now())
             ->get();
     }
@@ -121,5 +124,10 @@ class ClassHasProduct extends Component
         ]);
         Notification::alert($this, 'success', 'Success!', 'Assigned!');
         $this->dispatch('model_assign_hide');
+    }
+
+    public function acadamic_sessions()
+    {
+        return AcademicSession::select("id", "name")->get();
     }
 }
