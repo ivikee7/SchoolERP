@@ -56,6 +56,9 @@
                                                 <span class="info-box-text">
                                                     ({{ $product->product_description }})
                                                 </span>
+                                                <span class="info-box-text">
+                                                    ({{ $product->class_has_product_academic_session_id }})
+                                                </span>
                                                 <div class="progress">
                                                     {{-- <div class="progress-bar bg-info" style="width: 70%"></div> --}}
                                                 </div>

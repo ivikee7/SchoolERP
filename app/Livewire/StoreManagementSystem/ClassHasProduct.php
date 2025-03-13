@@ -59,12 +59,14 @@ class ClassHasProduct extends Component
 
     public function getProductsOfClass($class_id, $acadamic_session_id)
     {
-        return ProductClassHasProduct::leftJoin('products as p', 'class_has_products.class_has_product_product_id', 'p.product_id')
+        $products = ProductClassHasProduct::leftJoin('products as p', 'class_has_products.class_has_product_product_id', 'p.product_id')
             ->leftJoin('academic_sessions as ac', 'class_has_products.class_has_product_academic_session_id', 'ac.id')
             ->where('class_has_products.class_has_product_class_id', $class_id)
             ->where('class_has_products.class_has_product_academic_session_id', $acadamic_session_id)
             ->where('ac.session_end', '>', now())
             ->get();
+
+        return $products;
     }
 
     public function store()

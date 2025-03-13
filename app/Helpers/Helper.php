@@ -77,7 +77,8 @@ class Helper
 
     public static function productInvoiceGet($product_invoice_id)
     {
-        return ProductInvoice::where('product_invoice_id', $product_invoice_id)->get();
+        return ProductInvoice::where('product_invoice_id', $product_invoice_id)
+            ->get();
     }
 
     public static function productInvoiceItemGet($product_invoice_item_id)

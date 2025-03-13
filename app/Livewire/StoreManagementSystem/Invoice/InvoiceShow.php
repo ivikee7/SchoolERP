@@ -7,6 +7,7 @@ use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\ProductInvoice;
 use App\Models\Inventory\Product\ProductInvoiceItem;
 use App\Models\StoreManagementSystem\ProductPayment;
+use App\Models\StudentAdmission;
 use App\Models\User;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -36,7 +37,12 @@ class InvoiceShow extends Component
 
         return view('livewire.store-management-system.invoice.invoice-show', [
             'invoice' => Helper::productInvoiceGet($this->product_invoice_id),
-            'products' => Helper::productInvoiceItemsGet($this->product_invoice_id),
+            'products' => self::productInvoiceItemsGet($this->product_invoice_id)
+                ->whereIn(
+                    'class_has_product_academic_session_id',
+                    StudentAdmission::where('user_id', $this->id)
+                        ->pluck('academic_session_id')
+                ),
             'user' => User::findOrFail(function ($query) {
                 $query->from('product_invoices')->select('product_invoice_buyer_id')
                     ->where('product_invoice_id', $this->product_invoice_id)

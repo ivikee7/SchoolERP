@@ -24,7 +24,7 @@
                             <address>
                                 <strong>{{ $user->first_name }} {{ $user->middle_name }}
                                     {{ $user->last_name }}</strong><br>
-                                <strong>{{ $user->class_name }} {{ $user->section_name }}</strong><br>
+                                <strong>{{ $user->class_name }}</strong><br>
                                 <span class="text-wrap">{{ $user->address_line1 }}</span><br>
                             </address>
                         </div>
@@ -147,7 +147,7 @@
                             <address>
                                 <strong>{{ $user->first_name }} {{ $user->middle_name }}
                                     {{ $user->last_name }}</strong><br>
-                                <strong>{{ $user->class_name }} {{ $user->section_name }}</strong><br>
+                                <strong>{{ $user->class_name }}</strong><br>
                                 <span class="text-wrap">{{ $user->address_line1 }}</span><br>
                             </address>
                         </div>

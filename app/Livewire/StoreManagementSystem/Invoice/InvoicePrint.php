@@ -4,7 +4,9 @@ namespace App\Livewire\StoreManagementSystem\Invoice;
 
 use App\Helpers\Helper;
 use App\Models\Inventory\Product\ProductInvoice;
+use App\Models\Inventory\Product\ProductInvoiceItem;
 use App\Models\StoreManagementSystem\ProductPayment;
+use App\Models\StudentAdmission;
 use App\Models\User;
 use Livewire\Component;
 
@@ -32,10 +34,48 @@ class InvoicePrint extends Component
             ->first();
 
         return view('livewire.store-management-system.invoice.invoice-print', [
-            'invoice' => Helper::productInvoiceGet($this->product_invoice_id),
-            'products' => Helper::productInvoiceItemsGet($this->product_invoice_id),
-            'total' => Helper::invoiceSubTotal($this->product_invoice_id)
+            'invoice' => self::productInvoiceGet($this->product_invoice_id),
+            'products' => self::productInvoiceItemsGet($this->product_invoice_id)
+                ->whereIn(
+                    'class_has_product_academic_session_id',
+                    StudentAdmission::where('user_id', $this->id)
+                        ->pluck('academic_session_id')
+                ),
+            'total' => self::invoiceSubTotal($this->id, $this->product_invoice_id)
+
         ])->layout('components.layouts.base');
+    }
+
+    public static function productInvoiceGet($product_invoice_id)
+    {
+        return ProductInvoice::where('product_invoice_id', $product_invoice_id)
+            ->get();
+    }
+
+    public static function productInvoiceItemsGet($product_invoice_id)
+    {
+        return ProductInvoiceItem::leftJoin('class_has_products as chp', 'product_invoice_items.product_invoice_item_class_has_product_id', 'chp.class_has_product_id')
+            ->leftJoin('products as p', 'chp.class_has_product_product_id', 'p.product_id')
+            ->where('product_invoice_items.product_invoice_item_product_invoice_id', $product_invoice_id)
+            ->get();
+    }
+
+    public static function invoiceSubTotal($user_id, $product_invoice_id)
+    {
+        $data = self::productInvoiceItemsGet($product_invoice_id)
+            ->whereIn(
+                'class_has_product_academic_session_id',
+                StudentAdmission::where('user_id', $user_id)
+                    ->pluck('academic_session_id')
+            );
+
+        $total = 0;
+
+        foreach ($data as $d) {
+            $total += $d->product_invoice_item_price * $d->product_invoice_item_quantity;
+        }
+
+        return $total;
     }
 
     public function productInvoicePaidAmount($product_invoice_id)

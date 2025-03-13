@@ -27,7 +27,12 @@ class Products extends Component
     public function render()
     {
         User::findOrFail($this->id);
-        $this->products = self::classHasProducts($this->id)->where('class_has_product_academic_session_id', StudentAdmission::where('user_id', $this->id)->pluck('academic_session_id'));
+        $this->products = self::classHasProducts($this->id)
+            ->whereIn(
+                'class_has_product_academic_session_id',
+                StudentAdmission::where('user_id', $this->id)
+                    ->pluck('academic_session_id')
+            );
         $this->addToCartCountProducts = Helper::addToCartCountProducts($this->id);
 
         return view('livewire.store-management-system.products');
@@ -44,7 +49,7 @@ class Products extends Component
             return redirect(route('store-management-system.seller'));
         }
 
-        return Product::leftJoin('product_categories as pc', 'products.product_product_category_id', 'pc.product_category_id')
+        $data = Product::leftJoin('product_categories as pc', 'products.product_product_category_id', 'pc.product_category_id')
             ->leftJoin('class_has_products as chp', 'products.product_id', 'chp.class_has_product_product_id')
             ->where('pc.product_category_name', 'store_management_system')
             ->where('chp.class_has_product_class_id', function ($query) use ($user_id) {
@@ -66,6 +71,9 @@ class Products extends Component
             })
             ->select('products.*', 'chp.*')
             ->get();
+
+        // dd($data);
+        return $data;
     }
 
     public function addToCart($user_id, $product_id)

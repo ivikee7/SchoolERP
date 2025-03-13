@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\ProductInvoice;
 use App\Models\Inventory\Product\ProductInvoiceItem;
+use App\Models\StudentAdmission;
 use Livewire\Component;
 
 class Cart extends Component
@@ -23,7 +24,12 @@ class Cart extends Component
         return view(
             'livewire.store-management-system.cart',
             [
-                'products' => self::cartUserHasProducts($this->id),
+                'products' => self::cartUserHasProducts($this->id)
+                    ->whereIn(
+                        'class_has_product_academic_session_id',
+                        StudentAdmission::where('user_id', $this->id)
+                            ->pluck('academic_session_id')
+                    ),
                 'total' => self::cartSubTotal($this->id)
             ]
         );
@@ -106,7 +112,7 @@ class Cart extends Component
 
     public function cartUserHasProducts($user)
     {
-        return ProductCart::leftJoin('products as p', 'product_carts.product_cart_product_id', 'p.product_id')
+        $data = ProductCart::leftJoin('products as p', 'product_carts.product_cart_product_id', 'p.product_id')
             ->leftJoin('class_has_products as chp', 'p.product_id', 'chp.class_has_product_product_id')
             ->leftJoin('product_categories as pc', 'p.product_product_category_id', 'pc.product_category_id')
             ->where('chp.class_has_product_class_id', function ($query) use ($user) {
@@ -118,11 +124,18 @@ class Cart extends Component
             ->where('pc.product_category_name', 'store_management_system')
             ->select('product_carts.*', 'p.*', 'chp.*')
             ->get();
+
+        return $data;
     }
 
     public function cartSubTotal($user_id)
     {
-        $data = self::cartUserHasProducts($user_id);
+        $data = self::cartUserHasProducts($user_id)
+            ->whereIn(
+                'class_has_product_academic_session_id',
+                StudentAdmission::where('user_id', $this->id)
+                    ->pluck('academic_session_id')
+            );
 
         $total = 0;
 
