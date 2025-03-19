@@ -34,6 +34,7 @@ class InvoicePrint extends Component
             ->first();
 
         return view('livewire.store-management-system.invoice.invoice-print', [
+            'invoice_new' => self::invoice($this->product_invoice_id),
             'invoice' => self::productInvoiceGet($this->product_invoice_id),
             'products' => self::productInvoiceItemsGet($this->product_invoice_id)
                 ->whereIn(
@@ -44,6 +45,11 @@ class InvoicePrint extends Component
             'total' => self::invoiceSubTotal($this->id, $this->product_invoice_id)
 
         ])->layout('components.layouts.base');
+    }
+
+    public static function invoice($product_invoice_id)
+    {
+        return ProductInvoice::with('items', 'payments', 'payments.creator', 'payments.updater', 'student', 'items.classHasProduct.class','items.classHasProduct', 'items.classHasProduct.product', 'creator', 'updater')->get()->find($product_invoice_id);
     }
 
     public static function productInvoiceGet($product_invoice_id)

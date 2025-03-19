@@ -51,7 +51,7 @@
                                                 {{-- <i class="fas fa-globe"></i> --}}
                                                 India Book Center
                                                 <small class="float-right">Date:
-                                                    {{ date('Y-M-d', strtotime($invoice[0]->product_invoice_created_at)) }}</small>
+                                                    {{ date('Y-M-d', strtotime($invoice_new->product_invoice_created_at)) }}</small>
                                             </h4>
                                         </div>
                                         <!-- /.col -->
@@ -62,32 +62,35 @@
                                         <div class="col-sm-4 invoice-col">
                                             From
                                             <address>
-                                                <strong>{{ Auth()->user()->first_name }}
-                                                    {{ Auth()->user()->middle_name }}
-                                                    {{ Auth()->user()->last_name }}</strong><br>
-                                                {{ Auth()->user()->address_line1 }}<br>
-                                                {{ Auth()->user()->city }} {{ Auth()->user()->state }}
-                                                {{ Auth()->user()->pin_code }}<br>
-                                                Phone: {{ Auth()->user()->contact_number }}<br>
-                                                Email: {{ Auth()->user()->email }}
+                                                <strong>{{ $invoice_new->creator->first_name }}
+                                                    {{ $invoice_new->creator->middle_name }}
+                                                    {{ $invoice_new->creator->last_name }}</strong><br>
+                                                {{ $invoice_new->creator->address_line1 }}<br>
+                                                {{ $invoice_new->creator->city }} {{ $invoice_new->creator->state }}
+                                                {{ $invoice_new->creator->pin_code }}<br>
+                                                Phone: {{ $invoice_new->creator->contact_number }}<br>
+                                                Email: {{ $invoice_new->creator->email }}
                                             </address>
                                         </div>
                                         <!-- /.col -->
                                         <div class="col-sm-4 invoice-col">
                                             To
                                             <address>
-                                                <strong>{{ $user->first_name }} {{ $user->middle_name }}
-                                                    {{ $user->last_name }}</strong><br>
-                                                <span class="text-wrap">{{ $user->address_line1 }}</span><br>
-                                                <span class="text-wrap">{{ $user->city }} {{ $user->state }}
-                                                    {{ $user->pin_code }}</span><br>
-                                                Phone: {{ $user->contact_number }}<br>
-                                                Email: {{ $user->email }}
+                                                <strong>{{ $invoice_new->student->first_name }}
+                                                    {{ $invoice_new->student->middle_name }}
+                                                    {{ $invoice_new->student->last_name }}</strong><br>
+                                                <span
+                                                    class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
+                                                <span class="text-wrap">{{ $invoice_new->student->city }}
+                                                    {{ $invoice_new->student->state }}
+                                                    {{ $invoice_new->student->pin_code }}</span><br>
+                                                Phone: {{ $invoice_new->student->contact_number }}<br>
+                                                Email: {{ $invoice_new->student->email }}
                                             </address>
                                         </div>
                                         <!-- /.col -->
                                         <div class="col-sm-4 invoice-col">
-                                            <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
+                                            <b>Invoice {{ $invoice_new->product_invoice_id }}</b>
                                         </div>
                                         <!-- /.col -->
                                     </div>
@@ -100,18 +103,20 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Product</th>
-                                                        <th>Description</th>
+                                                        <th>Class</th>
                                                         <th>Price</th>
                                                         <th>Qty</th>
                                                         <th>Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{-- @dd($products) --}}
-                                                    @foreach ($products as $product)
+                                                    @foreach ($invoice_new->items as $product)
                                                         <tr>
-                                                            <td>{{ $product->product_name }}</td>
-                                                            <td>{{ $product->product_description }}</td>
+                                                            <td>{{ $product->classHasProduct->product->product_name }}
+                                                                <br>
+                                                                ({{ $product->classHasProduct->product->product_description }})
+                                                            </td>
+                                                            <td>{{ $product->classHasProduct->class->name }}</td>
                                                             <td>₹{{ $product->product_invoice_item_price }}</td>
                                                             <td>{{ $product->product_invoice_item_quantity }}</td>
                                                             <td>₹{{ $product->product_invoice_item_quantity * $product->product_invoice_item_price }}
@@ -139,7 +144,7 @@
                                         <!-- /.col -->
                                         <div class="col-7">
                                             <p class="lead">Amount Due
-                                                {{ date('Y-m-d', strtotime($invoice[0]->product_invoice_created_at)) }}
+                                                {{ date('Y-m-d', strtotime($invoice_new->product_invoice_created_at)) }}
                                             </p>
 
                                             <div class="table-responsive">
@@ -177,9 +182,9 @@
                                                 rel="noopener" target="_blank" class="btn btn-default"><i
                                                     class="fas fa-print"></i>
                                                 Print</a>
-                                            {{-- @dd($invoice[0]->product_invoice_id) --}}
+                                            {{-- @dd($invoice_new->product_invoice_id) --}}
                                             {{-- <a type="button" class="btn btn-success float-right"
-                                                wire:click="payment('{{ $invoice[0]->product_invoice_id }}')">₹
+                                                wire:click="payment('{{ $invoice_new->product_invoice_id }}')">₹
                                                 Payment
                                             </a> --}}
                                             {{-- @can('store_management_system_owner')
@@ -245,7 +250,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($invoice_payments as $kay => $invoice_payment)
+                                            @foreach ($invoice_new->payments as $kay => $invoice_payment)
                                                 <tr>
                                                     <td>{{ $kay + 1 }}</td>
                                                     <td>₹{{ $invoice_payment->product_payment_total_due }}</td>
@@ -253,8 +258,11 @@
                                                     <td>₹{{ $invoice_payment->product_payment_remaining_due }}</td>
                                                     <td>{{ $invoice_payment->product_payment_created_at }}
                                                     </td>
-                                                    <td>{{ $this->user($invoice_payment->product_payment_created_by) }}
-                                                    </td>
+                                                    <td>({{ $invoice_payment->creator->id }})
+                                                        {{ $invoice_payment->creator->first_name }}
+                                                        {{ $invoice_payment->creator->middle_name }}
+                                                        {{ $invoice_payment->creator->last_name }}</td>
+                                                    {{-- <td>{{ $this->user($invoice_payment->product_payment_created_by) }}</td> --}}
                                                     <td>{{ $invoice_payment->product_payment_method }}
                                                     </td>
                                                     <td>{{ $invoice_payment->product_payment_remarks }}
@@ -279,7 +287,7 @@
     <div wire:ignore.self class="modal fade" id="modal-payment" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <form wire:submit="payment('{{ $invoice[0]->product_invoice_id }}')" action="" method="post">
+                <form wire:submit="payment('{{ $invoice_new->product_invoice_id }}')" action="" method="post">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Payment</h4>
@@ -335,7 +343,8 @@
     <div wire:ignore.self class="modal fade" id="modal-discount" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <form wire:submit="discount('{{ $invoice[0]->product_invoice_id }}')" action="" method="post">
+                <form wire:submit="discount('{{ $invoice_new->product_invoice_id }}')" action=""
+                    method="post">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Payment</h4>

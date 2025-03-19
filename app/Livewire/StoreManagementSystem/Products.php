@@ -4,7 +4,9 @@ namespace App\Livewire\StoreManagementSystem;
 
 use App\Helpers\Helper;
 use App\Livewire\Alert\Notification;
+use App\Models\Inventory\Product\ClassHasProduct;
 use App\Models\Inventory\Product\Product;
+use App\Models\Inventory\Product\ProductInvoice;
 use App\Models\StoreManagementSystem\ProductCart;
 use App\Models\User;
 use Livewire\Component;
@@ -16,7 +18,7 @@ class Products extends Component
 {
     // public $products = [];
     public $id;
-    public $products;
+    // public $products;
     public $addToCartCountProducts;
 
     public function mount($id)
@@ -27,15 +29,28 @@ class Products extends Component
     public function render()
     {
         User::findOrFail($this->id);
-        $this->products = self::classHasProducts($this->id)
-            ->whereIn(
-                'class_has_product_academic_session_id',
-                StudentAdmission::where('user_id', $this->id)
-                    ->pluck('academic_session_id')
-            );
         $this->addToCartCountProducts = Helper::addToCartCountProducts($this->id);
 
-        return view('livewire.store-management-system.products');
+        return view('livewire.store-management-system.products', [
+            'products' => self::student($this->id)
+        ]);
+    }
+
+    public function student($user_id)
+    {
+        return User::with(array(
+            'student',
+            'student.class',
+            'student.class.classHasProduct' => function ($query) use ($user_id) {
+                $query->where('class_has_product_academic_session_id', User::with('student')
+                    ->find($user_id)->student->academic_session_id)
+                    ->whereNotIn('class_has_product_id', User::with('cart')
+                        ->find($user_id)->cart->pluck('product_cart_class_has_product_id'))
+                ;
+            },
+            'student.class.classHasProduct.product',
+        ))
+            ->find($user_id);
     }
 
     public function classHasProducts($user_id)
@@ -72,7 +87,6 @@ class Products extends Component
             ->select('products.*', 'chp.*')
             ->get();
 
-        // dd($data);
         return $data;
     }
 
@@ -85,7 +99,7 @@ class Products extends Component
         if ($product_quantity == 1) {
             ProductCart::create([
                 'product_cart_buyer_id' => $user_id,
-                'product_cart_product_id' => $product_id,
+                'product_cart_class_has_product_id' => $product_id,
                 'product_cart_quantity' => $product_quantity
             ]);
             Notification::alert($this, 'success', 'Success!', 'Successfully added!');

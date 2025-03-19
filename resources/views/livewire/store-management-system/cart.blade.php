@@ -56,32 +56,33 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($products as $key => $product)
+                                                {{-- @dd($products) --}}
+                                                @foreach ($products as $key => $item)
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
                                                         <td><a
-                                                                href="pages/examples/invoice.html">{{ $product->product_id }}</a>
+                                                                href="pages/examples/invoice.html">{{ $item->classHasProduct->class_has_product_id }}</a>
                                                         </td>
-                                                        <td>{{ $product->product_name }}</td>
-                                                        <td>₹{{ $product->class_has_product_price }}</td>
+                                                        <td>{{ $item->classHasProduct->product->product_name }}</td>
+                                                        <td>₹{{ $item->classHasProduct->class_has_product_price }}</td>
                                                         <td>
                                                             <a class="btn bg-warning btn-sm"
-                                                                wire:click="addToCartDecrease({{ $id }}, '{{ $product->product_cart_product_id }}')">
+                                                                wire:click="addToCartDecrease({{ $id }}, '{{ $item->product_cart_product_id }}')">
                                                                 -
                                                             </a>
                                                         </td>
                                                         <td class="text-center">
-                                                            {{ $product->product_cart_quantity }}
+                                                            {{ $item->product_cart_quantity }}
                                                         </td>
                                                         <td class="text-center">
                                                             <a class="btn btn-success btn-sm"
-                                                                wire:click="addToCartIncrease({{ $id }}, '{{ $product->product_cart_product_id }}')">
+                                                                wire:click="addToCartIncrease({{ $id }}, '{{ $item->product_cart_product_id }}')">
                                                                 +
                                                             </a>
                                                         </td>
                                                         <td>
                                                             <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                                                ₹{{ $product->class_has_product_price * $product->product_cart_quantity }}
+                                                                ₹{{ $item->classHasProduct->class_has_product_price * $item->product_cart_quantity }}
                                                             </div>
                                                         </td>
                                                     </tr>

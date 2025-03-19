@@ -8,6 +8,7 @@ use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\ProductInvoice;
 use App\Models\Inventory\Product\ProductInvoiceItem;
 use App\Models\StudentAdmission;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Livewire\Component;
 
 class Cart extends Component
@@ -24,12 +25,13 @@ class Cart extends Component
         return view(
             'livewire.store-management-system.cart',
             [
-                'products' => self::cartUserHasProducts($this->id)
-                    ->whereIn(
-                        'class_has_product_academic_session_id',
-                        StudentAdmission::where('user_id', $this->id)
-                            ->pluck('academic_session_id')
-                    ),
+                'products' => self::cart($this->id),
+                // 'products' => self::cartUserHasProducts($this->id)
+                //     ->whereIn(
+                //         'class_has_product_academic_session_id',
+                //         StudentAdmission::where('user_id', $this->id)
+                //             ->pluck('academic_session_id')
+                //     ),
                 'total' => self::cartSubTotal($this->id)
             ]
         );
@@ -94,18 +96,26 @@ class Cart extends Component
 
     public function createInvoice($user_id, $discount = 0)
     {
-        if (!self::cartUserHasProducts($user_id)->count() > 0) {
+        if (!self::cart($user_id)->count() > 0) {
             exit();
         }
 
         $invoiceSubTotal = self::cartSubTotal($user_id);
         $productInvoice = self::productInvoiceCreate($user_id, $invoiceSubTotal, $discount);
 
-        foreach (self::cartUserHasProducts($user_id) as $product) {
+        // dd(self::cartUserHasProducts($user_id));
+        // dd($productInvoice);
+
+        // foreach (self::cartUserHasProducts($user_id) as $product) {
+        //     self::productInvoiceItemCreate($productInvoice, $product);
+        // }
+
+        foreach (self::cart($user_id) as $product) {
             self::productInvoiceItemCreate($productInvoice, $product);
         }
 
         self::cartClear($user_id);
+
         Notification::alert($this, 'success', 'Success!', 'Invoice successfully created!');
         $this->redirect(route('store-management-system.invoice', [$this->id, $productInvoice->product_invoice_id]), navigate: true);
     }
@@ -130,17 +140,19 @@ class Cart extends Component
 
     public function cartSubTotal($user_id)
     {
-        $data = self::cartUserHasProducts($user_id)
-            ->whereIn(
-                'class_has_product_academic_session_id',
-                StudentAdmission::where('user_id', $this->id)
-                    ->pluck('academic_session_id')
-            );
+        // $data = self::cartUserHasProducts($user_id)
+        //     ->whereIn(
+        //         'class_has_product_academic_session_id',
+        //         StudentAdmission::where('user_id', $this->id)
+        //             ->pluck('academic_session_id')
+        //     );
+
+        $data = self::cart($user_id);
 
         $total = 0;
 
         foreach ($data as $d) {
-            $total += $d->class_has_product_price * $d->product_cart_quantity;
+            $total += $d->classHasProduct->class_has_product_price * $d->product_cart_quantity;
         }
         return $total;
     }
@@ -159,15 +171,20 @@ class Cart extends Component
         ]);
     }
 
-    public function productInvoiceItemCreate($invoice, $product)
+    public function productInvoiceItemCreate($invoice, $cart_item)
     {
         return ProductInvoiceItem::create([
             'product_invoice_item_product_invoice_id' => $invoice->product_invoice_id,
-            'product_invoice_item_class_has_product_id' => $product->class_has_product_id,
-            'product_invoice_item_price' => $product->class_has_product_price,
-            'product_invoice_item_quantity' => $product->product_cart_quantity,
+            'product_invoice_item_class_has_product_id' => $cart_item->classHasProduct->class_has_product_id,
+            'product_invoice_item_price' => $cart_item->classHasProduct->class_has_product_price,
+            'product_invoice_item_quantity' => $cart_item->product_cart_quantity,
             'product_invoice_item_created_by' => Auth()->user()->id,
             'product_invoice_item_updated_by' => Auth()->user()->id,
         ]);
+    }
+
+    public function cart($user_id)
+    {
+        return ProductCart::with('classHasProduct', 'classHasProduct.product')->where('product_cart_buyer_id', $user_id)->get();
     }
 }

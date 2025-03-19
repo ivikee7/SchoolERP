@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Inventory\Product\ProductInvoice;
+use App\Models\StoreManagementSystem\ProductCart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -69,4 +73,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(StudentAdmission::class, 'user_id', 'id');
+    }
+
+    public function cart(): HasMany
+    {
+        return $this->hasMany(ProductCart::class, 'product_cart_buyer_id', 'id');
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(ProductInvoice::class, 'product_invoice_buyer_id', 'id');
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StudentAdmission extends Model
@@ -25,4 +27,14 @@ class StudentAdmission extends Model
         'created_by_id',
         'updated_by_id',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(StudentClass::class, 'current_class_id', 'id');
+    }
 }

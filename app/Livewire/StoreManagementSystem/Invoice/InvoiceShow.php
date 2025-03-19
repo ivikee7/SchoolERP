@@ -36,21 +36,19 @@ class InvoiceShow extends Component
         // $this->remaining_payment = self::invoiceRemaining($this->product_invoice_id);
 
         return view('livewire.store-management-system.invoice.invoice-show', [
-            'invoice' => Helper::productInvoiceGet($this->product_invoice_id),
-            'products' => self::productInvoiceItemsGet($this->product_invoice_id)
-                ->whereIn(
-                    'class_has_product_academic_session_id',
-                    StudentAdmission::where('user_id', $this->id)
-                        ->pluck('academic_session_id')
-                ),
-            'user' => User::findOrFail(function ($query) {
-                $query->from('product_invoices')->select('product_invoice_buyer_id')
-                    ->where('product_invoice_id', $this->product_invoice_id)
-                    ->get();
-            }),
-            'invoice_payments' => ProductPayment::where('product_payment_product_invoice_id', $this->product_invoice_id)
-                ->get(),
+            'invoice_new' => self::invoice($this->product_invoice_id),
         ]);
+    }
+
+    public static function invoice($product_invoice_id)
+    {
+        return ProductInvoice::with('items', 'payments', 'payments.creator', 'payments.updater', 'student', 'items.classHasProduct.class','items.classHasProduct', 'items.classHasProduct.product', 'creator', 'updater')->get()->find($product_invoice_id);
+    }
+
+    public static function productInvoice($product_invoice_id)
+    {
+        return ProductInvoice::where('product_invoice_id', $product_invoice_id)
+            ->get();
     }
 
     public function user($user_id)

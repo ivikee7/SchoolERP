@@ -2,9 +2,13 @@
 
 namespace App\Models\Inventory\Product;
 
+use App\Models\StoreManagementSystem\ProductPayment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductInvoice extends Model
 {
@@ -25,4 +29,29 @@ class ProductInvoice extends Model
 
     const CREATED_AT = 'product_invoice_created_at';
     const UPDATED_AT = 'product_invoice_updated_at';
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(ProductInvoiceItem::class, 'product_invoice_item_product_invoice_id', 'product_invoice_id');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(ProductPayment::class, 'product_payment_product_invoice_id', 'product_invoice_id');
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'product_invoice_buyer_id', 'id');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'product_invoice_created_by', 'id');
+    }
+
+    public function updater(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'product_invoice_updated_by', 'id');
+    }
 }

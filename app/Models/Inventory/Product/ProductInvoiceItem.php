@@ -5,6 +5,7 @@ namespace App\Models\Inventory\Product;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductInvoiceItem extends Model
 {
@@ -23,4 +24,9 @@ class ProductInvoiceItem extends Model
 
     const CREATED_AT = 'product_invoice_item_created_at';
     const UPDATED_AT = 'product_invoice_item_updated_at';
+
+    public function classHasProduct(): BelongsTo
+    {
+        return $this->belongsTo(ClassHasProduct::class, 'product_invoice_item_class_has_product_id', 'class_has_product_id');
+    }
 }

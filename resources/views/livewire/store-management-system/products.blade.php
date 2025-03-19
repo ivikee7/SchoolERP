@@ -42,7 +42,8 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                @foreach ($products as $product)
+                                {{-- @dd($products) --}}
+                                @foreach ($products->student->class->classHasProduct as $item)
                                     <div class="col col-md-6 col-xl-4">
                                         <div class="info-box">
                                             <span class="info-box-icon bg-info">
@@ -51,13 +52,13 @@
                                             </span>
                                             <div class="info-box-content">
                                                 <span class="info-box-text">
-                                                    {{ $product->product_name }}
+                                                    {{ $item->product_name }}
                                                 </span>
                                                 <span class="info-box-text">
-                                                    ({{ $product->product_description }})
+                                                    ({{ $item->product_description }})
                                                 </span>
                                                 <span class="info-box-text">
-                                                    ({{ $product->class_has_product_academic_session_id }})
+                                                    ({{ $item->class_has_product_academic_session_id }})
                                                 </span>
                                                 <div class="progress">
                                                     {{-- <div class="progress-bar bg-info" style="width: 70%"></div> --}}
@@ -65,11 +66,11 @@
                                                 <span class="progress-description">
                                                     <div class="row">
                                                         <span class="col col-6">Price
-                                                            ₹{{ $product->class_has_product_price }}</span>
+                                                            ₹{{ $item->class_has_product_price }}</span>
                                                         <div class="col col-6">
                                                             <div class="d-flex flex-row-reverse">
                                                                 <input
-                                                                    wire:click='addToCart({{ $id }}, "{{ $product->product_id }}")'
+                                                                    wire:click='addToCart({{ $id }}, "{{ $item->class_has_product_id }}")'
                                                                     type="button" class="btn btn-primary btn-sm"
                                                                     name="adToCart" value="Add To Cart" />
                                                             </div>

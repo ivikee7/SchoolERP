@@ -11,7 +11,7 @@
                                 {{-- <i class="fas fa-globe"></i> --}}
                                 India Book Center
                                 <small class="float-right">Date:
-                                    {{ date('Y-M-d h:i:s', strtotime($invoice[0]->product_invoice_created_at)) }}</small>
+                                    {{ date('Y-M-d h:i:s', strtotime($invoice_new->product_invoice_created_at)) }}</small>
                             </h4>
                         </div>
                         <!-- /.col -->
@@ -22,15 +22,14 @@
                         <div class="col-sm-9 invoice-col">
                             To
                             <address>
-                                <strong>{{ $user->first_name }} {{ $user->middle_name }}
-                                    {{ $user->last_name }}</strong><br>
-                                <strong>{{ $user->class_name }}</strong><br>
-                                <span class="text-wrap">{{ $user->address_line1 }}</span><br>
+                                <strong>{{ $invoice_new->student->first_name }} {{ $invoice_new->student->middle_name }}
+                                    {{ $invoice_new->student->last_name }}</strong><br>
+                                <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                             </address>
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-3 invoice-col">
-                            <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
+                            <b>Invoice {{ $invoice_new->product_invoice_id }}</b>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -43,21 +42,25 @@
                                 <thead>
                                     <tr>
                                         <th>Product</th>
+                                        <th>Class</th>
                                         <th>Price</th>
                                         <th>Qty</th>
                                         <th>Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $product)
+                                    @foreach ($invoice_new->items as $item)
                                         <tr>
-                                            <td>{{ $product->product_name }} @if ($product->product_description)
-                                                    ({{ $product->product_description }})
+                                            <td>{{ $item->classHasProduct->product->product_name }}
+                                                @if ($item->classHasProduct->product->product_description)
+                                                <br>
+                                                    ({{ $item->classHasProduct->product->product_description }})
                                                 @endif
                                             </td>
-                                            <td>₹{{ $product->product_invoice_item_price }}</td>
-                                            <td>{{ $product->product_invoice_item_quantity }}</td>
-                                            <td>₹{{ $product->product_invoice_item_quantity * $product->product_invoice_item_price }}
+                                            <td>{{ $item->classHasProduct->class->name }}</td>
+                                            <td>₹{{ $item->product_invoice_item_price }}</td>
+                                            <td>{{ $item->product_invoice_item_quantity }}</td>
+                                            <td>₹{{ $item->product_invoice_item_quantity * $item->product_invoice_item_price }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -101,19 +104,19 @@
                                         <th>Shipping:</th>
                                         <td>$5.80</td>
                                     </tr> --}}
-                                    @if ($product_invoice->product_invoice_discount > 0)
+                                    @if ($invoice_new->product_invoice_discount > 0)
                                         <tr>
                                             <th>Discount:</th>
-                                            <td>₹{{ $product_invoice->product_invoice_discount }}</td>
+                                            <td>₹{{ $invoice_new->product_invoice_discount }}</td>
                                         </tr>
                                     @endif
                                     <tr>
                                         <th>Total:</th>
-                                        <td>₹{{ $product_invoice->product_invoice_gross_total }}</td>
+                                        <td>₹{{ $invoice_new->product_invoice_gross_total }}</td>
                                     </tr>
                                     <tr>
                                         <th>Due:</th>
-                                        <td>₹{{ $product_invoice->product_invoice_gross_total - $this->productInvoicePaidAmount($product_invoice->product_invoice_id) }}
+                                        <td>₹{{ $invoice_new->product_invoice_gross_total - $this->productInvoicePaidAmount($invoice_new->product_invoice_id) }}
                                         </td>
                                     </tr>
                                 </table>
@@ -134,7 +137,7 @@
                                 {{-- <i class="fas fa-globe"></i> --}}
                                 India Book Center
                                 <small class="float-right">Date:
-                                    {{ date('Y-M-d h:i:s', strtotime($invoice[0]->product_invoice_created_at)) }}</small>
+                                    {{ date('Y-M-d h:i:s', strtotime($invoice_new->product_invoice_created_at)) }}</small>
                             </h4>
                         </div>
                         <!-- /.col -->
@@ -145,15 +148,15 @@
                         <div class="col-sm-9 invoice-col">
                             To
                             <address>
-                                <strong>{{ $user->first_name }} {{ $user->middle_name }}
-                                    {{ $user->last_name }}</strong><br>
-                                <strong>{{ $user->class_name }}</strong><br>
-                                <span class="text-wrap">{{ $user->address_line1 }}</span><br>
+                                <strong>{{ $invoice_new->student->first_name }}
+                                    {{ $invoice_new->student->middle_name }}
+                                    {{ $invoice_new->student->last_name }}</strong><br>
+                                <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                             </address>
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-3 invoice-col">
-                            <b>Invoice {{ $invoice[0]->product_invoice_id }}</b>
+                            <b>Invoice {{ $invoice_new->product_invoice_id }}</b>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -166,21 +169,25 @@
                                 <thead>
                                     <tr>
                                         <th>Product</th>
+                                        <th>Class</th>
                                         <th>Price</th>
                                         <th>Qty</th>
                                         <th>Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $product)
+                                    @foreach ($invoice_new->items as $item)
                                         <tr>
-                                            <td>{{ $product->product_name }} @if ($product->product_description)
-                                                    ({{ $product->product_description }})
+                                            <td>{{ $item->classHasProduct->product->product_name }}
+                                                @if ($item->classHasProduct->product->product_description)
+                                                <br>
+                                                    ({{ $item->classHasProduct->product->product_description }})
                                                 @endif
                                             </td>
-                                            <td>₹{{ $product->product_invoice_item_price }}</td>
-                                            <td>{{ $product->product_invoice_item_quantity }}</td>
-                                            <td>₹{{ $product->product_invoice_item_quantity * $product->product_invoice_item_price }}
+                                            <td>{{ $item->classHasProduct->class->name }}</td>
+                                            <td>₹{{ $item->product_invoice_item_price }}</td>
+                                            <td>{{ $item->product_invoice_item_quantity }}</td>
+                                            <td>₹{{ $item->product_invoice_item_quantity * $item->product_invoice_item_price }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -224,19 +231,19 @@
                                         <th>Shipping:</th>
                                         <td>$5.80</td>
                                     </tr> --}}
-                                    @if ($product_invoice->product_invoice_discount > 0)
+                                    @if ($invoice_new->product_invoice_discount > 0)
                                         <tr>
                                             <th>Discount:</th>
-                                            <td>₹{{ $product_invoice->product_invoice_discount }}</td>
+                                            <td>₹{{ $invoice_new->product_invoice_discount }}</td>
                                         </tr>
                                     @endif
                                     <tr>
                                         <th>Total:</th>
-                                        <td>₹{{ $product_invoice->product_invoice_gross_total }}</td>
+                                        <td>₹{{ $invoice_new->product_invoice_gross_total }}</td>
                                     </tr>
                                     <tr>
                                         <th>Due:</th>
-                                        <td>₹{{ $product_invoice->product_invoice_gross_total - $this->productInvoicePaidAmount($product_invoice->product_invoice_id) }}
+                                        <td>₹{{ $invoice_new->product_invoice_gross_total - $this->productInvoicePaidAmount($invoice_new->product_invoice_id) }}
                                         </td>
                                     </tr>
                                 </table>
