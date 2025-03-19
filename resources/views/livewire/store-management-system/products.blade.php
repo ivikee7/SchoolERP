@@ -44,6 +44,7 @@
                             <div class="row">
                                 {{-- @dd($products) --}}
                                 @foreach ($products->student->class->classHasProduct as $item)
+                                {{-- @dd($item) --}}
                                     <div class="col col-md-6 col-xl-4">
                                         <div class="info-box">
                                             <span class="info-box-icon bg-info">
@@ -52,13 +53,13 @@
                                             </span>
                                             <div class="info-box-content">
                                                 <span class="info-box-text">
-                                                    {{ $item->product_name }}
+                                                    {{ $item->product->product_name }}
                                                 </span>
                                                 <span class="info-box-text">
-                                                    ({{ $item->product_description }})
+                                                    ({{ $item->product->product_description }})
                                                 </span>
                                                 <span class="info-box-text">
-                                                    ({{ $item->class_has_product_academic_session_id }})
+                                                    ({{ $item->session->name }})
                                                 </span>
                                                 <div class="progress">
                                                     {{-- <div class="progress-bar bg-info" style="width: 70%"></div> --}}

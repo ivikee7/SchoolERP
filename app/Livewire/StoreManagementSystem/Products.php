@@ -49,6 +49,7 @@ class Products extends Component
                 ;
             },
             'student.class.classHasProduct.product',
+            'student.class.classHasProduct.session'
         ))
             ->find($user_id);
     }

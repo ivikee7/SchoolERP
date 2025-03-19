@@ -2,6 +2,7 @@
 
 namespace App\Models\Inventory\Product;
 
+use App\Models\AcademicSession;
 use App\Models\StoreManagementSystem\ProductCart;
 use App\Models\StudentClass;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -36,6 +37,11 @@ class ClassHasProduct extends Model
     public function class(): BelongsTo
     {
         return $this->belongsTo(StudentClass::class, 'class_has_product_class_id', 'id');
+    }
+
+    public function session(): BelongsTo
+    {
+        return $this->belongsTo(AcademicSession::class, 'class_has_product_academic_session_id', 'id');
     }
 
     public function cart(): HasMany
