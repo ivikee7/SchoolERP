@@ -76,10 +76,11 @@
                                 <table class="table table-sm table-bordered table-striped display" style="width: 100%">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Buyer</th>
+                                            <th>TID</th>
+                                            <th>StuID</th>
+                                            <th>Student</th>
                                             <th>Invoice</th>
-                                            <th>Total</th>
+                                            <th>Rem.</th>
                                             <th>Received</th>
                                             <th>Due</th>
                                             <th>Method</th>
@@ -92,15 +93,24 @@
                                         @foreach ($transactions as $transaction)
                                             <tr>
                                                 <td>{{ $transaction->product_payment_id }}</td>
-                                                <td>{{ $this->user($transaction->product_invoice_buyer_id) }}</td>
-                                                <td>{{ $transaction->product_payment_product_invoice_id }}</td>
+                                                <td>{{ $transaction->invoice->student->id }}</td>
+                                                <td>
+                                                    {{ $transaction->invoice->student->first_name }}
+                                                    {{ $transaction->invoice->student->middel_name }}
+                                                    {{ $transaction->invoice->student->last_name }}
+                                                </td>
+                                                <td>{{ $transaction->invoice->product_invoice_id }}</td>
                                                 <td>{{ $transaction->product_payment_total_due }}</td>
                                                 <td>{{ $transaction->product_payment_payment_received }}</td>
                                                 <td>{{ $transaction->product_payment_remaining_due }}</td>
                                                 <td>{{ $transaction->product_payment_method }}</td>
                                                 <td>{{ $transaction->product_payment_remarks }}</td>
                                                 <td>
-                                                    {{ $this->user($transaction->product_payment_created_by) }}
+                                                    ({{ $transaction->creator->id }})
+                                                    {{ $transaction->creator->first_name }}
+                                                    {{ $transaction->creator->middle_name }}
+                                                    {{ $transaction->creator->last_name }}
+                                                    {{-- {{ $this->user($transaction->product_payment_created_by) }} --}}
                                                 </td>
                                                 <td>
                                                     {{ $transaction->product_payment_created_at }}

@@ -19,31 +19,31 @@ class Transaction extends Component
     public function render()
     {
         return view('livewire.store-management-system.invoice.transaction', [
-            'transactions' => ProductPayment::leftJoin(
-                'product_invoices as pi',
-                'product_payments.product_payment_product_invoice_id',
-                'pi.product_invoice_id'
-            )
-                ->leftJoin(
-                    'product_invoice_items as pii',
-                    'pi.product_invoice_id',
-                    'pii.product_invoice_item_product_invoice_id'
-                )
-                ->leftJoin(
-                    'class_has_products as chp',
-                    'pii.product_invoice_item_class_has_product_id',
-                    'chp.class_has_product_id'
-                )
-                ->where('chp.class_has_product_academic_session_id', $this->acadamic_session)
-                ->where(function ($q) {
-                    if (!empty($this->search)) {
-                        $q->where('product_payment_product_invoice_id', $this->search);
-                    }
-                })
-                ->select('product_payments.*', 'pi.*')
-                ->orderBy('product_payment_id', 'desc')
-                ->paginate(50000),
-
+            // 'transactions' => ProductPayment::leftJoin(
+            //     'product_invoices as pi',
+            //     'product_payments.product_payment_product_invoice_id',
+            //     'pi.product_invoice_id'
+            // )
+            //     ->leftJoin(
+            //         'product_invoice_items as pii',
+            //         'pi.product_invoice_id',
+            //         'pii.product_invoice_item_product_invoice_id'
+            //     )
+            //     ->leftJoin(
+            //         'class_has_products as chp',
+            //         'pii.product_invoice_item_class_has_product_id',
+            //         'chp.class_has_product_id'
+            //     )
+            //     ->where('chp.class_has_product_academic_session_id', $this->acadamic_session)
+            //     ->where(function ($q) {
+            //         if (!empty($this->search)) {
+            //             $q->where('product_payment_product_invoice_id', $this->search);
+            //         }
+            //     })
+            //     ->select('product_payments.*', 'pi.*')
+            //     ->orderBy('product_payment_id', 'desc')
+            //     ->paginate(50000),
+            'transactions' => ProductPayment::with('invoice', 'invoice.student')->paginate(50000),
             'transactions_total' => self::total(),
             'acadamic_sessions' => self::acadamic_sessions()
         ]);

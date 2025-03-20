@@ -31,7 +31,7 @@ class ProductPayment extends Model
 
     public function invoice(): BelongsTo
     {
-        return $this->belongsTo(ProductInvoice::class, 'product_invoice_id', 'product_payment_product_invoice_id');
+        return $this->belongsTo(ProductInvoice::class, 'product_payment_product_invoice_id', 'product_invoice_id');
     }
 
     public function creator(): BelongsTo
