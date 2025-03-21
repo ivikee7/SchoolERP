@@ -74,11 +74,10 @@
                                         style="width: 100%">
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
                                                 <th>Invoice</th>
-                                                <th>Buyer Name</th>
+                                                <th>StuId</th>
+                                                <th>Student</th>
                                                 <th>Class</th>
-                                                <th>Current Section</th>
                                                 <th>SubTotal</th>
                                                 <th>Discount</th>
                                                 <th>Total</th>
@@ -91,7 +90,48 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+
+                                            {{-- @dd($invoices) --}}
+
+                                            {{-- new --}}
                                             @foreach ($invoices as $key => $invoice)
+                                                {{-- @dd($invoice) --}}
+                                                <tr>
+                                                    <td>{{ $invoice->product_invoice_id }}</td>
+                                                    <td>{{ $invoice->product_invoice_buyer_id }}</td>
+                                                    <td>{{ $invoice->student->first_name . ' ' . $invoice->student->middle_name . ' ' . $invoice->student->last_name }}
+                                                    </td>
+                                                    <td>{{ $invoice->class->name }}
+                                                    </td>
+                                                    <td>{{ $invoice->product_invoice_subtotal }}</td>
+                                                    <td>{{ $invoice->product_invoice_discount }}</td>
+                                                    <td>{{ $invoice->product_invoice_gross_total }}</td>
+                                                    <td>{{ $invoice->product_invoice_gross_total - $invoice->product_invoice_due }}
+                                                    </td>
+                                                    <td>{{ $invoice->product_invoice_due }}</td>
+                                                    <td>{{ $this->user($invoice->product_invoice_discount_by) }}</td>
+                                                    <td>{{ $invoice->product_invoice_discount_at }}</td>
+                                                    <td>
+                                                        ({{ $invoice->creator->id }})
+                                                        {{ $invoice->creator->first_name }}
+                                                        {{ $invoice->creator->middle_name }}
+                                                        {{ $invoice->creator->last_name }}
+                                                        ({{ $invoice->product_invoice_created_at }})
+                                                    </td>
+                                                    <td><a wire:navigate class="btn btn-primary btn-xs"
+                                                            href="{{ route('store-management-system.invoice', [$invoice->student->id, $invoice->product_invoice_id]) }}">Invoice</a>
+                                                        @if (!$this->paymentNotReceived($invoice->product_invoice_id))
+                                                            <button
+                                                                onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
+                                                                wire:click="destroy({{ $invoice->product_invoice_id }})"
+                                                                class="btn btn-warning btn-xs">Delete!</button>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            {{-- new end --}}
+
+                                            {{-- @foreach ($invoices as $key => $invoice)
                                                 <tr>
                                                     <td>{{ $invoice->product_invoice_buyer_id }}</td>
                                                     <td>{{ $invoice->product_invoice_id }}</td>
@@ -120,11 +160,10 @@
                                                         @endif
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @endforeach --}}
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -177,7 +216,43 @@
                                 </div>
                             </div>
                             <!-- /.card-header -->
+
+                            {{-- new start --}}
                             <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-striped display"
+                                        style="width: 100%">
+                                        <tr>
+                                            <th>Total</th>
+                                            <th>Discount</th>
+                                            <th>Received</th>
+                                            <th>Due</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ $total['amount_total'] }}</td>
+                                            <td>{{ $total['amount_discount'] }}</td>
+                                            <td>{{ $total['amount_received'] }}</td>
+                                            <td>{{ $total['amount_due'] }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-striped display"
+                                        style="width: 100%">
+                                        <tr>
+                                            <th>Cash</th>
+                                            <th>Online</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ $total['amount_cash'] }}</td>
+                                            <td>{{ $total['amount_online'] }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            {{-- new end --}}
+
+                            {{-- <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-sm table-bordered table-striped display"
                                         style="width: 100%">
@@ -198,7 +273,7 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- /.card-body -->
                         </div>
                         <!-- /.card -->

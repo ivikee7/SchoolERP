@@ -8,6 +8,7 @@ use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\ProductInvoice;
 use App\Models\Inventory\Product\ProductInvoiceItem;
 use App\Models\StudentAdmission;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Livewire\Component;
 
@@ -161,6 +162,8 @@ class Cart extends Component
     {
         return ProductInvoice::create([
             'product_invoice_buyer_id' => $user_id,
+            'product_invoice_academic_session_id' => User::with('student')->find($user_id)->student->academic_session_id,
+            'product_invoice_class_id' => User::with('student')->find($user_id)->student->current_class_id,
             'product_invoice_subtotal' => $sub_total,
             'product_invoice_discount' => $discounted_amount,
             'product_invoice_gross_total' => ($sub_total - $discounted_amount),

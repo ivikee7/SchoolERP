@@ -27,6 +27,10 @@
                             <div class="card-title float-right">
                                 <div class="row">
                                     <div class="form-group pr-1">
+                                        <input type="date" class="form-control form-control-sm" name="date"
+                                            wire:model.live="date">
+                                    </div>
+                                    <div class="form-group pr-1">
                                         <select class="form-control form-control-sm" wire:model.live="acadamic_session">
                                             <option @selected(true) @disabled(true)>select
                                             </option>
@@ -124,6 +128,7 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
+                                            <th></th>
                                             <th>{{ $transactions->sum('product_payment_payment_received') }}</th>
                                             <th></th>
                                             <th></th>
@@ -168,7 +173,53 @@
                             </div>
                         </div>
                         <!-- /.card-header -->
+
+                        {{-- new start --}}
                         <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered table-striped display" style="width: 100%">
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>Discount</th>
+                                        <th>Received</th>
+                                        <th>Due</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $total['amount_total'] }}</td>
+                                        <td>{{ $total['amount_discount'] }}</td>
+                                        <td>{{ $total['amount_received'] }}</td>
+                                        <td>{{ $total['amount_due'] }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered table-striped display" style="width: 100%">
+                                    <tr>
+                                        <th>Cash</th>
+                                        <th>Online</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $total['amount_cash'] }}
+                                            @if ($date)
+                                                <br>
+                                                ({{ $date }})
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $total['amount_online'] }}
+                                            @if ($date)
+                                                <br>
+                                                ({{ $date }})
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- new end --}}
+
+                        {{-- <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-sm table-bordered table-striped display" style="width: 100%">
                                     <tr>
@@ -185,7 +236,7 @@
                                     </tr>
                                 </table>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->

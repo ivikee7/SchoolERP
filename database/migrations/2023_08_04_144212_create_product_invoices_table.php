@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('product_invoices', function (Blueprint $table) {
             $table->id('product_invoice_id');
             $table->bigInteger('product_invoice_buyer_id')->nullable()->unsigned();
+            $table->bigInteger('product_invoice_academic_session_id')->nullable()->unsigned();
+            $table->bigInteger('product_invoice_class_id')->nullable()->unsigned();
             $table->double('product_invoice_subtotal', 10, 2)->nullable();
             $table->double('product_invoice_discount', 10, 2)->nullable();
             $table->bigInteger('product_invoice_discount_by')->nullable()->unsigned();

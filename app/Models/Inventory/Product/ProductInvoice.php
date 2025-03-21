@@ -3,6 +3,7 @@
 namespace App\Models\Inventory\Product;
 
 use App\Models\StoreManagementSystem\ProductPayment;
+use App\Models\StudentClass;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,8 @@ class ProductInvoice extends Model
 
     protected $fillable = [
         'product_invoice_buyer_id',
+        'product_invoice_academic_session_id',
+        'product_invoice_class_id',
         'product_invoice_subtotal',
         'product_invoice_discount',
         'product_invoice_gross_total',
@@ -53,5 +56,15 @@ class ProductInvoice extends Model
     public function updater(): BelongsTo
     {
         return $this->belongsTo(User::class, 'product_invoice_updated_by', 'id');
+    }
+
+    public function discountBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'product_invoice_discount_by', 'id');
+    }
+
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(StudentClass::class, 'product_invoice_class_id', 'id');
     }
 }

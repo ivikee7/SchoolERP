@@ -15,6 +15,7 @@ class Transaction extends Component
 
     public $search = '';
     public $acadamic_session = '';
+    public $date = '';
 
     public function render()
     {
@@ -43,10 +44,59 @@ class Transaction extends Component
             //     ->select('product_payments.*', 'pi.*')
             //     ->orderBy('product_payment_id', 'desc')
             //     ->paginate(50000),
-            'transactions' => ProductPayment::with('invoice', 'invoice.student')->paginate(50000),
-            'transactions_total' => self::total(),
+            'transactions' => self::transactions($this->acadamic_session, $this->date),
+            'transactions_total' => self::total_old(),
+            'total' => self::total($this->acadamic_session, $this->date),
             'acadamic_sessions' => self::acadamic_sessions()
         ]);
+    }
+
+    public function transactions($acadamic_session_id, $date)
+    {
+        return ProductPayment::with(array(
+            'invoice',
+            'invoice.student'
+        ))
+            ->when(!empty($date), function ($query) use ($date) {
+                $query->whereDate('product_payment_created_at', $date);
+            })
+            ->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+            })
+            ->orderBy('product_payment_id', 'desc')
+            ->paginate(100);
+    }
+
+    public function total($acadamic_session_id, $date)
+    {
+        return array(
+            "amount_total" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
+                ->sum('product_invoice_subtotal'),
+            "amount_discount" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
+                ->sum('product_invoice_discount'),
+            "amount_received" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+            })
+                ->sum('product_payment_payment_received'),
+            "amount_due" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
+                ->sum('product_invoice_due'),
+            "amount_cash" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+            })
+                ->when(!empty($date), function ($query) use ($date) {
+                    $query->whereDate('product_payment_created_at', $date);
+                })
+                ->where('product_payment_method', 'Cash')
+                ->sum('product_payment_payment_received'),
+            "amount_online" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+            })
+                ->when(!empty($date), function ($query) use ($date) {
+                    $query->whereDate('product_payment_created_at', $date);
+                })
+                ->where('product_payment_method', 'Online')
+                ->sum('product_payment_payment_received')
+        );
     }
 
     public function updatingSearch()
@@ -60,7 +110,7 @@ class Transaction extends Component
         return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
     }
 
-    public function total()
+    public function total_old()
     {
         if (empty($this->acadamic_session)) {
             return array(
