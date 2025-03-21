@@ -84,8 +84,7 @@
                                                 <th>Paid</th>
                                                 <th>Due</th>
                                                 <th>Discount By</th>
-                                                <th>Discount At</th>
-                                                <th>Created At</th>
+                                                <th>Created By</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -109,8 +108,15 @@
                                                     <td>{{ $invoice->product_invoice_gross_total - $invoice->product_invoice_due }}
                                                     </td>
                                                     <td>{{ $invoice->product_invoice_due }}</td>
-                                                    <td>{{ $this->user($invoice->product_invoice_discount_by) }}</td>
-                                                    <td>{{ $invoice->product_invoice_discount_at }}</td>
+                                                    <td>
+                                                        @if ($invoice->product_invoice_discount_by)
+                                                            ({{ $invoice->discountBy->id }})
+                                                            {{ $invoice->discountBy->first_name }}
+                                                            {{ $invoice->discountBy->middle_name }}
+                                                            {{ $invoice->discountBy->last_name }}
+                                                            ({{ $invoice->product_invoice_discount_at }})
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         ({{ $invoice->creator->id }})
                                                         {{ $invoice->creator->first_name }}
