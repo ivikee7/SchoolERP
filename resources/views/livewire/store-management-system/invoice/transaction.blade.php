@@ -84,6 +84,7 @@
                                             <th>StuID</th>
                                             <th>Student</th>
                                             <th>Invoice</th>
+                                            <th>Total</th>
                                             <th>Rem.</th>
                                             <th>Received</th>
                                             <th>Due</th>
@@ -104,6 +105,7 @@
                                                     {{ $transaction->invoice->student->last_name }}
                                                 </td>
                                                 <td>{{ $transaction->invoice->product_invoice_id }}</td>
+                                                <td>{{ $transaction->invoice->product_invoice_subtotal }}</td>
                                                 <td>{{ $transaction->product_payment_total_due }}</td>
                                                 <td>{{ $transaction->product_payment_payment_received }}</td>
                                                 <td>{{ $transaction->product_payment_remaining_due }}</td>
@@ -124,6 +126,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
