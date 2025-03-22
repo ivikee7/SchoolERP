@@ -39,12 +39,6 @@ class Products extends Component
 
     public function student($user_id)
     {
-        // return ProductInvoiceItem::with('invoice')
-        //     ->whereHas('invoice', function ($query) use ($user_id) {
-        //         $query->where('product_invoice_buyer_id', $user_id);
-        //     })
-        //     ->pluck('product_invoice_item_id');
-
         return User::with(array(
             'student',
             'student.class',
@@ -53,11 +47,16 @@ class Products extends Component
                     ->find($user_id)->student->academic_session_id)
                     ->whereNotIn('class_has_product_id', User::with('cart')
                         ->find($user_id)->cart->pluck('product_cart_class_has_product_id'));
-                $query->whereNotIn('class_has_product_id', ProductInvoiceItem::with('invoice')
-                    ->whereHas('invoice', function ($query) use ($user_id) {
-                        $query->where('product_invoice_buyer_id', $user_id);
-                    })
-                    ->pluck('product_invoice_item_class_has_product_id'));
+                $query->whereNotIn(
+                    'class_has_product_id',
+                    ProductInvoiceItem::with('invoice')
+                        ->whereHas('invoice', function ($query) use ($user_id) {
+                            $query->where('product_invoice_buyer_id', $user_id)
+                                ->where('product_invoice_academic_session_id', User::with('student')
+                                    ->find($user_id)->student->academic_session_id);
+                        })
+                        ->pluck('product_invoice_item_class_has_product_id')
+                );
             },
             'student.class.classHasProduct.product',
             'student.class.classHasProduct.session'
