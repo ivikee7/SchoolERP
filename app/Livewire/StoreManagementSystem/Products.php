@@ -7,6 +7,7 @@ use App\Livewire\Alert\Notification;
 use App\Models\Inventory\Product\ClassHasProduct;
 use App\Models\Inventory\Product\Product;
 use App\Models\Inventory\Product\ProductInvoice;
+use App\Models\Inventory\Product\ProductInvoiceItem;
 use App\Models\StoreManagementSystem\ProductCart;
 use App\Models\User;
 use Livewire\Component;
@@ -38,6 +39,12 @@ class Products extends Component
 
     public function student($user_id)
     {
+        // return ProductInvoiceItem::with('invoice')
+        //     ->whereHas('invoice', function ($query) use ($user_id) {
+        //         $query->where('product_invoice_buyer_id', $user_id);
+        //     })
+        //     ->pluck('product_invoice_item_id');
+
         return User::with(array(
             'student',
             'student.class',
@@ -45,8 +52,12 @@ class Products extends Component
                 $query->where('class_has_product_academic_session_id', User::with('student')
                     ->find($user_id)->student->academic_session_id)
                     ->whereNotIn('class_has_product_id', User::with('cart')
-                        ->find($user_id)->cart->pluck('product_cart_class_has_product_id'))
-                ;
+                        ->find($user_id)->cart->pluck('product_cart_class_has_product_id'));
+                $query->whereNotIn('class_has_product_id', ProductInvoiceItem::with('invoice')
+                    ->whereHas('invoice', function ($query) use ($user_id) {
+                        $query->where('product_invoice_buyer_id', $user_id);
+                    })
+                    ->pluck('product_invoice_item_class_has_product_id'));
             },
             'student.class.classHasProduct.product',
             'student.class.classHasProduct.session'

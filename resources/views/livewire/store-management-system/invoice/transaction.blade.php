@@ -200,6 +200,7 @@
                                     <tr>
                                         <th>Cash</th>
                                         <th>Online</th>
+                                        <th>Total</th>
                                     </tr>
                                     <tr>
                                         <td>
@@ -211,6 +212,13 @@
                                         </td>
                                         <td>
                                             {{ $total['amount_online'] }}
+                                            @if ($date)
+                                                <br>
+                                                ({{ $date }})
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $total['amount_cash_and_online'] }}
                                             @if ($date)
                                                 <br>
                                                 ({{ $date }})

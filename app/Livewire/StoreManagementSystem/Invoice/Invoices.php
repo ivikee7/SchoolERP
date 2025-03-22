@@ -33,6 +33,11 @@ class Invoices extends Component
     {
         return ProductInvoice::with('student', 'class', 'creator')
             ->where('product_invoice_academic_session_id', $acadamic_session_id)
+            ->whereHas('student', function ($q) use ($search) {
+                if (!empty($search)) {
+                    $q->where('id', $search);
+                }
+            })
             ->orderBy('product_invoice_id', 'desc')
             ->paginate(100);
     }

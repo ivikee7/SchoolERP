@@ -29,4 +29,8 @@ class ProductInvoiceItem extends Model
     {
         return $this->belongsTo(ClassHasProduct::class, 'product_invoice_item_class_has_product_id', 'class_has_product_id');
     }
+
+    public function invoice():BelongsTo{
+        return $this->belongsTo(ProductInvoice::class, 'product_invoice_item_product_invoice_id', 'product_invoice_id');
+    }
 }
