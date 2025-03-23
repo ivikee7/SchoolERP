@@ -67,4 +67,9 @@ class ProductInvoice extends Model
     {
         return $this->belongsTo(StudentClass::class, 'product_invoice_class_id', 'id');
     }
+
+    public function session(): BelongsTo
+    {
+        return $this->belongsTo(StudentClass::class, 'product_invoice_academic_session_id', 'id');
+    }
 }

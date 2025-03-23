@@ -179,58 +179,134 @@
 
                         {{-- new start --}}
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-sm table-bordered table-striped display" style="width: 100%">
-                                    <tr>
-                                        <th>Total</th>
-                                        <th>Discount</th>
-                                        <th>Received</th>
-                                        <th>Due</th>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $total['amount_total'] }}</td>
-                                        <td>{{ $total['amount_discount'] }}</td>
-                                        <td>{{ $total['amount_received'] }}</td>
-                                        <td>{{ $total['amount_due'] }}</td>
-                                    </tr>
-                                </table>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Received By</h3>
+                                    <div class="card-title float-right">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered table-striped display"
+                                            style="width: 100%">
+                                            <tr>
+                                                <th>Total</th>
+                                                <th>Discount</th>
+                                                <th>Received</th>
+                                                <th>Due</th>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ $total['amount_session_total'] }}</td>
+                                                <td>{{ $total['amount_session_discount'] }}</td>
+                                                <td>{{ $total['amount_session_received'] }}</td>
+                                                <td>{{ $total['amount_session_due'] }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-sm table-bordered table-striped display" style="width: 100%">
-                                    <tr>
-                                        <th>Cash</th>
-                                        <th>Online</th>
-                                        <th>Total</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            {{ $total['amount_cash'] }}
-                                            @if ($date)
-                                                <br>
-                                                ({{ $date }})
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $total['amount_online'] }}
-                                            @if ($date)
-                                                <br>
-                                                ({{ $date }})
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $total['amount_cash_and_online'] }}
-                                            @if ($date)
-                                                <br>
-                                                ({{ $date }})
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
+                            {{-- <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Counters Total
+                                        @if ($date)
+                                            ({{ $date }})
+                                        @endif
+                                    </h3>
+                                    <div class="card-title float-right">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered table-striped display"
+                                            style="width: 100%">
+                                            <tr>
+                                                <th>Cash</th>
+                                                <th>Online</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    {{ $total['amount_cash'] }}
+                                                </td>
+                                                <td>
+                                                    {{ $total['amount_online'] }}
+                                                </td>
+                                                <td>
+                                                    {{ $total['amount_cash_and_online'] }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Counters
+                                        @if ($date)
+                                            ({{ $date }})
+                                        @endif
+                                    </h3>
+                                    <div class="card-title float-right">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered table-striped display"
+                                            style="width: 100%">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Cash</th>
+                                                <th>Online</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            {{-- @dd($total['user_billing']) --}}
+                                            @foreach ($total['user_billing']->toArray() as $data)
+                                                {{-- @dd($data) --}}
+                                                <tr>
+                                                    <td>
+                                                        {{ $data['creator']['id'] }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $data['creator']['first_name'] }}
+                                                        {{ $data['creator']['middle_name'] }}
+                                                        {{ $data['creator']['last_name'] }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $data['cash'] }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $data['online'] }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $data['total'] }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    {{ $total['amount_cash'] }}
+                                                </td>
+                                                <td>
+                                                    {{ $total['amount_online'] }}
+                                                </td>
+                                                <td>
+                                                    {{ $total['amount_cash_and_online'] }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        {{-- new end --}}
 
-                        {{-- <div class="card-body">
+                    </div>
+                    {{-- new end --}}
+
+                    {{-- <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-sm table-bordered table-striped display" style="width: 100%">
                                     <tr>
@@ -248,19 +324,19 @@
                                 </table>
                             </div>
                         </div> --}}
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
+                    <!-- /.card-body -->
                 </div>
-                <!-- /.col -->
+                <!-- /.card -->
             </div>
-            <!-- /.row -->
-            {{-- Date Details End --}}
-
+            <!-- /.col -->
         </div>
-        <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        <!-- /.row -->
+        {{-- Date Details End --}}
+
+</div>
+<!-- /.container-fluid -->
+</section>
+<!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 

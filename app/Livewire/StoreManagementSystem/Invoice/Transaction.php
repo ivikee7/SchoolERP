@@ -74,16 +74,67 @@ class Transaction extends Component
 
     public function total($acadamic_session_id, $date)
     {
+        $user_data = ProductPayment::groupBy('product_payment_created_by')
+            ->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                return $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+            })
+            ->when(!empty($date), function ($query) use ($date) {
+                $query->whereDate('product_payment_created_at', $date);
+            })
+            ->pluck('product_payment_created_by')
+            ->map(
+                fn($array_map) => collect()
+                    ->put(
+                        'creator',
+                        User::find($array_map)
+                    )
+                    ->put(
+                        'cash',
+                        ProductPayment::with('invoice')
+                            ->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                                return $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+                            })
+                            ->where('product_payment_created_by', $array_map)
+                            ->when(!empty($date), function ($query) use ($date) {
+                                $query->whereDate('product_payment_created_at', $date);
+                            })
+                            ->where('product_payment_method', 'Cash')
+                            ->sum('product_payment_payment_received')
+                    )
+                    ->put(
+                        'online',
+                        ProductPayment::where('product_payment_created_by', $array_map)
+                            ->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                                return $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+                            })
+                            ->when(!empty($date), function ($query) use ($date) {
+                                $query->whereDate('product_payment_created_at', $date);
+                            })
+                            ->where('product_payment_method', 'Online')
+                            ->sum('product_payment_payment_received')
+                    )
+                    ->put(
+                        'total',
+                        ProductPayment::where('product_payment_created_by', $array_map)
+                            ->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+                                return $q->where('product_invoice_academic_session_id', $acadamic_session_id);
+                            })
+                            ->when(!empty($date), function ($query) use ($date) {
+                                $query->whereDate('product_payment_created_at', $date);
+                            })
+                            ->sum('product_payment_payment_received')
+                    )
+            );
         return array(
-            "amount_total" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
+            "amount_session_total" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
                 ->sum('product_invoice_subtotal'),
-            "amount_discount" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
+            "amount_session_discount" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
                 ->sum('product_invoice_discount'),
-            "amount_received" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
+            "amount_session_received" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
                 $q->where('product_invoice_academic_session_id', $acadamic_session_id);
             })
                 ->sum('product_payment_payment_received'),
-            "amount_due" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
+            "amount_session_due" => ProductInvoice::where('product_invoice_academic_session_id', $acadamic_session_id)
                 ->sum('product_invoice_due'),
             "amount_cash" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
                 $q->where('product_invoice_academic_session_id', $acadamic_session_id);
@@ -108,13 +159,7 @@ class Transaction extends Component
                     $query->whereDate('product_payment_created_at', $date);
                 })
                 ->sum('product_payment_payment_received'),
-            "user_billing" => ProductPayment::with('invoice')->whereHas('invoice', function ($q) use ($acadamic_session_id) {
-                $q->where('product_invoice_academic_session_id', $acadamic_session_id);
-            })
-                ->when(!empty($date), function ($query) use ($date) {
-                    $query->whereDate('product_payment_created_at', $date);
-                })
-                ->sum('product_payment_payment_received')
+            "user_billing" => $user_data
         );
     }
 
