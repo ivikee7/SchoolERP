@@ -39,7 +39,7 @@ class Invoices extends Component
                 }
             })
             ->orderBy('product_invoice_id', 'desc')
-            ->paginate(100);
+            ->paginate(10);
     }
 
     public function total($acadamic_session_id)

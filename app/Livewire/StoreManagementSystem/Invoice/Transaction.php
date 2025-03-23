@@ -14,7 +14,7 @@ class Transaction extends Component
     use WithPagination;
 
     public $search = '';
-    public $acadamic_session = '';
+    public $acadamicSession = '';
     public $date = '';
 
     public function render()
@@ -35,7 +35,7 @@ class Transaction extends Component
             //         'pii.product_invoice_item_class_has_product_id',
             //         'chp.class_has_product_id'
             //     )
-            //     ->where('chp.class_has_product_academic_session_id', $this->acadamic_session)
+            //     ->where('chp.class_has_product_academic_session_id', $this->acadamicSession)
             //     ->where(function ($q) {
             //         if (!empty($this->search)) {
             //             $q->where('product_payment_product_invoice_id', $this->search);
@@ -44,9 +44,9 @@ class Transaction extends Component
             //     ->select('product_payments.*', 'pi.*')
             //     ->orderBy('product_payment_id', 'desc')
             //     ->paginate(50000),
-            'transactions' => self::transactions($this->acadamic_session, $this->date, $this->search),
+            'transactions' => self::transactions($this->acadamicSession, $this->date, $this->search),
             'transactions_total' => self::total_old(),
-            'total' => self::total($this->acadamic_session, $this->date),
+            'total' => self::total($this->acadamicSession, $this->date),
             'acadamic_sessions' => self::acadamic_sessions()
         ]);
     }
@@ -69,7 +69,7 @@ class Transaction extends Component
                 }
             })
             ->orderBy('product_payment_id', 'desc')
-            ->paginate(100);
+            ->paginate(10);
     }
 
     public function total($acadamic_session_id, $date)
@@ -168,6 +168,16 @@ class Transaction extends Component
         $this->resetPage();
     }
 
+    public function updatedDate()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedAcadamicSession()
+    {
+        $this->resetPage();
+    }
+
     public function user($user_id)
     {
         $user =  User::findOrFail($user_id);
@@ -176,7 +186,7 @@ class Transaction extends Component
 
     public function total_old()
     {
-        if (empty($this->acadamic_session)) {
+        if (empty($this->acadamicSession)) {
             return array(
                 "sub_total" => "",
                 "gross_total" => "",
@@ -185,10 +195,10 @@ class Transaction extends Component
             );
         }
 
-        $product_invoice_subtotal = self::productInvoiceColumnSum($this->acadamic_session, 'product_invoice_subtotal');
-        $product_invoice_discount = self::productInvoiceColumnSum($this->acadamic_session, 'product_invoice_discount');
-        $product_invoice_gross_total = self::productInvoiceColumnSum($this->acadamic_session, 'product_invoice_gross_total');
-        $product_invoice_due = self::productInvoiceColumnSum($this->acadamic_session, 'product_invoice_due');
+        $product_invoice_subtotal = self::productInvoiceColumnSum($this->acadamicSession, 'product_invoice_subtotal');
+        $product_invoice_discount = self::productInvoiceColumnSum($this->acadamicSession, 'product_invoice_discount');
+        $product_invoice_gross_total = self::productInvoiceColumnSum($this->acadamicSession, 'product_invoice_gross_total');
+        $product_invoice_due = self::productInvoiceColumnSum($this->acadamicSession, 'product_invoice_due');
 
         return array(
             "sub_total" => $product_invoice_subtotal,

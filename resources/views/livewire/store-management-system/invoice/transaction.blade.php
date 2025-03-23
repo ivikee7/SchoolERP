@@ -31,7 +31,7 @@
                                             wire:model.live="date">
                                     </div>
                                     <div class="form-group pr-1">
-                                        <select class="form-control form-control-sm" wire:model.live="acadamic_session">
+                                        <select class="form-control form-control-sm" wire:model.live="acadamicSession">
                                             <option @selected(true) @disabled(true)>select
                                             </option>
                                             @if ($acadamic_sessions)
@@ -182,7 +182,7 @@
 
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Received By</h3>
+                                    <h3 class="card-title">Session</h3>
                                     <div class="card-title float-right">
                                     </div>
                                 </div>
