@@ -115,10 +115,10 @@
                                                             {{ $invoice->discountBy->middle_name }}
                                                             {{ $invoice->discountBy->last_name }}
                                                             ({{ $invoice->product_invoice_discount_at }})
-                                                            @if ($invoice->product_invoice_remarks)
-                                                                <br>
-                                                                {{ $invoice->product_invoice_remarks }}
-                                                            @endif
+                                                        @endif
+                                                        @if ($invoice->product_invoice_remarks)
+                                                            <br>
+                                                            {{ $invoice->product_invoice_remarks }}
                                                         @endif
                                                     </td>
                                                     <td>
