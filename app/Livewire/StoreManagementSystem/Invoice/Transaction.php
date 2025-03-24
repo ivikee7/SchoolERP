@@ -16,6 +16,7 @@ class Transaction extends Component
     public $search = '';
     public $acadamicSession = '';
     public $date = '';
+    public $numberOfRecords = 10;
 
     public function render()
     {
@@ -44,14 +45,14 @@ class Transaction extends Component
             //     ->select('product_payments.*', 'pi.*')
             //     ->orderBy('product_payment_id', 'desc')
             //     ->paginate(50000),
-            'transactions' => self::transactions($this->acadamicSession, $this->date, $this->search),
+            'transactions' => self::transactions($this->acadamicSession, $this->date, $this->search, $this->numberOfRecords),
             'transactions_total' => self::total_old(),
             'total' => self::total($this->acadamicSession, $this->date),
             'acadamic_sessions' => self::acadamic_sessions()
         ]);
     }
 
-    public function transactions($acadamic_session_id, $date, $search)
+    public function transactions($acadamic_session_id, $date, $search, $number_of_records)
     {
         return ProductPayment::with(array(
             'invoice',
@@ -69,7 +70,7 @@ class Transaction extends Component
                 }
             })
             ->orderBy('product_payment_id', 'desc')
-            ->paginate(10);
+            ->paginate($number_of_records);
     }
 
     public function total($acadamic_session_id, $date)

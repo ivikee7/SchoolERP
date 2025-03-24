@@ -23,6 +23,7 @@ class InvoiceShow extends Component
     public $product_payment_method;
     public $product_payment_remarks;
     public $payment_discount;
+    public $payment_remarks;
 
     public function mount($id, $product_invoice_id)
     {
@@ -98,6 +99,7 @@ class InvoiceShow extends Component
 
         $product_invoice = ProductInvoice::findOrFail($product_invoice_id);
         $product_invoice->product_invoice_discount = $this->payment_discount;
+        $product_invoice->product_invoice_remarks = $this->payment_remarks;
         $product_invoice->product_invoice_discount_by = auth()->user()->id;
         $product_invoice->product_invoice_discount_at = now();
         $product_invoice->product_invoice_gross_total = ($product_invoice->product_invoice_subtotal - $this->payment_discount);
@@ -105,6 +107,7 @@ class InvoiceShow extends Component
         $product_invoice->save();
 
         $this->payment_discount = null;
+        $this->payment_remarks = null;
         $this->dispatch('modal_close_discount');
         Notification::alert($this, 'success', 'Success!', 'Discounted!');
     }
@@ -169,6 +172,8 @@ class InvoiceShow extends Component
         $invoice->save();
 
         $this->payment_received = null;
+        $this->product_payment_method = null;
+        $this->payment_remarks = null;
         $this->dispatch('modal_close_payment');
         Notification::alert($this, 'success', 'Success!', 'Payment successfully!');
     }

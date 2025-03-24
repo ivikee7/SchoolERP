@@ -26,6 +26,7 @@ class ProductInvoice extends Model
         'product_invoice_gross_total',
         'product_invoice_due',
         'product_invoice_due_date',
+        'product_invoice_remarks',
         'product_invoice_created_by',
         'product_invoice_updated_by',
     ];

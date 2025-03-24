@@ -18,18 +18,19 @@ class Invoices extends Component
 
     public $search = '';
     public $acadamic_session = '';
+    public $numberOfRecords = 10;
 
     public function render()
     {
         return view('livewire.store-management-system.invoice.invoices', [
-            'invoices' => self::invoices($this->search, $this->acadamic_session),
+            'invoices' => self::invoices($this->search, $this->acadamic_session, $this->numberOfRecords),
             // 'invoices' => self::invoicesGet($this->search, $this->acadamic_session),
             'total' => self::total($this->acadamic_session),
             'acadamic_sessions' => self::acadamic_sessions()
         ]);
     }
 
-    public function invoices($search, $acadamic_session_id)
+    public function invoices($search, $acadamic_session_id, $number_of_records)
     {
         return ProductInvoice::with('student', 'class', 'creator')
             ->where('product_invoice_academic_session_id', $acadamic_session_id)
@@ -39,7 +40,7 @@ class Invoices extends Component
                 }
             })
             ->orderBy('product_invoice_id', 'desc')
-            ->paginate(10);
+            ->paginate($number_of_records);
     }
 
     public function total($acadamic_session_id)

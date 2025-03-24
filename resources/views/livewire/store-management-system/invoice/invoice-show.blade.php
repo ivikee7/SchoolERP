@@ -156,7 +156,10 @@
                                                     @if ($product_invoice->product_invoice_discount > 0)
                                                         <tr>
                                                             <th>Discount:</th>
-                                                            <td>₹{{ $product_invoice->product_invoice_discount }}</td>
+                                                            <td>₹{{ $product_invoice->product_invoice_discount }}
+                                                                <br>
+                                                                ({{ $product_invoice->product_invoice_remarks }})
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                     <tr>
@@ -365,6 +368,12 @@
                                 <label for="" class="ml-1 mr-1">Discount amount</label>
                                 <input wire:model="payment_discount" name="payment_discount" type="number"
                                     class="form-control" placeholder="Discount amount" min="0">
+                            </div>
+                            <div class="col col-12">
+                                <label for="" class="ml-1 mr-1">Remarks</label>
+                                <input wire:model="payment_remarks" name="payment_remarks" type="text"
+                                    class="form-control" value="" placeholder="Discount remarks"
+                                    @required(true) minlength="0" maxlength="50">
                             </div>
                         </div>
                         <!-- /.card -->

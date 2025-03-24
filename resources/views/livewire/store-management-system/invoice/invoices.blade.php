@@ -115,6 +115,10 @@
                                                             {{ $invoice->discountBy->middle_name }}
                                                             {{ $invoice->discountBy->last_name }}
                                                             ({{ $invoice->product_invoice_discount_at }})
+                                                            @if ($invoice->product_invoice_remarks)
+                                                                <br>
+                                                                {{ $invoice->product_invoice_remarks }}
+                                                            @endif
                                                         @endif
                                                     </td>
                                                     <td>
@@ -180,7 +184,6 @@
                                                 <th>{{ $invoices->sum('product_invoice_gross_total') - $invoices->sum('product_invoice_due') }}
                                                 </th>
                                                 <th>{{ $invoices->sum('product_invoice_due') }}</th>
-                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
