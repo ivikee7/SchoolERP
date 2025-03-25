@@ -24,7 +24,8 @@
                             <address>
                                 <strong>{{ $invoice_new->student->first_name }} {{ $invoice_new->student->middle_name }}
                                     {{ $invoice_new->student->last_name }}</strong><br>
-                                <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
+                                Father Name: {{ $invoice_new->creator->father_name }}<br>
+                                Address: <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                             </address>
                         </div>
                         <!-- /.col -->
@@ -53,7 +54,7 @@
                                         <tr>
                                             <td>{{ $item->classHasProduct->product->product_name }}
                                                 @if ($item->classHasProduct->product->product_description)
-                                                <br>
+                                                    <br>
                                                     ({{ $item->classHasProduct->product->product_description }})
                                                 @endif
                                             </td>
@@ -151,7 +152,8 @@
                                 <strong>{{ $invoice_new->student->first_name }}
                                     {{ $invoice_new->student->middle_name }}
                                     {{ $invoice_new->student->last_name }}</strong><br>
-                                <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
+                                Father Name: {{ $invoice_new->creator->father_name }}<br>
+                                Address: <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                             </address>
                         </div>
                         <!-- /.col -->
@@ -180,7 +182,7 @@
                                         <tr>
                                             <td>{{ $item->classHasProduct->product->product_name }}
                                                 @if ($item->classHasProduct->product->product_description)
-                                                <br>
+                                                    <br>
                                                     ({{ $item->classHasProduct->product->product_description }})
                                                 @endif
                                             </td>

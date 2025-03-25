@@ -65,7 +65,7 @@
                                                 <strong>{{ $invoice_new->creator->first_name }}
                                                     {{ $invoice_new->creator->middle_name }}
                                                     {{ $invoice_new->creator->last_name }}</strong><br>
-                                                {{ $invoice_new->creator->address_line1 }}<br>
+                                                {{ $invoice_new->creator->address_line1 }}
                                                 {{ $invoice_new->creator->city }} {{ $invoice_new->creator->state }}
                                                 {{ $invoice_new->creator->pin_code }}<br>
                                                 Phone: {{ $invoice_new->creator->contact_number }}<br>
@@ -79,7 +79,8 @@
                                                 <strong>{{ $invoice_new->student->first_name }}
                                                     {{ $invoice_new->student->middle_name }}
                                                     {{ $invoice_new->student->last_name }}</strong><br>
-                                                <span
+                                                Father Name: {{ $invoice_new->creator->father_name }}<br>
+                                                Address: <span
                                                     class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                                                 <span class="text-wrap">{{ $invoice_new->student->city }}
                                                     {{ $invoice_new->student->state }}
