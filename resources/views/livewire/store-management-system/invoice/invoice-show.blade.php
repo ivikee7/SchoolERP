@@ -200,10 +200,12 @@
                                             @endcan --}}
 
                                             @can('store_management_system_owner')
-                                                <button type="button" class="btn btn-primary float-right"
-                                                    data-toggle="modal" data-target="#modal-discount">
-                                                    ₹ Discount
-                                                </button>
+                                                @if ($product_invoice->product_invoice_due != 0)
+                                                    <button type="button" class="btn btn-primary float-right"
+                                                        data-toggle="modal" data-target="#modal-discount">
+                                                        ₹ Discount
+                                                    </button>
+                                                @endif
                                             @endcan
 
                                             @can('store_management_system_manage')
