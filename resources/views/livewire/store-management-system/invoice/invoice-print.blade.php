@@ -24,7 +24,7 @@
                             <address>
                                 <strong>{{ $invoice_new->student->first_name }} {{ $invoice_new->student->middle_name }}
                                     {{ $invoice_new->student->last_name }}</strong><br>
-                                Father Name: {{ $invoice_new->creator->father_name }}<br>
+                                Father Name: {{ $invoice_new->student->father_name }}<br>
                                 Address: <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                             </address>
                         </div>
@@ -152,7 +152,7 @@
                                 <strong>{{ $invoice_new->student->first_name }}
                                     {{ $invoice_new->student->middle_name }}
                                     {{ $invoice_new->student->last_name }}</strong><br>
-                                Father Name: {{ $invoice_new->creator->father_name }}<br>
+                                Father Name: {{ $invoice_new->student->father_name }}<br>
                                 Address: <span class="text-wrap">{{ $invoice_new->student->address_line1 }}</span><br>
                             </address>
                         </div>
