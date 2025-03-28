@@ -16,7 +16,7 @@ class Transaction extends Component
     public $search = '';
     public $acadamicSession = '';
     public $date = '';
-    public $numberOfRecords = 10;
+    public $numberOfRecords = 100;
 
     public function render()
     {

@@ -18,7 +18,7 @@ class Invoices extends Component
 
     public $search = '';
     public $acadamic_session = '';
-    public $numberOfRecords = 10;
+    public $numberOfRecords = 100;
 
     public function render()
     {
@@ -34,9 +34,16 @@ class Invoices extends Component
     {
         return ProductInvoice::with('student', 'class', 'creator')
             ->where('product_invoice_academic_session_id', $acadamic_session_id)
-            ->whereHas('student', function ($q) use ($search) {
+            ->whereHas('student', function ($student) use ($search) {
                 if (!empty($search)) {
-                    $q->where('id', $search);
+                    $columns = ['id', 'first_name', 'middle_name', 'last_name'];
+                    foreach (explode(" ", $search) as $item) {
+                        $student->where(function ($student) use ($item, $columns) {
+                            foreach ($columns as $column) {
+                                $student->orWhere($column, 'like', '%' . $item . '%');
+                            }
+                        });
+                    }
                 }
             })
             ->orderBy('product_invoice_id', 'desc')
